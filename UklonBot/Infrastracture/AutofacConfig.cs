@@ -1,0 +1,28 @@
+﻿using Autofac;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Web;
+using System.Web.Http;
+
+namespace UklonBot.Infrastracture
+{
+    public class AutofacConfig
+    {
+        public static IContainer Container { get; private set; }
+        public static void ConfigureContainer()
+        {
+            var builder = new ContainerBuilder();
+            var config = GlobalConfiguration.Configuration;
+            //builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+
+            //builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
+            //builder.RegisterType<UklonApiHelper>().As<IUklonApiHelper>();
+            //builder.RegisterType<CommunicationHelper>().As<ICommunicationHelper>();
+
+            Container = builder.Build();
+           // config.DependencyResolver = new AutofacWebApiDependencyResolver(Container);
+        }
+    }
+}
