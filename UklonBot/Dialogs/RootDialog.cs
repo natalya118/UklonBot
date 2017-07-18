@@ -55,9 +55,10 @@ namespace UklonBot.Dialogs
             // calculate something for us to return
             int length = (activity.Text ?? string.Empty).Length;
             LuisHelper _luisHelper = new LuisHelper();
-            var luisAnswer = await _luisHelper.GetResult("i want to change car ");
-            // return our reply to the user
-            await context.PostAsync($"You sent {activity.Text} which was {length} characters");
+            var luisAnswer = await _luisHelper.GetResult(activity.Text);
+            
+            await context.PostAsync("hiiiii)");
+            //await context.PostAsync(luisAnswer.Value);
 
             context.Wait(MessageReceivedAsync);
         }

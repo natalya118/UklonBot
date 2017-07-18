@@ -3,24 +3,19 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
+using Microsoft.Cognitive.LUIS;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using UklonBot.Models.BotSide;
 
 namespace UklonBot.Helpers
 {
 
-    public class LuisResult
-
-    {
-        public bool IsSucceed { set; get; }
-        public string Command { set; get; }
-        public string Value { set; get; }
-    }
+    
     public class LuisHelper
     {
-        public async Task<LuisResult> GetResult(string query)  
+        public async Task<LuisRes> GetResult(string query)  
         {
             using (var httpClient = new HttpClient())
             {
@@ -32,10 +27,14 @@ namespace UklonBot.Helpers
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<LuisResult>(jsonResponse);
+                    var res = JsonConvert.DeserializeObject<LuisRes>(jsonResponse);
+                    return JsonConvert.DeserializeObject<LuisRes>(jsonResponse);
+
                 }
+
                 return null;
             }
         }
+
     }
 }
