@@ -15,7 +15,7 @@ namespace UklonBot.Dialogs.TaxiOrder
     {
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync("What city are you in?");
+            //await context.PostAsync("What city are you in?");
             var changeCityFormDialog = FormDialog.FromForm(ChangeCity.BuildForm, FormOptions.PromptInStart);
 
             context.Call(changeCityFormDialog, this.DialogResumeAfter);
@@ -29,7 +29,7 @@ namespace UklonBot.Dialogs.TaxiOrder
 
         private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
-            await context.PostAsync("dialog after");
+            await context.PostAsync("Your city have been changed successfully");
         }
     }
 }

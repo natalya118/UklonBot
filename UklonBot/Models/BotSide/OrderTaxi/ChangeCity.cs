@@ -14,7 +14,7 @@ namespace UklonBot.Models.BotSide.OrderTaxi
         public static IForm<ChangeCity> BuildForm()
         {
             return new FormBuilder<ChangeCity>()
-                .Message("change city")
+                .Message("What city are you in?")
                 .Build();
         }
     }

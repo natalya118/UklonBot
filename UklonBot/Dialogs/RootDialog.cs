@@ -18,7 +18,7 @@ namespace UklonBot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-           
+            
             context.Wait(this.MessageReceivedAsync);
         }
 
@@ -26,30 +26,29 @@ namespace UklonBot.Dialogs
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result as Activity;
-            await context.PostAsync("hi:)");
+            
+            //string engQuery = TranslatorService.TranslateIntoEnglish(activity.Text).Result;
             //await this.SendWelcomeMessageAsync(context);
+            await context.PostAsync("hi:)");
+            //var resText = await TranslatorService.TranslateIntoEnglish("привет") as string;
+            //TranslatorService ts = new TranslatorService();
+            
             Services.Implementations.LuisService _luisService = new Services.Implementations.LuisService();
             var luisAnswer = await _luisService.GetResult(activity.Text);
-
             switch (luisAnswer.topScoringIntent.intent)
             {
                 case "Order taxi":
                     await context.Forward(new GreetingDialog(), this.TestDialogResumeAfterAsync, "test", CancellationToken.None);
                     break;
                 case "Registration":
-                    //await this.SendWelcomeMessageAsync(context);
                     context.Call(new RegistrationDialog(), this.RegistrationDialogResumeAfter);
-                    //await context.Forward(new RegistrationDialog(), this.RegistrationDialogResumeAfter, "test", CancellationToken.None);
                     break;
                 case "Change city":
                     context.Call(new ChangeCityDialog(), DialogResumeAfter);
-                    //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.AnimalsTransportation, _userLocalLang), ResumeAfterDialog);
                     break;
                 case "Email Subscription":
-                    //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.EmailSubscription, _userLocalLang), ResumeAfterDialog);
                     break;
                 default:
-                    //await context.PostAsync(await _translatorHelper.GetTranslatedText("Sorry. I didn't understand.", _userLocalLang));
                     context.Wait(MessageReceivedAsync);
                     break;
             }
