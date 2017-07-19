@@ -7,6 +7,7 @@ using System.Threading;
 using UklonBot.Services.Implementations;
 using UklonBot.Services.Interfaces;
 using Microsoft.Bot.Builder.Luis;
+using UklonBot.Dialogs.TaxiOrder;
 
 namespace UklonBot.Dialogs
 {
@@ -40,7 +41,8 @@ namespace UklonBot.Dialogs
                     context.Call(new RegistrationDialog(), this.RegistrationDialogResumeAfter);
                     //await context.Forward(new RegistrationDialog(), this.RegistrationDialogResumeAfter, "test", CancellationToken.None);
                     break;
-                case "Animals Transport":
+                case "Change city":
+                    context.Call(new ChangeCityDialog(), DialogResumeAfter);
                     //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.AnimalsTransportation, _userLocalLang), ResumeAfterDialog);
                     break;
                 case "Email Subscription":
@@ -84,6 +86,9 @@ namespace UklonBot.Dialogs
         {
             await context.PostAsync("Congratulations! You've successfully registered :)");
         }
-
+        private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
+        {
+            await context.PostAsync("dialog after");
+        }
     }
 }
