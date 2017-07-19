@@ -6,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
+using UklonBot.Models.Repositories.Abstract;
+using UklonBot.Models.Repositories.Exact;
 
 namespace UklonBot.Infrastracture
 {
@@ -17,7 +19,7 @@ namespace UklonBot.Infrastracture
             var builder = new ContainerBuilder();
             var config = GlobalConfiguration.Configuration;
             
-            //builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
             //builder.RegisterType<UklonApiHelper>().As<IUklonApiHelper>();
             builder.RegisterType<LuisService>().As<ILuisService>();
 
