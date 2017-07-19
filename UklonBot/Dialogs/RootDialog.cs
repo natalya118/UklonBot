@@ -14,31 +14,31 @@ namespace UklonBot.Dialogs
     [Serializable]
     public class RootDialog : IDialog<object>
     {
-        
-        public Task StartAsync(IDialogContext context)
+
+        public async Task StartAsync(IDialogContext context)
         {
-            context.Wait(MessageReceivedAsync);
-            
-
-            return Task.CompletedTask;
+           
+            context.Wait(this.MessageReceivedAsync);
         }
-        
 
-        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
+
+        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result as Activity;
             await context.PostAsync("hi:)");
-            
+            //await this.SendWelcomeMessageAsync(context);
             Services.Implementations.LuisService _luisService = new Services.Implementations.LuisService();
             var luisAnswer = await _luisService.GetResult(activity.Text);
-            
+
             switch (luisAnswer.topScoringIntent.intent)
             {
                 case "Order taxi":
-                        await context.Forward(new GreetingDialog(), this.TestDialogResumeAfterAsync, "test", CancellationToken.None);
+                    await context.Forward(new GreetingDialog(), this.TestDialogResumeAfterAsync, "test", CancellationToken.None);
                     break;
-                case "Additional Person":
-                    //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.AdditionalPerson, _userLocalLang), ResumeAfterDialog);
+                case "Registration":
+                    //await this.SendWelcomeMessageAsync(context);
+                    context.Call(new RegistrationDialog(), this.RegistrationDialogResumeAfter);
+                    //await context.Forward(new RegistrationDialog(), this.RegistrationDialogResumeAfter, "test", CancellationToken.None);
                     break;
                 case "Animals Transport":
                     //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.AnimalsTransportation, _userLocalLang), ResumeAfterDialog);
@@ -52,15 +52,38 @@ namespace UklonBot.Dialogs
                     break;
             }
 
-            context.Wait(MessageReceivedAsync);
+            //context.Wait(MessageReceivedAsync);
         }
 
         private async Task TestDialogResumeAfterAsync(IDialogContext context, IAwaitable<object> result)
         {
             await context.PostAsync("Resume after test.");
         }
+        private async Task NameDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
+        {
+            try
+            {
+               // this.name = await result;
 
+                //context.Call(new AgeDialog(this.name), this.AgeDialogResumeAfter);
+            }
+            catch (TooManyAttemptsException)
+            {
+                await context.PostAsync("I'm sorry, I'm having issues understanding you. Let's try again.");
 
+                //await this.SendWelcomeMessageAsync(context);
+            }
+        }
+        private async Task SendWelcomeMessageAsync(IDialogContext context)
+        {
+            await context.PostAsync("Hi, I'm the Basic Multi Dialog bot. Let's get started.");
+
+            context.Call(new NameDialog(), this.NameDialogResumeAfter);
+        }
+        private async Task RegistrationDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
+        {
+            await context.PostAsync("Congratulations! You've successfully registered :)");
+        }
 
     }
 }

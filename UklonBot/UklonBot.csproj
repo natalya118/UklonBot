@@ -121,6 +121,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\GreetingDialog.cs" />
+    <Compile Include="Dialogs\NameDialog.cs" />
+    <Compile Include="Dialogs\Registration\AddNumberDialog.cs" />
+    <Compile Include="Dialogs\Registration\RegistrationDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -129,6 +132,7 @@
     <Compile Include="Infrastracture\AutofacConfig.cs" />
     <Compile Include="Models\BotSide\ChangeCar.cs" />
     <Compile Include="Models\BotSide\LuisRes.cs" />
+    <Compile Include="Models\BotSide\Registration\NewUser.cs" />
     <Compile Include="Models\Cities.cs" />
     <Compile Include="Models\UklonSide\AddressQueryInfo.cs" />
     <Compile Include="Models\UklonSide\AuthInfo.cs" />
