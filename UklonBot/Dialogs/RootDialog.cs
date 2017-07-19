@@ -27,10 +27,8 @@ namespace UklonBot.Dialogs
         {
             var activity = await result as Activity;
             
-            //string engQuery = TranslatorService.TranslateIntoEnglish(activity.Text).Result;
             //await this.SendWelcomeMessageAsync(context);
             await context.PostAsync("hi:)");
-            //var resText = await TranslatorService.TranslateIntoEnglish("привет") as string;
             //TranslatorService ts = new TranslatorService();
             
             Services.Implementations.LuisService _luisService = new Services.Implementations.LuisService();

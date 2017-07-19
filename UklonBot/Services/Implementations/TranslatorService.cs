@@ -33,7 +33,24 @@ namespace UklonBot.Services.Implementations
                 return translatedText;
             }
         }
+        public static async Task<string> GetLanguage(string inputText)
+        {
+            string query ="http://api.microsofttranslator.com/v2/Http.svc/Detect?text=" + inputText;
+            string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
+            var accessToken = await GetAuthenticationToken(ApiKey);
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                var response = await client.GetAsync(query);
+                var result = await response.Content.ReadAsStringAsync();
 
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                var language = XElement.Parse(result).Value;
+                return language;
+            }
+        }
         static async Task<string> GetAuthenticationToken(string key)
         {
             string endpoint = "https://api.cognitive.microsoft.com/sts/v1.0/issueToken";
