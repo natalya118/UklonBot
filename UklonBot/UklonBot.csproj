@@ -120,15 +120,16 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dialogs\GreetingDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\LuisHelper.cs" />
     <Compile Include="Helpers\TranslatorHelper.cs" />
     <Compile Include="Infrastracture\AutofacConfig.cs" />
     <Compile Include="Models\BotSide\ChangeCar.cs" />
     <Compile Include="Models\BotSide\LuisRes.cs" />
+    <Compile Include="Models\Cities.cs" />
     <Compile Include="Models\UklonSide\AddressQueryInfo.cs" />
     <Compile Include="Models\UklonSide\AuthInfo.cs" />
     <Compile Include="Models\UklonSide\AuthResult.cs" />
@@ -148,7 +149,10 @@
     <Compile Include="Models\UklonSide\Route.cs" />
     <Compile Include="Models\UklonSide\RoutePoint.cs" />
     <Compile Include="Models\UklonSide\Vehicle.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Implementations\LuisService.cs" />
+    <Compile Include="Services\Interfaces\ILuisService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -162,6 +166,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

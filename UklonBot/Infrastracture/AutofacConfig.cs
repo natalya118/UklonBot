@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.Bot.Builder.Luis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,10 @@ namespace UklonBot.Infrastracture
         {
             var builder = new ContainerBuilder();
             var config = GlobalConfiguration.Configuration;
-            //builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-
+            
             //builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
             //builder.RegisterType<UklonApiHelper>().As<IUklonApiHelper>();
-            //builder.RegisterType<CommunicationHelper>().As<ICommunicationHelper>();
+            builder.RegisterType<LuisService>().As<ILuisService>();
 
             Container = builder.Build();
            // config.DependencyResolver = new AutofacWebApiDependencyResolver(Container);

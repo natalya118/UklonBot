@@ -2,8 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using Microsoft.Bot.Builder.Luis;
 using UklonBot.Helpers;
+using System.Threading;
+using UklonBot.Services.Implementations;
+using UklonBot.Services.Interfaces;
+using Microsoft.Bot.Builder.Luis;
 
 namespace UklonBot.Dialogs
 {
@@ -11,56 +14,53 @@ namespace UklonBot.Dialogs
     [Serializable]
     public class RootDialog : IDialog<object>
     {
+        
         public Task StartAsync(IDialogContext context)
         {
             context.Wait(MessageReceivedAsync);
-            //context.Wait(MessageReceivedAsync);
+            
 
             return Task.CompletedTask;
         }
-
-        private async Task HandleUserInput(IDialogContext context, Activity activity)
-        {
-            LuisHelper _luisHelper = new LuisHelper();
-            //_userLocalLang = await _translatorHelper.GetLanguageType(activity.Text);
-            //var englishText = await _translatorHelper.GetTranslatedText(activity.Text, LangType.en);
-            var luisAnswer = await _luisHelper.GetResult("i want to change car ");
-
-            //switch (luisAnswer.TopScoringIntent.Intent)
-            //{
-            //    case "Change Car":
-            //        //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCar, _userLocalLang)
-            //   break;
-            //    case "Additional Person":
-            //       // context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.AdditionalPerson, _userLocalLang), ResumeAfterDialog);
-            //        break;
-            //    case "Animals Transport":
-            //        //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.AnimalsTransportation, _userLocalLang), ResumeAfterDialog);
-            //        break;
-            //    case "Email Subscription":
-            //        //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.EmailSubscription, _userLocalLang), ResumeAfterDialog);
-            //        break;
-            //    default:
-            //        //await context.PostAsync(await _translatorHelper.GetTranslatedText("Sorry. I didn't understand.", _userLocalLang));
-            //        context.Wait(MessageReceivedAsync);
-            //        break;
-            //}
-
-        }
+        
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
             var activity = await result as Activity;
-
-            // calculate something for us to return
-            int length = (activity.Text ?? string.Empty).Length;
-            LuisHelper _luisHelper = new LuisHelper();
-            var luisAnswer = await _luisHelper.GetResult(activity.Text);
+            await context.PostAsync("hi:)");
             
-            await context.PostAsync("hiiiii)");
-            //await context.PostAsync(luisAnswer.Value);
+            Services.Implementations.LuisService _luisService = new Services.Implementations.LuisService();
+            var luisAnswer = await _luisService.GetResult(activity.Text);
+            
+            switch (luisAnswer.topScoringIntent.intent)
+            {
+                case "Order taxi":
+                        await context.Forward(new GreetingDialog(), this.TestDialogResumeAfterAsync, "test", CancellationToken.None);
+                    break;
+                case "Additional Person":
+                    //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.AdditionalPerson, _userLocalLang), ResumeAfterDialog);
+                    break;
+                case "Animals Transport":
+                    //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.AnimalsTransportation, _userLocalLang), ResumeAfterDialog);
+                    break;
+                case "Email Subscription":
+                    //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.EmailSubscription, _userLocalLang), ResumeAfterDialog);
+                    break;
+                default:
+                    //await context.PostAsync(await _translatorHelper.GetTranslatedText("Sorry. I didn't understand.", _userLocalLang));
+                    context.Wait(MessageReceivedAsync);
+                    break;
+            }
 
             context.Wait(MessageReceivedAsync);
         }
+
+        private async Task TestDialogResumeAfterAsync(IDialogContext context, IAwaitable<object> result)
+        {
+            await context.PostAsync("Resume after test.");
+        }
+
+
+
     }
 }
