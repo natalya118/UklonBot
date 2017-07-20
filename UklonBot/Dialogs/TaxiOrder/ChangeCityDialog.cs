@@ -15,7 +15,12 @@ namespace UklonBot.Dialogs.TaxiOrder
         {
             await context.PostAsync(await StringExtensions.ToUserLocaleAsync("What city are you in?", context));
             //Creating dialog from changeCity model
+            var data = context.UserData;
+            data.SetValue("field_name", false);
+
             var changeCityFormDialog = FormDialog.FromForm(ChangeCity.BuildForm, FormOptions.PromptInStart);
+            
+            data.SetValue("field_name", false);
 
             context.Call(changeCityFormDialog, this.DialogResumeAfter);
             //context.Wait(MessageReceivedAsync);

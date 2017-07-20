@@ -8,6 +8,7 @@ using UklonBot.Services.Implementations;
 using UklonBot.Services.Interfaces;
 using Microsoft.Bot.Builder.Luis;
 using UklonBot.Dialogs.TaxiOrder;
+using System.Globalization;
 
 namespace UklonBot.Dialogs
 {
@@ -18,7 +19,6 @@ namespace UklonBot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            
             context.Wait(this.MessageReceivedAsync);
         }
 
@@ -27,8 +27,8 @@ namespace UklonBot.Dialogs
         {
             var activity = await result as Activity;
             
-            StateHelper.SetUserLanguageCode(activity, await TranslatorService.GetLanguage(activity.Text));
-            await context.PostAsync("hi:)");
+           StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
+            //context.UserData.SetValue<string>("GetName", l);
             //TODO move services to autofac
             Services.Implementations.LuisService _luisService = new Services.Implementations.LuisService();
             var luisAnswer = await _luisService.GetResult(activity.Text);
@@ -46,7 +46,11 @@ namespace UklonBot.Dialogs
                 case "Email Subscription":
                     break;
                 default:
-                    context.Wait(MessageReceivedAsync);
+                    //await context.PostAsync(await StringExtensions.ToUserLocaleAsync("I'm not sure if I understand you correctly. Could you specify your wish, please?", context));
+
+                    await context.PostAsync("teeest");
+                   
+                    //context.Wait(MessageReceivedAsync);
                     break;
             }
 
