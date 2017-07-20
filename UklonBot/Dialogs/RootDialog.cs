@@ -27,10 +27,9 @@ namespace UklonBot.Dialogs
         {
             var activity = await result as Activity;
             
-            //await this.SendWelcomeMessageAsync(context);
+            StateHelper.SetUserLanguageCode(activity, await TranslatorService.GetLanguage(activity.Text));
             await context.PostAsync("hi:)");
-            //TranslatorService ts = new TranslatorService();
-            
+            //TODO move services to autofac
             Services.Implementations.LuisService _luisService = new Services.Implementations.LuisService();
             var luisAnswer = await _luisService.GetResult(activity.Text);
             switch (luisAnswer.topScoringIntent.intent)

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.FormFlow;
 using UklonBot.Models.BotSide.OrderTaxi;
+using UklonBot.Helpers;
 
 namespace UklonBot.Dialogs.TaxiOrder
 {
@@ -15,7 +16,8 @@ namespace UklonBot.Dialogs.TaxiOrder
     {
         public async Task StartAsync(IDialogContext context)
         {
-            //await context.PostAsync("What city are you in?");
+            await context.PostAsync(await StringExtensions.ToUserLocaleAsync("What city are you in?", context));
+            //Creating dialog from changeCity model
             var changeCityFormDialog = FormDialog.FromForm(ChangeCity.BuildForm, FormOptions.PromptInStart);
 
             context.Call(changeCityFormDialog, this.DialogResumeAfter);
@@ -29,7 +31,7 @@ namespace UklonBot.Dialogs.TaxiOrder
 
         private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
-            await context.PostAsync("Your city have been changed successfully");
+            await context.PostAsync( await "Your city have been changed successfully".ToUserLocaleAsync(context));
         }
     }
 }

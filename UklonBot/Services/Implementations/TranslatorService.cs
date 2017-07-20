@@ -15,13 +15,36 @@ namespace UklonBot.Services.Implementations
 
 
        
-        public static async Task<string> TranslateText(string inputText, string language, string accessToken)
+        public static async Task<string> TranslateText(string inputText, string language)
         {
             string url = "http://api.microsofttranslator.com/v2/Http.svc/Translate";
             string query = $"?text={System.Net.WebUtility.UrlEncode(inputText)}&to={language}&contentType=text/plain";
 
             using (var client = new HttpClient())
             {
+                string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
+                var accessToken = await GetAuthenticationToken(ApiKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                var response = await client.GetAsync(url + query);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                    return "Hata: " + result;
+
+                var translatedText = XElement.Parse(result).Value;
+                return translatedText;
+            }
+        }
+
+        public static async Task<string> TranslateTextFromTo(string inputText, string inputLocale, string outputLocale)
+        {
+            string url = "http://api.microsofttranslator.com/v2/Http.svc/Translate";
+            string query = $"?text={System.Net.WebUtility.UrlEncode(inputText)}&from={inputLocale}&to={outputLocale}&contentType=text/plain";
+
+            using (var client = new HttpClient())
+            {
+                string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
+                var accessToken = await GetAuthenticationToken(ApiKey);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 var response = await client.GetAsync(url + query);
                 var result = await response.Content.ReadAsStringAsync();
@@ -66,10 +89,8 @@ namespace UklonBot.Services.Implementations
 
         public static async Task<string> TranslateIntoEnglish(string inputText)
         {
-            string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
             string targetLang = "en";
-            var accessToken = await GetAuthenticationToken(ApiKey);
-            var output = await TranslateText(inputText, targetLang, accessToken);
+            var output = await TranslateText(inputText, targetLang);
             return output;
         }
     }

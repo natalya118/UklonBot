@@ -66,5 +66,34 @@ public class TranslatorHelper
                 return null;
             }
         }
+
+        //public string TranslateFromTo(string inputText, string inputLocale, string outputLocale)
+        //{
+        //    try
+        //    {
+        //        string uri =
+        //            $"{ConfigurationManager.ConnectionStrings["TranslateTextEndpoint"].ConnectionString}Translate?text={HttpUtility.UrlEncode(inputText)}&from={inputLocale}&to={outputLocale}";
+
+        //        WebRequest translationWebRequest = WebRequest.Create(uri);
+        //        translationWebRequest.Headers.Add("Authorization", Bearer.Header);
+
+        //        WebResponse response = null;
+        //        response = translationWebRequest.GetResponse();
+        //        Stream stream = response.GetResponseStream();
+        //        Encoding encode = Encoding.GetEncoding("utf-8");
+
+        //        StreamReader translatedStream = new StreamReader(stream, encode);
+        //        XmlDocument xTranslation = new XmlDocument();
+        //        xTranslation.LoadXml(translatedStream.ReadToEnd());
+
+        //        return xTranslation.InnerText;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+
+        //}
+
     }
 }
