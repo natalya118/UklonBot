@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UklonBot.Models.UklonSide;
 
 namespace UklonBot.Services.Interfaces
 {
@@ -10,14 +11,14 @@ namespace UklonBot.Services.Interfaces
     {
         //string CreateOrder(Dialog currentDialog);
         //double CalculateAmmount(Dialog currentDialog);
-        //IEnumerable<string> GetPlaces(string query);
-        //OrderInfo GetOrderState(string dialogOrderId);
-        //void CancelOrder(string currentDialogOrderId);
-        //string RecreateOrder(string orderId);
-        //string GetRecreatedOrderId(string orderId);
-        //Location GetPlaceLocation(string currentDialogPickupAddress, string currentDialogPickupHouse);
-        //bool Authenticate(string phoneNumber, string viberId);
-        //bool Register(string phoneNumber, string viberId, string phoneValidationCode);
-        //void ConfirmPhone(string phoneNumber);
+        IEnumerable<string> GetPlaces(string query);
+        OrderInfo GetOrderState(string dialogOrderId);
+        void CancelOrder(string currentDialogOrderId);
+        string RecreateOrder(string orderId);
+        string GetRecreatedOrderId(string orderId);
+        Location GetPlaceLocation(string currentDialogPickupAddress, string currentDialogPickupHouse);
+        bool Authenticate(string phoneNumber, string viberId);
+        bool Register(string phoneNumber, string viberId, string phoneValidationCode);
+        void ConfirmPhone(string phoneNumber);
     }
 }
