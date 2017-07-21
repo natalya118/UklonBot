@@ -126,11 +126,12 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dialogs\Common\YesNoDialog.cs" />
     <Compile Include="Dialogs\GreetingDialog.cs" />
     <Compile Include="Dialogs\HelpDialog.cs" />
-    <Compile Include="Dialogs\NameDialog.cs" />
     <Compile Include="Dialogs\Registration\RegistrationDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
+    <Compile Include="Dialogs\TaxiOrder\DestinationAddress\DestinationAddressWayDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\AddressDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\ChangeCityDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\NumberDialog.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Models\BotSide\LuisRes.cs" />
     <Compile Include="Models\BotSide\OrderTaxi\PickUpAddress.cs" />
     <Compile Include="Models\BotSide\OrderTaxi\ChangeCity.cs" />
+    <Compile Include="Models\BotSide\OrderTaxi\ProvideDestinationWay.cs" />
     <Compile Include="Models\BotSide\Registration\NewUser.cs" />
     <Compile Include="Models\Cities.cs" />
     <Compile Include="Models\Repositories\Abstract\IUnitOfWork.cs" />
@@ -198,7 +200,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dialogs\Help\" />
-    <Folder Include="Dialogs\TaxiOrder\NewFolder1\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

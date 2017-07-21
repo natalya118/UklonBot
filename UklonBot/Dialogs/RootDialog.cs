@@ -3,14 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
-using System.Threading;
 using UklonBot.Services.Implementations;
-using UklonBot.Services.Interfaces;
 using Microsoft.Bot.Builder.Luis;
+using UklonBot.Dialogs.Common;
 using UklonBot.Dialogs.TaxiOrder;
-using System.Globalization;
 using UklonBot.Dialogs.Registration;
-using UklonBot.Models.UklonSide;
 
 namespace UklonBot.Dialogs
 {
@@ -21,6 +18,7 @@ namespace UklonBot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
+
             context.Wait(this.MessageReceivedAsync);
         }
 
@@ -29,6 +27,7 @@ namespace UklonBot.Dialogs
         {
             var activity = await result as Activity;
             StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
+           context.Call(new YesNoDialog(), this.YesNoDialogResumeAfter);
             //TODO move services to autofac
             var _luisService = new Services.Implementations.LuisService();
             var luisAnswer = await _luisService.GetResult(activity.Text);
@@ -51,12 +50,12 @@ namespace UklonBot.Dialogs
                     break;
                 case "Greeting":
                     await context.PostAsync(await StringExtensions.ToUserLocaleAsync("Hi! How can I help you?", context));
-                    context.Wait(MessageReceivedAsync);
+                    //context.Wait(MessageReceivedAsync);
                     break;
                 default:
                     //await context.PostAsync(await StringExtensions.ToUserLocaleAsync("I'm not sure if I understand you correctly. Could you specify your wish, please?", context));
 
-                    await context.PostAsync("teeest");
+                    //await context.PostAsync("teeest");
                    
                     //context.Wait(MessageReceivedAsync);
                     break;
@@ -88,7 +87,7 @@ namespace UklonBot.Dialogs
         {
             await context.PostAsync("Hi, I'm the Basic Multi Dialog bot. Let's get started.");
 
-            context.Call(new NameDialog(), this.NameDialogResumeAfter);
+           // context.Call(new NameDialog(), this.NameDialogResumeAfter);
         }
         private async Task RegistrationDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
@@ -97,6 +96,16 @@ namespace UklonBot.Dialogs
         private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             await context.PostAsync("dialog after");
+        }
+        private async Task YesNoDialogResumeAfter(IDialogContext context, IAwaitable<bool> result)
+        {
+            await context.PostAsync("dialog after");
+            var res = await result;
+            if (res)
+            {
+                await context.PostAsync("REEEEESET");
+            }
+
         }
     }
 }

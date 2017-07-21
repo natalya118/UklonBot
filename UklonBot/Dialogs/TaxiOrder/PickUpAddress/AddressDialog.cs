@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using UklonBot.Dialogs.TaxiOrder.DestinationAddress;
 using UklonBot.Helpers;
 
 namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
@@ -50,7 +51,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                 this._number = await result;
 
                 await context.PostAsync(await StringExtensions.ToUserLocaleAsync($"Your street is { _street } and your number is { _number }.", context));
-
+            context.Call(new DestinationAddressWayDialog(), null);
                 //await this.SendWelcomeMessageAsync(context);
             
         }

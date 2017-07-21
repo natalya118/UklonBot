@@ -31,6 +31,7 @@ namespace UklonBot.Dialogs.TaxiOrder
         private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             await context.PostAsync( await "Your city have been changed successfully".ToUserLocaleAsync(context));
+            context.Call(new RootDialog(), null);
         }
     }
 }

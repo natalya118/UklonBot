@@ -1,13 +1,10 @@
-﻿using Microsoft.Bot.Builder.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
 
-namespace UklonBot.Dialogs.TaxiOrder
+namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 {
     [Serializable]
     public class NumberDialog : IDialog<string>
