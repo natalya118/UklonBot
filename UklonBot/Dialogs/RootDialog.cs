@@ -9,6 +9,8 @@ using UklonBot.Services.Interfaces;
 using Microsoft.Bot.Builder.Luis;
 using UklonBot.Dialogs.TaxiOrder;
 using System.Globalization;
+using UklonBot.Dialogs.Registration;
+using UklonBot.Models.UklonSide;
 
 namespace UklonBot.Dialogs
 {
@@ -26,16 +28,14 @@ namespace UklonBot.Dialogs
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result as Activity;
-            
-           StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
-            //context.UserData.SetValue<string>("GetName", l);
+            StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
             //TODO move services to autofac
-            Services.Implementations.LuisService _luisService = new Services.Implementations.LuisService();
+            var _luisService = new Services.Implementations.LuisService();
             var luisAnswer = await _luisService.GetResult(activity.Text);
             switch (luisAnswer.topScoringIntent.intent)
             {
                 case "Order taxi":
-                    await context.Forward(new GreetingDialog(), this.TestDialogResumeAfterAsync, "test", CancellationToken.None);
+                    context.Call(new OrderDialog(), this.DialogResumeAfter);
                     break;
                 case "Registration":
                     context.Call(new RegistrationDialog(), this.RegistrationDialogResumeAfter);
@@ -43,7 +43,15 @@ namespace UklonBot.Dialogs
                 case "Change city":
                     context.Call(new ChangeCityDialog(), DialogResumeAfter);
                     break;
-                case "Email Subscription":
+                case "Help":
+                    context.Call(new HelpDialog(), DialogResumeAfter);
+                    break;
+                case "How to order taxi":
+                    context.Call(new HelpDialog(), DialogResumeAfter);
+                    break;
+                case "Greeting":
+                    await context.PostAsync(await StringExtensions.ToUserLocaleAsync("Hi! How can I help you?", context));
+                    context.Wait(MessageReceivedAsync);
                     break;
                 default:
                     //await context.PostAsync(await StringExtensions.ToUserLocaleAsync("I'm not sure if I understand you correctly. Could you specify your wish, please?", context));

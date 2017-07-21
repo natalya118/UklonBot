@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Http;
 using UklonBot.Models.Repositories.Abstract;
 using UklonBot.Models.Repositories.Exact;
+using UklonBot.Services.Implementations;
+using UklonBot.Services.Interfaces;
 
 namespace UklonBot.Infrastracture
 {
@@ -20,11 +22,11 @@ namespace UklonBot.Infrastracture
             var config = GlobalConfiguration.Configuration;
             
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
-            //builder.RegisterType<UklonApiHelper>().As<IUklonApiHelper>();
-            builder.RegisterType<LuisService>().As<ILuisService>();
+            builder.RegisterType<UklonApiService>().As<IUklonApiService>();
+            builder.RegisterType<Services.Implementations.LuisService>().As<Services.Interfaces.ILuisService>();
 
             Container = builder.Build();
-           // config.DependencyResolver = new AutofacWebApiDependencyResolver(Container);
+          // config.DependencyResolver = new AutofacWebApiDependencyResolver(Container);
         }
     }
 }

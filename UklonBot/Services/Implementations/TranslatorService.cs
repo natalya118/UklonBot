@@ -12,9 +12,7 @@ namespace UklonBot.Services.Implementations
 {
     public class TranslatorService : ITranslatorService
     {
-
-
-       
+        
         public static async Task<string> TranslateText(string inputText, string language)
         {
             string url = "http://api.microsofttranslator.com/v2/Http.svc/Translate";

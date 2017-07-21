@@ -127,15 +127,20 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\GreetingDialog.cs" />
+    <Compile Include="Dialogs\HelpDialog.cs" />
     <Compile Include="Dialogs\NameDialog.cs" />
     <Compile Include="Dialogs\Registration\RegistrationDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
-    <Compile Include="Dialogs\TaxiOrder\AddressDialog.cs" />
+    <Compile Include="Dialogs\TaxiOrder\PickUpAddress\AddressDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\ChangeCityDialog.cs" />
+    <Compile Include="Dialogs\TaxiOrder\PickUpAddress\NumberDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\OrderDialog.cs" />
+    <Compile Include="Dialogs\TaxiOrder\PickUpAddress\CorrectStreetDialog.cs" />
+    <Compile Include="Dialogs\TaxiOrder\PickUpAddress\StreetDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\OrderHelper.cs" />
     <Compile Include="Helpers\StateHelper.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\TranslatorHelper.cs" />
@@ -143,6 +148,7 @@
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\BotSide\ChangeCar.cs" />
     <Compile Include="Models\BotSide\LuisRes.cs" />
+    <Compile Include="Models\BotSide\OrderTaxi\PickUpAddress.cs" />
     <Compile Include="Models\BotSide\OrderTaxi\ChangeCity.cs" />
     <Compile Include="Models\BotSide\Registration\NewUser.cs" />
     <Compile Include="Models\Cities.cs" />
@@ -172,6 +178,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Implementations\LuisService.cs" />
     <Compile Include="Services\Implementations\TranslatorService.cs" />
+    <Compile Include="Services\Implementations\UklonApiService.cs" />
     <Compile Include="Services\Interfaces\ILuisService.cs" />
     <Compile Include="Services\Interfaces\ITranslatorService.cs" />
     <Compile Include="Services\Interfaces\IUklonApiService.cs" />
@@ -181,6 +188,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Translator.exe.config" />
+    <None Include="Properties\PublishProfiles\UklonBot20170721111038 - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -188,7 +196,10 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Dialogs\Help\" />
+    <Folder Include="Dialogs\TaxiOrder\NewFolder1\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

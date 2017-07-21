@@ -1,11 +1,11 @@
-﻿using Microsoft.Bot.Builder.Dialogs;
-using System;
+﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Bot.Connector;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
+using Microsoft.Bot.Connector;
 using UklonBot.Models.BotSide.Registration;
 
-namespace UklonBot.Dialogs
+namespace UklonBot.Dialogs.Registration
 {
     [Serializable]
     public class RegistrationDialog : IDialog
@@ -27,7 +27,7 @@ namespace UklonBot.Dialogs
 
             return new FormBuilder<NewUser>()
                 .Field(nameof(NewUser.Phone))
-                .Message("bla bla {Phone}...")
+                .Message("phone {Phone}...")
                 .AddRemainingFields()
                 .OnCompletion(processRegistration)
                 .Build();
