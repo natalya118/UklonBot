@@ -1,14 +1,17 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Microsoft.Bot.Builder.Dialogs;
+using UklonBot.Helpers;
 using UklonBot.Services.Interfaces;
 
 namespace UklonBot.Services.Implementations
 {
     public class TranslatorService : ITranslatorService
     {
-        
+
         public static async Task<string> TranslateText(string inputText, string language)
         {
             string url = "http://api.microsofttranslator.com/v2/Http.svc/Translate";
@@ -33,7 +36,8 @@ namespace UklonBot.Services.Implementations
         public static async Task<string> TranslateTextFromTo(string inputText, string inputLocale, string outputLocale)
         {
             string url = "http://api.microsofttranslator.com/v2/Http.svc/Translate";
-            string query = $"?text={System.Net.WebUtility.UrlEncode(inputText)}&from={inputLocale}&to={outputLocale}&contentType=text/plain";
+            string query =
+                $"?text={System.Net.WebUtility.UrlEncode(inputText)}&from={inputLocale}&to={outputLocale}&contentType=text/plain";
 
             using (var client = new HttpClient())
             {
@@ -50,9 +54,10 @@ namespace UklonBot.Services.Implementations
                 return translatedText;
             }
         }
+
         public static async Task<string> GetLanguage(string inputText)
         {
-            string query ="http://api.microsofttranslator.com/v2/Http.svc/Detect?text=" + inputText;
+            string query = "http://api.microsofttranslator.com/v2/Http.svc/Detect?text=" + inputText;
             string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
             var accessToken = await GetAuthenticationToken(ApiKey);
             using (var client = new HttpClient())
@@ -68,6 +73,7 @@ namespace UklonBot.Services.Implementations
                 return language;
             }
         }
+
         static async Task<string> GetAuthenticationToken(string key)
         {
             string endpoint = "https://api.cognitive.microsoft.com/sts/v1.0/issueToken";
@@ -87,5 +93,15 @@ namespace UklonBot.Services.Implementations
             var output = await TranslateText(inputText, targetLang);
             return output;
         }
+
+        public static async Task<List<string>> TranslateList(List<string> list, IDialogContext context)
+        {
+            List<string> res = new List<string>();
+            foreach (string s in list)
+                res.Add(await s.ToUserLocaleAsync(context) as string);
+            return res;
+        }
+
+
     }
 }

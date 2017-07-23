@@ -30,41 +30,36 @@ namespace UklonBot.Dialogs
             StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
             //context.Call(new YesNoDialog(), this.YesNoDialogResumeAfter);
             //TODO move services to autofac
-            //var _luisService = new Services.Implementations.LuisService();
-            //var luisAnswer = await _luisService.GetResult(activity.Text);
-            List<string> testDictionary = new List<string>();
-            testDictionary.Add("sas");
-            testDictionary.Add("nj2");
-            testDictionary.Add("nkc");
-            context.Call(new ChoiceDialog(testDictionary), this.DialogResumeAfter);
-            //await context.PostAsync("dsds");
-            //switch (luisAnswer.topScoringIntent.intent)
-            //{
-            //    case "Order taxi":
-            //        context.Call(new OrderDialog(), this.DialogResumeAfter);
-            //        break;
-            //    case "Registration":
-            //        context.Call(new RegistrationDialog(), this.RegistrationDialogResumeAfter);
-            //        break;
-            //    case "Change city":
-            //        context.Call(new ChangeCityDialog(), DialogResumeAfter);
-            //        break;
-            //    case "Help":
-            //        context.Call(new HelpDialog(), DialogResumeAfter);
-            //        break;
-            //    case "How to order taxi":
-            //        context.Call(new HelpDialog(), DialogResumeAfter);
-            //        break;
-            //    case "Greeting":
-            //        await context.PostAsync(await StringExtensions.ToUserLocaleAsync("Hi! How can I help you?", context));
-            //        context.Wait(MessageReceivedAsync);
-            //        break;
-            //    default:
-            //        //await context.PostAsync(await StringExtensions.ToUserLocaleAsync("I'm not sure if I understand you correctly. Could you specify your wish, please?", context));
-            
-            //        //context.Wait(MessageReceivedAsync);
-            //        break;
-            //}
+            var _luisService = new Services.Implementations.LuisService();
+            var luisAnswer = await _luisService.GetResult(activity.Text);
+            await context.PostAsync("dsds");
+            switch (luisAnswer.topScoringIntent.intent)
+            {
+                case "Order taxi":
+                    context.Call(new OrderDialog(), this.DialogResumeAfter);
+                    break;
+                case "Registration":
+                    context.Call(new RegistrationDialog(), this.RegistrationDialogResumeAfter);
+                    break;
+                case "Change city":
+                    context.Call(new ChangeCityDialog(), DialogResumeAfter);
+                    break;
+                case "Help":
+                    context.Call(new HelpDialog(), DialogResumeAfter);
+                    break;
+                case "How to order taxi":
+                    context.Call(new HelpDialog(), DialogResumeAfter);
+                    break;
+                case "Greeting":
+                    await context.PostAsync(await StringExtensions.ToUserLocaleAsync("Hi! How can I help you?", context));
+                    //context.Wait(MessageReceivedAsync);
+                    break;
+                default:
+                    //await context.PostAsync(await StringExtensions.ToUserLocaleAsync("I'm not sure if I understand you correctly. Could you specify your wish, please?", context));
+
+                    //context.Wait(MessageReceivedAsync);
+                    break;
+            }
 
             //context.Wait(MessageReceivedAsync);
         }
