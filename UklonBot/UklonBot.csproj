@@ -126,9 +126,11 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dialogs\Common\ChoiseDialog.cs" />
     <Compile Include="Dialogs\Common\YesNoDialog.cs" />
     <Compile Include="Dialogs\GreetingDialog.cs" />
     <Compile Include="Dialogs\HelpDialog.cs" />
+    <Compile Include="Dialogs\ModifyOrder\ModifyOrderDialog.cs" />
     <Compile Include="Dialogs\Registration\RegistrationDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\DestinationAddress\DestinationAddressWayDialog.cs" />

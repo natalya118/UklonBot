@@ -17,7 +17,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         }
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(await StringExtensions.ToUserLocaleAsync($"Please, provide your pickup number on street: { this.street }", context));
+            await context.PostAsync(await StringExtensions.ToUserLocaleAsync($"Provide number on street: { this.street }", context));
 
            
 

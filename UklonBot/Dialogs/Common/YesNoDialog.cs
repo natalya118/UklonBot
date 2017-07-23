@@ -8,7 +8,7 @@ namespace UklonBot.Dialogs.Common
     [Serializable]
     public class YesNoDialog : IDialog<bool>
     {
-        
+
         public async Task StartAsync(IDialogContext context)
         {
             context.Wait(MessageReceivedAsync);
@@ -19,19 +19,19 @@ namespace UklonBot.Dialogs.Common
             await argument;
 
             PromptDialog.Confirm(
-                    context,
-                    AfterResetAsync,
-                    "",
-                    "Didn't get that!",
-                    promptStyle: PromptStyle.Auto);
+                context,
+                AfterResetAsync,
+                "",
+                "Didn't get that!",
+                promptStyle: PromptStyle.Auto);
         }
 
         public async Task AfterResetAsync(IDialogContext context, IAwaitable<bool> argument)
         {
             var confirm = await argument;
             context.Done(confirm);
-           
+
         }
-       
+
     }
 }
