@@ -58,8 +58,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             this._number = await result;
 
             await context.PostAsync(
-                await StringExtensions.ToUserLocaleAsync($"Your street is {_street} and your number is {_number}.",
-                    context));
+                await $"Your street is {_street} and your number is {_number}.".ToUserLocaleAsync(context));
             context.Call(
                 new ChoiceDialog(new List<string>() {"Call", "Enter" },
                     "How would you like to provide your destination?", "Please, choose one of the variants"), ChoiceDialogResumeAfter);
@@ -75,6 +74,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             {
                 case "Call":
                     await context.PostAsync(await "Calling...".ToUserLocaleAsync(context));
+
                     break;
                 case "Enter":
                     context.Call(new DestinationDialog(), null);

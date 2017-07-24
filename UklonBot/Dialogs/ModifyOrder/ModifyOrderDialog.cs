@@ -6,6 +6,8 @@ using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Dialogs.Common;
+using UklonBot.Dialogs.TaxiOrder;
+using UklonBot.Helpers;
 using UklonBot.Services.Implementations;
 
 namespace UklonBot.Dialogs.ModifyOrder
@@ -46,14 +48,19 @@ namespace UklonBot.Dialogs.ModifyOrder
             switch (resEn)
             {
                 case "Add 5 uan":
+
                     break;
                 case "Change address":
                     break;
                 case "Change city":
+                    context.Call(new ChangeCityDialog(), null);
                     break;
                 case "Cancel order":
+                    context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.CancelDialogResumeAfter);
+
                     break;
                 case "Ok":
+                    context.Call(new ReportingDialog(), null);
                     break;
                 default:
                 {
@@ -62,5 +69,18 @@ namespace UklonBot.Dialogs.ModifyOrder
                 }
             }
         }
+        private async Task CancelDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
+        {
+            var res = await result;
+            var resEn = await TranslatorService.TranslateIntoEnglish(res.ToLower()) as string;
+            if (resEn.Contains("yes"))
+            {
+                await context.PostAsync(await "Your order was cancelled".ToUserLocaleAsync(context));
+                context.Call(new RootDialog(), null);
+
+            }
+            await StartAsync(context);
+        }
+
     }
 }

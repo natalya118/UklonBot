@@ -20,7 +20,7 @@ namespace UklonBot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-
+           
             context.Wait(this.MessageReceivedAsync);
         }
 
@@ -29,7 +29,7 @@ namespace UklonBot.Dialogs
         {
             var activity = await result as Activity;
             StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
-            context.Call(new ReportingDialog(), null);
+            //context.Call(new ReportingDialog(), null);
             //TODO move services to autofac
             var _luisService = new Services.Implementations.LuisService();
             var luisAnswer = await _luisService.GetResult(activity.Text);
@@ -38,6 +38,9 @@ namespace UklonBot.Dialogs
             {
                 case "Order taxi":
                     context.Call(new OrderDialog(), this.DialogResumeAfter);
+                    break;
+                case "Cancel":
+                    context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.DialogResumeAfter);
                     break;
                 case "Registration":
                     context.Call(new RegistrationDialog(), this.RegistrationDialogResumeAfter);
@@ -52,7 +55,7 @@ namespace UklonBot.Dialogs
                     context.Call(new HelpDialog(), DialogResumeAfter);
                     break;
                 case "Greeting":
-                    await context.PostAsync(await StringExtensions.ToUserLocaleAsync("Hi! How can I help you?", context));
+                    await context.PostAsync(await "Hi! How can I help you?".ToUserLocaleAsync(context));
                     //context.Wait(MessageReceivedAsync);
                     break;
                 default:

@@ -32,7 +32,8 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
         {
 
             this._number = await result;
-            context.Call(new ModifyOrderDialog(), null);
+            context.Done(_number);
+            //context.Call(new ModifyOrderDialog(), null);
         }
 
     }
