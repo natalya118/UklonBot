@@ -6,6 +6,7 @@ using Microsoft.Bot.Connector;
 using UklonBot.Dialogs.Common;
 using UklonBot.Dialogs.TaxiOrder.DestinationAddress;
 using UklonBot.Helpers;
+using UklonBot.Services.Implementations;
 
 namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 {
@@ -60,8 +61,8 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                 await StringExtensions.ToUserLocaleAsync($"Your street is {_street} and your number is {_number}.",
                     context));
             context.Call(
-                new ChoiceDialog(new List<string>() {"Call", "Input"},
-                    "How would you like to provide your destination?", "Please, choose one of the variants"), null);
+                new ChoiceDialog(new List<string>() {"Call", "Enter" },
+                    "How would you like to provide your destination?", "Please, choose one of the variants"), ChoiceDialogResumeAfter);
             //await this.SendWelcomeMessageAsync(context);
 
         }
@@ -69,6 +70,17 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task ChoiceDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             this._way = await result;
+            string wayEng = await TranslatorService.TranslateIntoEnglish(_way);
+            switch (wayEng)
+            {
+                case "Call":
+                    await context.PostAsync(await "Calling...".ToUserLocaleAsync(context));
+                    break;
+                case "Enter":
+                    context.Call(new DestinationDialog(), null);
+                    break;
+                    
+            }
            
         }
     }

@@ -143,12 +143,14 @@
     <Compile Include="Dialogs\Registration\RegistrationDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\DestinationAddress\DestinationAddressWayDialog.cs" />
+    <Compile Include="Dialogs\TaxiOrder\DestinationAddress\DestinationDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\AddressDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\ChangeCityDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\NumberDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\OrderDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\CorrectStreetDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\StreetDialog.cs" />
+    <Compile Include="Dialogs\TaxiOrder\ReportingDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
