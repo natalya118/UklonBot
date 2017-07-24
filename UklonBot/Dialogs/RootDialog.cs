@@ -7,6 +7,7 @@ using UklonBot.Helpers;
 using UklonBot.Services.Implementations;
 using Microsoft.Bot.Builder.Luis;
 using UklonBot.Dialogs.Common;
+using UklonBot.Dialogs.ModifyOrder;
 using UklonBot.Dialogs.TaxiOrder;
 using UklonBot.Dialogs.Registration;
 
@@ -32,7 +33,8 @@ namespace UklonBot.Dialogs
             //TODO move services to autofac
             var _luisService = new Services.Implementations.LuisService();
             var luisAnswer = await _luisService.GetResult(activity.Text);
-            await context.PostAsync("dsds");
+            
+            //context.Call(new ModifyOrderDialog(), this.DialogResumeAfter);
             switch (luisAnswer.topScoringIntent.intent)
             {
                 case "Order taxi":
@@ -101,10 +103,7 @@ namespace UklonBot.Dialogs
         {
             await context.PostAsync("dialog after");
             var res = await result;
-            if (res)
-            {
-                await context.PostAsync("REEEEESET");
-            }
+           
 
         }
     }

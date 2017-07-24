@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using UklonBot.Dialogs.Common;
 using UklonBot.Dialogs.TaxiOrder.DestinationAddress;
 using UklonBot.Helpers;
 
@@ -13,7 +15,8 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 
         private string _street;
         private string _number;
-        
+        private string _way;
+
         public async Task StartAsync(IDialogContext context)
         {
 
@@ -21,10 +24,12 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             await this.SendWelcomeMessageAsync(context);
             //context.Wait(MessageReceivedAsync);
         }
+
         private async Task SendWelcomeMessageAsync(IDialogContext context)
         {
-          
-            await context.PostAsync(await StringExtensions.ToUserLocaleAsync("Please, provide pick up address", context));
+
+            await context.PostAsync(
+                await StringExtensions.ToUserLocaleAsync("Please, provide pick up address", context));
 
             context.Call(new StreetDialog(), this.StreetDialogResumeAfter);
             //await GetStreet(context);
@@ -36,24 +41,35 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             await this.SendWelcomeMessageAsync(context);
 
         }
+
         private async Task StreetDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
-           
-                this._street = await result;
 
-                context.Call(new NumberDialog(this._street), this.NumberDialogResumeAfter);
-           
+            this._street = await result;
+
+            context.Call(new NumberDialog(this._street), this.NumberDialogResumeAfter);
+
         }
 
         private async Task NumberDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
-            
-                this._number = await result;
 
-                await context.PostAsync(await StringExtensions.ToUserLocaleAsync($"Your street is { _street } and your number is { _number }.", context));
-            context.Call(new DestinationAddressWayDialog(), null);
-                //await this.SendWelcomeMessageAsync(context);
-            
+            this._number = await result;
+
+            await context.PostAsync(
+                await StringExtensions.ToUserLocaleAsync($"Your street is {_street} and your number is {_number}.",
+                    context));
+            context.Call(
+                new ChoiceDialog(new List<string>() {"Call", "Input"},
+                    "How would you like to provide your destination?", "Please, choose one of the variants"), null);
+            //await this.SendWelcomeMessageAsync(context);
+
+        }
+
+        private async Task ChoiceDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
+        {
+            this._way = await result;
+           
         }
     }
 }
