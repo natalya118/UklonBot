@@ -27,7 +27,7 @@ namespace UklonBot.Dialogs.Common
         }
         public async Task StartAsync(IDialogContext context)
         {
-            _localizedVariants = await TranslatorService.TranslateList(_variants, context);
+            //_localizedVariants = await TranslatorService.TranslateList(_variants, context);
             _prompt = await _prompt.ToUserLocaleAsync(context) as string;
             _retry = await _retry.ToUserLocaleAsync(context) as string;
             StartDialog(context);

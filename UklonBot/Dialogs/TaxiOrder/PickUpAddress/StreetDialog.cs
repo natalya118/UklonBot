@@ -35,24 +35,24 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             }
             else
             {
-                var luisService = new LuisService();
-                var luisAnswer = await luisService.GetResult(message.Text);
-                switch (luisAnswer.topScoringIntent.intent)
-                {
-                    case "Cancel":
+                //var luisService = new LuisService();
+                //var luisAnswer = await luisService.GetResult(message.Text);
+                //switch (luisAnswer.topScoringIntent.intent)
+                //{
+                //    case "Cancel":
 
-                        context.Call(
-                            new ChoiceDialog(new List<string>() {"Yes", "No"},
-                                "Are you sure you want to cancel your order?", "Choose yes or no"),
-                            this.CancelDialogResumeAfter);
+                //        context.Call(
+                //            new ChoiceDialog(new List<string>() {"Yes", "No"},
+                //                "Are you sure you want to cancel your order?", "Choose yes or no"),
+                //            this.CancelDialogResumeAfter);
 
-                        break;
-                    default:
+                //        break;
+                //    default:
 
-                        //context.PostAsync("")
-                        break;
+                //        //context.PostAsync("")
+                //        break;
 
-                }
+                //}
             }
 
         }
@@ -66,19 +66,19 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task CancelDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             var res = await result;
-            var resEn = await TranslatorService.TranslateIntoEnglish(res.ToLower()) as string;
-            if (resEn.Contains("yes"))
-            {
-                await context.PostAsync(await "Your order was cancelled".ToUserLocaleAsync(context));
-                context.Call(new RootDialog(), null);
+            //var resEn = await TranslatorService.TranslateIntoEnglish(res.ToLower()) as string;
+            //if (resEn.Contains("yes"))
+            //{
+            //    await context.PostAsync(await "Your order was cancelled".ToUserLocaleAsync(context));
+            //    context.Call(new RootDialog(), null);
                 
-            }
+            //}
             await StartAsync(context);
         }
 
         public void AfterReset(IDialogContext context, IAwaitable<bool> argument)
         {
-            context.Call(new RootDialog(), null);
+            //context.Call(new RootDialog(), null);
 
         }
 

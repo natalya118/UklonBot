@@ -23,21 +23,21 @@ namespace UklonBot.Dialogs
         {
             var activity = await result as Activity;
 
-            StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
+            //StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
 
             //TODO move services to autofac
-            Services.Implementations.LuisService _luisService = new Services.Implementations.LuisService();
-            var luisAnswer = await _luisService.GetResult(activity.Text);
-            switch (luisAnswer.topScoringIntent.intent)
-            {
-                case "How to order taxi":
-                    await context.PostAsync(await StringExtensions.ToUserLocaleAsync("Ask me to order taxi for you, then provide your location and destination and confirm order.", context));
-                    break;
+            //Services.Implementations.LuisService _luisService = new Services.Implementations.LuisService();
+            //var luisAnswer = await _luisService.GetResult(activity.Text);
+            //switch (luisAnswer.topScoringIntent.intent)
+            //{
+            //    case "How to order taxi":
+            //        await context.PostAsync(await StringExtensions.ToUserLocaleAsync("Ask me to order taxi for you, then provide your location and destination and confirm order.", context));
+            //        break;
                 
-                default:
+            //    default:
                     
-                    break;
-            }
+            //        break;
+            //}
 
             //context.Wait(MessageReceivedAsync);
         }

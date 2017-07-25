@@ -7,9 +7,13 @@ using UklonBot.Helpers;
 using UklonBot.Services.Implementations;
 using Microsoft.Bot.Builder.Luis;
 using UklonBot.Dialogs.Common;
-using UklonBot.Dialogs.ModifyOrder;
 using UklonBot.Dialogs.TaxiOrder;
 using UklonBot.Dialogs.Registration;
+using UklonBot.Factories;
+using UklonBot.Factories.Abstract;
+using UklonBot.Helpers.Abstract;
+using UklonBot.Models;
+using ILuisService = Microsoft.Bot.Builder.Luis.ILuisService;
 
 namespace UklonBot.Dialogs
 {
@@ -17,11 +21,22 @@ namespace UklonBot.Dialogs
     [Serializable]
     public class RootDialog : IDialog<object>
     {
+        private static Helpers.Abstract.ILuisService _luisService;
+        private static ITranslatorService _translatorService;
+        //private LangType _userLocalLang;
+        private static IDialogStrategy _dialogStrategy;
+        public RootDialog(Helpers.Abstract.ILuisService luisService, ITranslatorService translatorService, IDialogStrategy dialogStrategy)
+        {
+            _luisService = luisService;
+            _translatorService = translatorService;
+            _dialogStrategy = dialogStrategy;
+        }
 
-        public async Task StartAsync(IDialogContext context)
+        public Task StartAsync(IDialogContext context)
         {
            
             context.Wait(this.MessageReceivedAsync);
+            return Task.CompletedTask;
         }
 
 
@@ -29,45 +44,45 @@ namespace UklonBot.Dialogs
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result as Activity;
-            UklonApiService uas = new UklonApiService();
-            
-            var channel = activity.ChannelId;
-            var channeId = activity.Recipient.Id;
-            StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
+            //UklonApiService uas = new UklonApiService();
+            //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order, _userLocalLang), this.DialogResumeAfter);
+
+            //var channel = activity.ChannelId;
+            //var channeId = activity.Recipient.Id;
+            StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
             //context.Call(new ReportingDialog(), null);
             //TODO move services to autofac
-            var _luisService = new Services.Implementations.LuisService();
             var luisAnswer = await _luisService.GetResult(activity.Text);
-           
+
             switch (luisAnswer.topScoringIntent.intent)
             {
                 case "Order taxi":
-                    context.Call(new OrderDialog(), this.DialogResumeAfter);
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order, LangType.ru), this.DialogResumeAfter);
                     break;
-                case "Cancel":
-                    context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.DialogResumeAfter);
-                    break;
-                case "Registration":
-                    context.Call(new RegisterDialog(channel, channeId), this.RegistrationDialogResumeAfter);
-                    break;
-                case "Change city":
-                    context.Call(new ChangeCityDialog(), DialogResumeAfter);
-                    break;
-                case "Help":
-                    context.Call(new HelpDialog(), DialogResumeAfter);
-                    break;
-                case "How to order taxi":
-                    context.Call(new HelpDialog(), DialogResumeAfter);
-                    break;
-                case "Greeting":
-                    await context.PostAsync(await "Hi! How can I help you?".ToUserLocaleAsync(context));
-                    //context.Wait(MessageReceivedAsync);
-                    break;
-                default:
-                    //await context.PostAsync(await StringExtensions.ToUserLocaleAsync("I'm not sure if I understand you correctly. Could you specify your wish, please?", context));
+                    //    case "Cancel":
+                    //        context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.DialogResumeAfter);
+                    //        break;
+                    //    case "Registration":
+                    //        //context.Call(new RegisterDialog(channel, channeId), this.RegistrationDialogResumeAfter);
+                    //        break;
+                    //    case "Change city":
+                    //        context.Call(new ChangeCityDialog(), DialogResumeAfter);
+                    //        break;
+                    //    case "Help":
+                    //        context.Call(new HelpDialog(), DialogResumeAfter);
+                    //        break;
+                    //    case "How to order taxi":
+                    //        context.Call(new HelpDialog(), DialogResumeAfter);
+                    //        break;
+                    //    case "Greeting":
+                    //        await context.PostAsync(await "Hi! How can I help you?".ToUserLocaleAsync(context));
+                    //        //context.Wait(MessageReceivedAsync);
+                    //        break;
+                    //    default:
+                    //        //await context.PostAsync(await StringExtensions.ToUserLocaleAsync("I'm not sure if I understand you correctly. Could you specify your wish, please?", context));
 
-                    //context.Wait(MessageReceivedAsync);
-                    break;
+                    //        //context.Wait(MessageReceivedAsync);
+                    //        break;
             }
 
             //context.Wait(MessageReceivedAsync);

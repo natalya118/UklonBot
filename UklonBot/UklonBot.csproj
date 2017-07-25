@@ -157,13 +157,16 @@
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\CorrectStreetDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\StreetDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\ReportingDialog.cs" />
+    <Compile Include="Factories\Abstract\IDialogFactory.cs" />
+    <Compile Include="Factories\Abstract\IDialogStrategy.cs" />
+    <Compile Include="Factories\DialogFactoryType.cs" />
+    <Compile Include="Factories\Exact\DialogStrategy.cs" />
+    <Compile Include="Factories\Exact\RootDialogFactory.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\OrderHelper.cs" />
     <Compile Include="Helpers\StateHelper.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
-    <Compile Include="Helpers\TranslatorHelper.cs" />
     <Compile Include="Infrastracture\AutofacConfig.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\BotSide\ChangeCar.cs" />
@@ -174,6 +177,7 @@
     <Compile Include="Models\BotSide\OrderTaxi\TaxiLocations.cs" />
     <Compile Include="Models\BotSide\Registration\NewUser.cs" />
     <Compile Include="Models\Cities.cs" />
+    <Compile Include="Models\LangType.cs" />
     <Compile Include="Models\Repositories\Abstract\IUnitOfWork.cs" />
     <Compile Include="Models\Repositories\Exact\GenericRepository.cs" />
     <Compile Include="Models\Repositories\Exact\UnitOfWork.cs" />
@@ -198,12 +202,12 @@
     <Compile Include="Models\UklonSide\Vehicle.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Implementations\LuisService.cs" />
-    <Compile Include="Services\Implementations\TranslatorService.cs" />
-    <Compile Include="Services\Implementations\UklonApiService.cs" />
-    <Compile Include="Services\Interfaces\ILuisService.cs" />
-    <Compile Include="Services\Interfaces\ITranslatorService.cs" />
-    <Compile Include="Services\Interfaces\IUklonApiService.cs" />
+    <Compile Include="Helpers\Exact\LuisService.cs" />
+    <Compile Include="Helpers\Exact\TranslatorService.cs" />
+    <Compile Include="Helpers\Exact\UklonApiService.cs" />
+    <Compile Include="Helpers\Abstract\ILuisService.cs" />
+    <Compile Include="Helpers\Abstract\ITranslatorService.cs" />
+    <Compile Include="Helpers\Abstract\IUklonApiService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

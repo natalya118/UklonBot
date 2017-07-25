@@ -4,15 +4,15 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.Bot.Builder.Dialogs;
+using UklonBot.Helpers.Abstract;
 using UklonBot.Helpers;
-using UklonBot.Services.Interfaces;
 
 namespace UklonBot.Services.Implementations
 {
     public class TranslatorService : ITranslatorService
     {
 
-        public static async Task<string> TranslateText(string inputText, string language)
+        public async Task<string> TranslateText(string inputText, string language)
         {
             string url = "http://api.microsofttranslator.com/v2/Http.svc/Translate";
             string query = $"?text={System.Net.WebUtility.UrlEncode(inputText)}&to={language}&contentType=text/plain";
@@ -33,7 +33,7 @@ namespace UklonBot.Services.Implementations
             }
         }
 
-        public static async Task<string> TranslateTextFromTo(string inputText, string inputLocale, string outputLocale)
+        public async Task<string> TranslateTextFromTo(string inputText, string inputLocale, string outputLocale)
         {
             string url = "http://api.microsofttranslator.com/v2/Http.svc/Translate";
             string query =
@@ -55,7 +55,7 @@ namespace UklonBot.Services.Implementations
             }
         }
 
-        public static async Task<string> GetLanguage(string inputText)
+        public async Task<string> GetLanguage(string inputText)
         {
             string query = "http://api.microsofttranslator.com/v2/Http.svc/Detect?text=" + inputText;
             string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
@@ -74,7 +74,7 @@ namespace UklonBot.Services.Implementations
             }
         }
 
-        static async Task<string> GetAuthenticationToken(string key)
+         public async Task<string> GetAuthenticationToken(string key)
         {
             string endpoint = "https://api.cognitive.microsoft.com/sts/v1.0/issueToken";
 
@@ -87,14 +87,14 @@ namespace UklonBot.Services.Implementations
             }
         }
 
-        public static async Task<string> TranslateIntoEnglish(string inputText)
+        public async Task<string> TranslateIntoEnglish(string inputText)
         {
             string targetLang = "en";
             var output = await TranslateText(inputText, targetLang);
             return output;
         }
 
-        public static async Task<List<string>> TranslateList(List<string> list, IDialogContext context)
+        public async Task<List<string>> TranslateList(List<string> list, IDialogContext context)
         {
             List<string> res = new List<string>();
             foreach (string s in list)

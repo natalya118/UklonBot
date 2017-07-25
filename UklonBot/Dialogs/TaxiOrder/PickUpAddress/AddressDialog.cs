@@ -201,29 +201,29 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 
             this._way = await result;
 
-            string wayEng = await TranslatorService.TranslateIntoEnglish(_way);
+            //string wayEng = await TranslatorService.TranslateIntoEnglish(_way);
 
-            switch (wayEng)
+            //switch (wayEng)
 
-            {
+            //{
 
-                case "Call":
+            //    case "Call":
 
-                    await context.PostAsync(await "Calling...".ToUserLocaleAsync(context));
-
-
-
-                    break;
-
-                case "Enter":
-
-                    context.Call(new DestinationDialog(), DestinationDialogResumeAfter);
-
-                    break;
+            //        await context.PostAsync(await "Calling...".ToUserLocaleAsync(context));
 
 
 
-            }
+            //        break;
+
+            //    case "Enter":
+
+            //        context.Call(new DestinationDialog(), DestinationDialogResumeAfter);
+
+            //        break;
+
+
+
+            //}
 
 
 

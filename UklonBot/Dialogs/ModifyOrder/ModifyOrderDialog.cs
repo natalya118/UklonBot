@@ -8,6 +8,8 @@ using Microsoft.Bot.Connector;
 using UklonBot.Dialogs.Common;
 using UklonBot.Dialogs.TaxiOrder;
 using UklonBot.Helpers;
+using UklonBot.Helpers.Abstract;
+using UklonBot.Models;
 using UklonBot.Services.Implementations;
 
 namespace UklonBot.Dialogs.ModifyOrder
@@ -15,6 +17,14 @@ namespace UklonBot.Dialogs.ModifyOrder
     [Serializable]
     public class ModifyOrderDialog : IDialog
     {
+        private static ITranslatorService _translatorService;
+        private readonly LangType _userLocalLang;
+
+        public ModifyOrderDialog(ITranslatorService translatorService, LangType langType)
+        {
+            _translatorService = translatorService;
+            _userLocalLang = langType;
+        }
         public async Task StartAsync(IDialogContext context)
         {
             List<string> options = new List<string>()
@@ -44,7 +54,7 @@ namespace UklonBot.Dialogs.ModifyOrder
         {
             var res = await result;
             await context.PostAsync(res);
-            var resEn = await TranslatorService.TranslateIntoEnglish(res) as string;
+            var resEn = await _translatorService.TranslateIntoEnglish(res) as string;
             switch (resEn)
             {
                 case "Add 5 uan":
@@ -72,11 +82,11 @@ namespace UklonBot.Dialogs.ModifyOrder
         private async Task CancelDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             var res = await result;
-            var resEn = await TranslatorService.TranslateIntoEnglish(res.ToLower()) as string;
+            var resEn = await _translatorService.TranslateIntoEnglish(res.ToLower()) as string;
             if (resEn.Contains("yes"))
             {
                 await context.PostAsync(await "Your order was cancelled".ToUserLocaleAsync(context));
-                context.Call(new RootDialog(), null);
+                //context.Call(new RootDialog(), null);
 
             }
             await StartAsync(context);

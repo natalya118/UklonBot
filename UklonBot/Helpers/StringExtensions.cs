@@ -1,9 +1,5 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using UklonBot.Services.Implementations;
 
 namespace UklonBot.Helpers
@@ -15,9 +11,8 @@ namespace UklonBot.Helpers
             var userLanguageCode = StateHelper.GetUserLanguageCode(context);
             if (userLanguageCode != "en")
             {
-                text = await TranslatorService.TranslateText(text, userLanguageCode) as string;
-                //text = TranslatorService.TranslateText(text, userLanguageCode);
-            }
+                //text = await TranslatorService.TranslateText(text, userLanguageCode) as string;
+                  }
 
             return text;
         }
@@ -26,7 +21,7 @@ namespace UklonBot.Helpers
             var userLanguageCode = StateHelper.GetUserLanguageCode(activity);
             if (userLanguageCode != "en")
             {
-                text = TranslatorService.TranslateTextFromTo(text, "en", userLanguageCode).Result;
+                //text = TranslatorService.TranslateTextFromTo(text, "en", userLanguageCode).Result;
             }
 
             return text;

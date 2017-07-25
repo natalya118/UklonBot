@@ -1,17 +1,14 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
 using System.Threading.Tasks;
 using UklonBot.Dialogs.TaxiOrder.PickUpAddress;
 using Microsoft.Bot.Connector;
 using UklonBot.Dialogs.Common;
 using UklonBot.Dialogs.ModifyOrder;
 using UklonBot.Helpers;
+using UklonBot.Helpers.Abstract;
 using UklonBot.Models.BotSide.OrderTaxi;
-using UklonBot.Models.UklonSide;
 using UklonBot.Services.Implementations;
 
 namespace UklonBot.Dialogs.TaxiOrder
@@ -19,6 +16,11 @@ namespace UklonBot.Dialogs.TaxiOrder
     [Serializable]
     public class OrderDialog : IDialog<object>
     {
+        private static ITranslatorService _translatorService;
+        public OrderDialog(ITranslatorService translatorService)
+        {
+            _translatorService = translatorService;
+        }
         private TaxiLocations taxiLocations;
         public async Task StartAsync(IDialogContext context)
         {
@@ -60,15 +62,15 @@ namespace UklonBot.Dialogs.TaxiOrder
         private async Task ChoiceDialogResumeAfterAsync(IDialogContext context, IAwaitable<string> result)
         {
             var res = await result;
-            var resEn = await TranslatorService.TranslateIntoEnglish(res.ToLower());
+            var resEn = await _translatorService.TranslateIntoEnglish(res.ToLower());
             switch (resEn)
             {
-                case "change":
-                    context.Call(new ModifyOrderDialog(), null);
-                    break;
-                case "modify":
-                    context.Call(new ModifyOrderDialog(), null);
-                    break;
+                //case "change":
+                //    context.Call(new ModifyOrderDialog(), null);
+                //    break;
+                //case "modify":
+                //    context.Call(new ModifyOrderDialog(), null);
+                //    break;
                 case "send":
                     await context.PostAsync(await "Your order have been sent".ToUserLocaleAsync(context));
                     context.Call(new ReportingDialog(), null);

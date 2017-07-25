@@ -5,11 +5,18 @@ using System.Web.Http;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
-namespace UklonBot
+namespace UklonBot.Controllers
 {
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        private readonly IDialog<object> _rootDialog;
+
+        public MessagesController(IDialog<object> rootDialog)
+        {
+            _rootDialog = rootDialog;
+        }
+
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -20,7 +27,7 @@ namespace UklonBot
             {
 
                 
-                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                await Conversation.SendAsync(activity, () => _rootDialog);
             }
             else
             {
