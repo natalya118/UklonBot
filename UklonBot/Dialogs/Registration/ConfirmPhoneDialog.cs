@@ -17,6 +17,7 @@ namespace UklonBot.Dialogs.Registration
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
+
             context.Done(message.Text);
 
         }

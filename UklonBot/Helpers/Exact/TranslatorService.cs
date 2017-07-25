@@ -1,11 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Microsoft.Bot.Builder.Dialogs;
+﻿
 using UklonBot.Helpers.Abstract;
 using UklonBot.Helpers;
+using UklonBot.Models;
+using System;
+using System.Configuration;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using System.Xml;
+using System.Xml.Linq;
+using System.Collections.Generic;
+using Microsoft.Bot.Builder.Dialogs;
 
 namespace UklonBot.Services.Implementations
 {
@@ -32,7 +40,26 @@ namespace UklonBot.Services.Implementations
                 return translatedText;
             }
         }
+        public async Task<string> TranslateText(string inputText, LangType language)
+        {
+            string url = "http://api.microsofttranslator.com/v2/Http.svc/Translate";
+            string query = $"?text={System.Net.WebUtility.UrlEncode(inputText)}&to={language}&contentType=text/plain";
 
+            using (var client = new HttpClient())
+            {
+                string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
+                var accessToken = await GetAuthenticationToken(ApiKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                var response = await client.GetAsync(url + query);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                    return "Hata: " + result;
+
+                var translatedText = XElement.Parse(result).Value;
+                return translatedText;
+            }
+        }
         public async Task<string> TranslateTextFromTo(string inputText, string inputLocale, string outputLocale)
         {
             string url = "http://api.microsofttranslator.com/v2/Http.svc/Translate";
@@ -101,7 +128,33 @@ namespace UklonBot.Services.Implementations
                 res.Add(await s.ToUserLocaleAsync(context) as string);
             return res;
         }
+        public async Task<LangType> GetLanguageType(string text)
+        {
+            using (var httpClient = new HttpClient())
+            {
 
+                var req = ConfigurationManager.ConnectionStrings["TranslatorLangTypeEndpoint"].ConnectionString + HttpUtility.UrlEncode(text);
+                string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetAuthenticationToken(ApiKey));
+
+                var response = await httpClient.GetAsync(req);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultStream = await response.Content.ReadAsStreamAsync();
+                    var translatedStream = new StreamReader(resultStream, Encoding.GetEncoding(""));
+                    var result = new XmlDocument();
+
+                    result.LoadXml(translatedStream.ReadToEnd());
+                    //return result.InnerText;
+
+                    return Enum.IsDefined(typeof(LangType), result.InnerText) ?
+                        (LangType)Enum.Parse(typeof(LangType), result.InnerText, true)
+                        : LangType.en;
+                }
+                return LangType.en;
+            }
+        }
 
     }
 }

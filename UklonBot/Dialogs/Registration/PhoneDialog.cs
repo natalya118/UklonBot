@@ -23,7 +23,6 @@ namespace UklonBot.Dialogs.Registration
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var phone = await argument;
-
             Regex phoneEx = new Regex(@"^\d{12}$");
             if (phoneEx.IsMatch(phone.Text))
             {

@@ -1,21 +1,28 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Threading.Tasks;
-using UklonBot.Helpers;
 using Microsoft.Bot.Connector;
-using UklonBot.Services.Implementations;
+using UklonBot.Helpers;
+using UklonBot.Helpers.Abstract;
+using UklonBot.Models;
 
 namespace UklonBot.Dialogs
 {
     [Serializable]
-    public class HelpDialog : IDialog
+    public class HelpDialog : IDialog<object>
     {
+        private static ITranslatorService _translatorService;
+        private static ILuisService _luisService;
+        private LangType _langType;
+        public HelpDialog(ITranslatorService translatorService, ILuisService luisService, LangType langType)
+        {
+            _translatorService = translatorService;
+            _luisService = luisService;
+            _langType = langType;
+        }
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(await StringExtensions.ToUserLocaleAsync("I'm here to help you", context));
+            await context.PostAsync(await _translatorService.TranslateText("Как я могу вам помочь?", StateHelper.GetUserLanguageCode(context)));
             context.Wait(this.MessageReceivedAsync);
         }
 
@@ -23,21 +30,18 @@ namespace UklonBot.Dialogs
         {
             var activity = await result as Activity;
 
-            //StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
+           
+                        var luisAnswer = await _luisService.GetResult(activity.Text);
+            switch (luisAnswer.topScoringIntent.intent)
+            {
+                case "How to order taxi":
+                    await context.PostAsync(await _translatorService.TranslateText("Попросите меня заказать такси и предоставьте Ваши данные", StateHelper.GetUserLanguageCode(context)));
+                    break;
 
-            //TODO move services to autofac
-            //Services.Implementations.LuisService _luisService = new Services.Implementations.LuisService();
-            //var luisAnswer = await _luisService.GetResult(activity.Text);
-            //switch (luisAnswer.topScoringIntent.intent)
-            //{
-            //    case "How to order taxi":
-            //        await context.PostAsync(await StringExtensions.ToUserLocaleAsync("Ask me to order taxi for you, then provide your location and destination and confirm order.", context));
-            //        break;
-                
-            //    default:
-                    
-            //        break;
-            //}
+                default:
+
+                    break;
+            }
 
             //context.Wait(MessageReceivedAsync);
         }

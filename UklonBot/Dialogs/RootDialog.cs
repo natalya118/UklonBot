@@ -23,7 +23,7 @@ namespace UklonBot.Dialogs
     {
         private static Helpers.Abstract.ILuisService _luisService;
         private static ITranslatorService _translatorService;
-        //private LangType _userLocalLang;
+        private LangType _userLocalLang;
         private static IDialogStrategy _dialogStrategy;
         public RootDialog(Helpers.Abstract.ILuisService luisService, ITranslatorService translatorService, IDialogStrategy dialogStrategy)
         {
@@ -47,8 +47,8 @@ namespace UklonBot.Dialogs
             //UklonApiService uas = new UklonApiService();
             //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order, _userLocalLang), this.DialogResumeAfter);
 
-            //var channel = activity.ChannelId;
-            //var channeId = activity.Recipient.Id;
+            _userLocalLang = LangType.uk;
+
             StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
             //context.Call(new ReportingDialog(), null);
             //TODO move services to autofac
@@ -59,18 +59,21 @@ namespace UklonBot.Dialogs
                 case "Order taxi":
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order, LangType.ru), this.DialogResumeAfter);
                     break;
-                    //    case "Cancel":
-                    //        context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.DialogResumeAfter);
-                    //        break;
-                    //    case "Registration":
-                    //        //context.Call(new RegisterDialog(channel, channeId), this.RegistrationDialogResumeAfter);
-                    //        break;
-                    //    case "Change city":
-                    //        context.Call(new ChangeCityDialog(), DialogResumeAfter);
-                    //        break;
-                    //    case "Help":
-                    //        context.Call(new HelpDialog(), DialogResumeAfter);
-                    //        break;
+                //    case "Cancel":
+                //        context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.DialogResumeAfter);
+                //        break;
+                case "Registration":
+                    var channel = activity.ChannelId;
+                    var channeId = activity.Recipient.Id;
+                    context.Call(new RegisterDialog(channel, channeId), this.RegistrationDialogResumeAfter);
+                    break;
+                //    case "Change city":
+                //        context.Call(new ChangeCityDialog(), DialogResumeAfter);
+                //        break;
+                case "Help":
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Help, LangType.ru), this.DialogResumeAfter);
+
+                    break;
                     //    case "How to order taxi":
                     //        context.Call(new HelpDialog(), DialogResumeAfter);
                     //        break;

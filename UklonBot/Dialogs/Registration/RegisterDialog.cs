@@ -30,6 +30,7 @@ namespace UklonBot.Dialogs.Registration
         private async Task PhoneDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             phone = await result;
+
             UklonApiService uas = new UklonApiService();
             uas.ConfirmPhone(phone);
             await context.PostAsync("Verification code have been sent to " + phone);

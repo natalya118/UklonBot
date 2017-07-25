@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Bot.Builder.Dialogs;
+using UklonBot.Dialogs;
 using UklonBot.Dialogs.TaxiOrder;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
@@ -25,8 +26,8 @@ namespace UklonBot.Factories.Exact
             {
                 case DialogFactoryType.Root.Order:
                     return new OrderDialog(_translatorService);
-                //case DialogFactoryType.Root.AdditionalLuggage:
-                //    return new AdditionalLuggageDialog(_translatorHelper, _luisHelper, userLocalLang);
+                case DialogFactoryType.Root.Help:
+                    return new HelpDialog(_translatorService, _luisService, userLocalLang);
                 //case DialogFactoryType.Root.AnimalsTransportation:
                 //    return new AnimalsTransportationDialog(_translatorHelper, _luisHelper, _dialogStrategy, userLocalLang);
                 //case DialogFactoryType.Root.PanoramaCard:
