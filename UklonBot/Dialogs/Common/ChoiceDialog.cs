@@ -47,7 +47,7 @@ namespace UklonBot.Dialogs.Common
             
         }
 
-        private async Task ChoiceDialogResumeAfterAsync(IDialogContext context, IAwaitable<object> result)
+        private async Task ChoiceDialogResumeAfterAsync(IDialogContext context, IAwaitable<string> result)
         {
 
             var message = await result;

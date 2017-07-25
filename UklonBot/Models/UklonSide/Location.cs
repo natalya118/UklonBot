@@ -1,7 +1,9 @@
+using System;
 using Newtonsoft.Json;
 
 namespace UklonBot.Models.UklonSide
 {
+    [Serializable]
     public class Location
     {
         [JsonProperty("city_id")]

@@ -6,14 +6,14 @@ using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Dialogs.ModifyOrder;
 using UklonBot.Dialogs.TaxiOrder.PickUpAddress;
+using UklonBot.Models.UklonSide;
 
 namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
 {
     [Serializable]
-    public class DestinationDialog: IDialog
+    public class DestinationDialog: IDialog<Location>
     {
         private string _street;
-        private string _number;
         public async Task StartAsync(IDialogContext context)
         {
             context.Call(new StreetDialog(), this.StreetDialogResumeAfterAsync);
@@ -28,11 +28,11 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
 
         }
 
-        private async Task NumberDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
+        private async Task NumberDialogResumeAfter(IDialogContext context, IAwaitable<Location> result)
         {
 
-            this._number = await result;
-            context.Done(_number);
+            var location = await result;
+            context.Done(location);
             //context.Call(new ModifyOrderDialog(), null);
         }
 

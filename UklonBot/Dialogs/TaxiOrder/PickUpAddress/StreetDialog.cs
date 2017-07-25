@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
@@ -22,32 +23,45 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         {
             
             var message = await result;
-
+            
+            UklonApiService uas = new UklonApiService();
+            List<string> Places = uas.GetPlaces(message.Text).ToList();
             //TODO check if street is valid (using UKLON API)
             //if not - check if input is intent
             //if not - ask user to change street or city 
-          
-            var luisService = new LuisService();
-            var luisAnswer = await luisService.GetResult(message.Text);
-            switch (luisAnswer.topScoringIntent.intent)
+            if (Places.Any())
             {
-                case "Cancel":
-                    
-                    context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.CancelDialogResumeAfter);
-
-                    break;
-                default:
-                    if ((message.Text != null) && (message.Text.Trim().Length > 0))
-                    {
-
-                        context.Done(message.Text);
-                    }
-                    break;
-                    
+                context.Call(new ChoiceDialog(Places, "choose location", "choose from list"), LocationDialogResumeAfter);
             }
-            
+            else
+            {
+                var luisService = new LuisService();
+                var luisAnswer = await luisService.GetResult(message.Text);
+                switch (luisAnswer.topScoringIntent.intent)
+                {
+                    case "Cancel":
+
+                        context.Call(
+                            new ChoiceDialog(new List<string>() {"Yes", "No"},
+                                "Are you sure you want to cancel your order?", "Choose yes or no"),
+                            this.CancelDialogResumeAfter);
+
+                        break;
+                    default:
+
+                        //context.PostAsync("")
+                        break;
+
+                }
+            }
+
         }
 
+        private async Task LocationDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
+        {
+            var res = await result;
+            context.Done(res);
+        }
 
         private async Task CancelDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {

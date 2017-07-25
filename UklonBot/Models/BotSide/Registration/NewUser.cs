@@ -6,7 +6,8 @@ namespace UklonBot.Models.BotSide.Registration
     [Serializable]
     public class NewUser
     {
-        [Pattern(@"^\d{2}\s\d{3}\s\d{2}\s\d{2}$")]
+        //[Pattern(@"^\d{2}\s\d{3}\s\d{2}\s\d{2}$")]
+        [Pattern(@"^\d{12}$")]
         [Prompt("Please enter your {&}")]
         public string Phone { get; set; }
         

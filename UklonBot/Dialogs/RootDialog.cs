@@ -25,15 +25,20 @@ namespace UklonBot.Dialogs
         }
 
 
+
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result as Activity;
+            UklonApiService uas = new UklonApiService();
+            
+            var channel = activity.ChannelId;
+            var channeId = activity.Recipient.Id;
             StateHelper.SetUserLanguageCode(context, await TranslatorService.GetLanguage(activity.Text));
             //context.Call(new ReportingDialog(), null);
             //TODO move services to autofac
             var _luisService = new Services.Implementations.LuisService();
             var luisAnswer = await _luisService.GetResult(activity.Text);
-            
+           
             switch (luisAnswer.topScoringIntent.intent)
             {
                 case "Order taxi":
@@ -43,7 +48,7 @@ namespace UklonBot.Dialogs
                     context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.DialogResumeAfter);
                     break;
                 case "Registration":
-                    context.Call(new RegistrationDialog(), this.RegistrationDialogResumeAfter);
+                    context.Call(new RegisterDialog(channel, channeId), this.RegistrationDialogResumeAfter);
                     break;
                 case "Change city":
                     context.Call(new ChangeCityDialog(), DialogResumeAfter);
@@ -93,9 +98,12 @@ namespace UklonBot.Dialogs
 
            // context.Call(new NameDialog(), this.NameDialogResumeAfter);
         }
-        private async Task RegistrationDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
+        private async Task RegistrationDialogResumeAfter(IDialogContext context, IAwaitable<bool> result)
         {
-            await context.PostAsync("Congratulations! You've successfully registered :)");
+            if(await result)
+                await context.PostAsync("Congratulations! You've successfully registered :)");
+            else
+                await context.PostAsync("Ooops");
         }
         private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
@@ -108,5 +116,6 @@ namespace UklonBot.Dialogs
            
 
         }
+
     }
 }

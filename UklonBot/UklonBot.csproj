@@ -45,6 +45,9 @@
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac.Integration.WebApi, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.WebApi2.4.0.1\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="Chronic, Version=0.3.2.0, Culture=neutral, PublicKeyToken=3bd1f1ef638b0d3c, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Chronic.Signed.0.3.2\lib\net40\Chronic.dll</HintPath>
     </Reference>
@@ -140,6 +143,9 @@
     <Compile Include="Dialogs\GreetingDialog.cs" />
     <Compile Include="Dialogs\HelpDialog.cs" />
     <Compile Include="Dialogs\ModifyOrder\ModifyOrderDialog.cs" />
+    <Compile Include="Dialogs\Registration\ConfirmPhoneDialog.cs" />
+    <Compile Include="Dialogs\Registration\PhoneDialog.cs" />
+    <Compile Include="Dialogs\Registration\RegisterDialog.cs" />
     <Compile Include="Dialogs\Registration\RegistrationDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\DestinationAddress\DestinationAddressWayDialog.cs" />
@@ -165,6 +171,7 @@
     <Compile Include="Models\BotSide\OrderTaxi\PickUpAddress.cs" />
     <Compile Include="Models\BotSide\OrderTaxi\ChangeCity.cs" />
     <Compile Include="Models\BotSide\OrderTaxi\ProvideDestinationWay.cs" />
+    <Compile Include="Models\BotSide\OrderTaxi\TaxiLocations.cs" />
     <Compile Include="Models\BotSide\Registration\NewUser.cs" />
     <Compile Include="Models\Cities.cs" />
     <Compile Include="Models\Repositories\Abstract\IUnitOfWork.cs" />

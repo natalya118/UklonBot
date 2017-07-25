@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
+using UklonBot.Models.UklonSide;
+using UklonBot.Services.Implementations;
 
 namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 {
     [Serializable]
-    public class NumberDialog : IDialog<string>
+    public class NumberDialog : IDialog<Location>
     {
         private string street;
 
@@ -17,7 +21,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         }
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(await StringExtensions.ToUserLocaleAsync($"Provide number on street: { this.street }", context));
+            await context.PostAsync(await $"Provide number on street: { this.street }".ToUserLocaleAsync(context));
 
            
 
@@ -29,8 +33,10 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 
             string number = message.Text;
 
-            
-                context.Done(number);            
+
+            UklonApiService uas = new UklonApiService();
+            Location location = uas.GetPlaceLocation(street, number);
+            context.Done(location);            
        
         }
 

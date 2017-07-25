@@ -10,7 +10,7 @@ namespace UklonBot.Services.Interfaces
     interface IUklonApiService
     {
         //string CreateOrder(Dialog currentDialog);
-        //double CalculateAmmount(Dialog currentDialog);
+        double CalculateAmmount(Location fromLocation, Location toLocation);
         IEnumerable<string> GetPlaces(string query);
         OrderInfo GetOrderState(string dialogOrderId);
         void CancelOrder(string currentDialogOrderId);
@@ -18,7 +18,7 @@ namespace UklonBot.Services.Interfaces
         string GetRecreatedOrderId(string orderId);
         Location GetPlaceLocation(string currentDialogPickupAddress, string currentDialogPickupHouse);
         bool Authenticate(string phoneNumber, string viberId);
-        bool Register(string phoneNumber, string viberId, string phoneValidationCode);
+        bool Register(string phoneNumber, string provider, string providerId, string phoneValidationCode);
         void ConfirmPhone(string phoneNumber);
     }
 }
