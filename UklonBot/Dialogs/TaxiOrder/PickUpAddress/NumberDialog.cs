@@ -1,42 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
-using UklonBot.Models.UklonSide;
-using UklonBot.Services.Implementations;
+using UklonBot.Helpers.Abstract;
 
 namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 {
     [Serializable]
-    public class NumberDialog : IDialog<Location>
+    public class NumberDialog : IDialog<object>
     {
-        private string street;
-
-        public NumberDialog(string street)
+        private static ITranslatorService _translatorService;
+        
+        public NumberDialog(ITranslatorService translatorService)
         {
-            this.street = street;
+            _translatorService = translatorService;
         }
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(await $"Provide number on street: { this.street }".ToUserLocaleAsync(context));
-
-           
+            await context.PostAsync(await _translatorService.TranslateText("Номер здания: ",StateHelper.GetUserLanguageCode(context)));
 
             context.Wait(this.MessageReceivedAsync);
         }
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var message = await result;
-
-            string number = message.Text;
-
-
-            //UklonApiService uas = new UklonApiService();
-            //Location location = uas.GetPlaceLocation(street, number);
-            //context.Done(location);            
+            
+            context.Done(message.Text);            
        
         }
 

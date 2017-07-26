@@ -24,7 +24,7 @@ namespace UklonBot.Factories.Exact
         }
 
 
-        public IDialog<object> CreateDialog(Enum value, LangType userLocalLang)
+        public IDialog<object> CreateDialog(Enum value)
         {
             var dialogFactory = _dialogFactories
                 .FirstOrDefault(factory => factory.AppliesTo(value.GetType()));
@@ -32,7 +32,7 @@ namespace UklonBot.Factories.Exact
             if (dialogFactory == null)
                 throw new Exception("Dialog Type not registered");
 
-            return dialogFactory.CreateDialog(value, userLocalLang);
+            return dialogFactory.CreateDialog(value);
         }
     }
 }

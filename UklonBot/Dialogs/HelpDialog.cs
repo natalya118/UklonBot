@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
-using UklonBot.Models;
 
 namespace UklonBot.Dialogs
 {
@@ -13,12 +12,10 @@ namespace UklonBot.Dialogs
     {
         private static ITranslatorService _translatorService;
         private static ILuisService _luisService;
-        private LangType _langType;
-        public HelpDialog(ITranslatorService translatorService, ILuisService luisService, LangType langType)
+        public HelpDialog(ITranslatorService translatorService, ILuisService luisService)
         {
             _translatorService = translatorService;
             _luisService = luisService;
-            _langType = langType;
         }
         public async Task StartAsync(IDialogContext context)
         {

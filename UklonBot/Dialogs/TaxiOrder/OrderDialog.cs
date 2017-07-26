@@ -27,7 +27,7 @@ namespace UklonBot.Dialogs.TaxiOrder
         private TaxiLocations taxiLocations;
         public async Task StartAsync(IDialogContext context)
         {
-            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address, LangType.ru), AddressDialogResumeAfter);
+            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
             
         }
         private async Task AddressDialogResumeAfter(IDialogContext context, IAwaitable<object> result)

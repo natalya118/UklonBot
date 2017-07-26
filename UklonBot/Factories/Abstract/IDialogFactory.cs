@@ -6,7 +6,7 @@ namespace UklonBot.Factories.Abstract
 {
     public interface IDialogFactory
     {
-        IDialog<object> CreateDialog(Enum value, LangType userLocalLang);
+        IDialog<object> CreateDialog(Enum value);
 
         bool AppliesTo(Type type);
     

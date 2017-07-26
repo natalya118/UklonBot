@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using UklonBot.Dialogs.Common;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
-using UklonBot.Models;
 using UklonBot.Models.BotSide.OrderTaxi;
 using UklonBot.Models.UklonSide;
 
@@ -31,44 +29,32 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         }
 
         private string _street;
-
         private string _number;
-
-        private string _way;
 
         private Location _from;
         private Location _to;
 
         public async Task StartAsync(IDialogContext context)
-
         {
-            await this.SendWelcomeMessageAsync(context);
+            await SendWelcomeMessageAsync(context);
         }
 
-
-
+        
         private async Task SendWelcomeMessageAsync(IDialogContext context)
 
         {
             await context.PostAsync(
                 await _translatorService.TranslateText("Введите адрес посадки", StateHelper.GetUserLanguageCode(context)));
             
-            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Street, LangType.ru), this.StreetDialogResumeAfter);
+            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Street), StreetDialogResumeAfter);
 
         }
 
 
 
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
-
         {
-
-
-
-            await this.SendWelcomeMessageAsync(context);
-
-
-
+            await SendWelcomeMessageAsync(context);
         }
 
 
@@ -76,35 +62,25 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task StreetDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
 
         {
-            this._street = await result as string;
+            _street = await result as string;
 
-            context.Call(new NumberDialog(this._street), this.NumberDialogResumeAfter);
-
-
-
+            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
         }
 
 
 
-        private async Task NumberDialogResumeAfter(IDialogContext context, IAwaitable<Location> result)
+        private async Task NumberDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
 
         {
-            _from = await result;
+            _number = await result as string;
+            _from = _uklonApiService.GetPlaceLocation(_street, _number);
 
-            //await context.PostAsync(
-
-            //    await $"Your street is {_street} and your number is {_number}.".ToUserLocaleAsync(context));
-
-            context.Call(
-
-                new ChoiceDialog(new List<string>() { "Call", "Enter" },
-
-                    "How would you like to provide your destination?", "Please, choose one of the variants"), ChoiceDialogResumeAfter);
-
+            await context.PostAsync( await 
+                _translatorService.TranslateText($"Your street is {_street} and your number is {_number}.", StateHelper.GetUserLanguageCode(context)));
+            PromptDialog.Choice(context,
+                ChoiceDialogResumeAfter, new List<string>() { "1", "2" }, await _translatorService.TranslateText("Предоставить адрес пункта назначения, или отправить машину?", StateHelper.GetUserLanguageCode(context)), "");
             //await this.SendWelcomeMessageAsync(context);
-
-
-
+            
         }
 
 
@@ -112,39 +88,24 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task ChoiceDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
 
         {
+            switch (await result)
 
-            this._way = await result;
+            {
+                case "1":
 
-            //string wayEng = await TranslatorService.TranslateIntoEnglish(_way);
+                    await context.PostAsync(await "Calling...".ToUserLocaleAsync(context));
+                    break;
 
-            //switch (wayEng)
-
-            //{
-
-            //    case "Call":
-
-            //        await context.PostAsync(await "Calling...".ToUserLocaleAsync(context));
-
-
-
-            //        break;
-
-            //    case "Enter":
-
-            //        context.Call(new DestinationDialog(), DestinationDialogResumeAfter);
-
-            //        break;
-
-
-
-            //}
-
-
-
+                case "2":
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Destination), DestinationDialogResumeAfter);
+                   
+                    break;
+            }
+            
         }
-        private async Task DestinationDialogResumeAfter(IDialogContext context, IAwaitable<Location> result)
+        private async Task DestinationDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
-            _to = await result;
+            _to = _uklonApiService.GetPlaceLocation(_street, await result as string);
             context.Done(new TaxiLocations(_from, _to));
 
         }

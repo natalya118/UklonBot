@@ -23,15 +23,13 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         }
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(await _translatorService.TranslateText("Введите улицу", StateHelper.GetUserLanguageCode(context)));
+            await context.PostAsync(await _translatorService.TranslateText("Улица:", StateHelper.GetUserLanguageCode(context)));
             context.Wait(MessageReceivedAsync);
         }
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             
             var message = await result;
-            
-           
             List<string> places = _uklonApiService.GetPlaces(message.Text).ToList();
             
             if (places.Any())

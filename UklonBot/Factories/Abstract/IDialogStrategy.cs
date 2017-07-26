@@ -7,6 +7,6 @@ namespace UklonBot.Factories.Abstract
 {
     public interface IDialogStrategy
     {
-        IDialog<object> CreateDialog(Enum value, LangType userLocalLang);
+        IDialog<object> CreateDialog(Enum value);
     }
 }

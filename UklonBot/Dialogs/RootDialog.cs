@@ -51,13 +51,13 @@ namespace UklonBot.Dialogs
 
             StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
             //context.Call(new ReportingDialog(), null);
-            //TODO move services to autofac
+            
             var luisAnswer = await _luisService.GetResult(activity.Text);
 
             switch (luisAnswer.topScoringIntent.intent)
             {
                 case "Order taxi":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order, LangType.ru), this.DialogResumeAfter);
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order), this.DialogResumeAfter);
                     break;
                 //    case "Cancel":
                 //        context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.DialogResumeAfter);
@@ -68,11 +68,11 @@ namespace UklonBot.Dialogs
                     context.Call(new RegisterDialog(channel, channeId), this.RegistrationDialogResumeAfter);
                     break;
                 case "Change city":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity, LangType.ru), this.DialogResumeAfter);
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), this.DialogResumeAfter);
 
                     break;
                 case "Help":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Help, LangType.ru), this.DialogResumeAfter);
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Help), this.DialogResumeAfter);
 
                     break;
                     //    case "How to order taxi":

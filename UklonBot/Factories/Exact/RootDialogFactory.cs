@@ -20,14 +20,14 @@ namespace UklonBot.Factories.Exact
             _translatorService = translatorService;
             _dialogStrategy = dialogStrategy;
         }
-        public IDialog<object> CreateDialog(Enum value, LangType userLocalLang)
+        public IDialog<object> CreateDialog(Enum value)
         {
             switch (value)
             {
                 case DialogFactoryType.Root.Order:
                     return new OrderDialog(_translatorService, _dialogStrategy);
                 case DialogFactoryType.Root.Help:
-                    return new HelpDialog(_translatorService, _luisService, userLocalLang);
+                    return new HelpDialog(_translatorService, _luisService);
                 case DialogFactoryType.Root.ChangeCity:
                     return new ChangeCityDialog(_translatorService);
                 //case DialogFactoryType.Root.PanoramaCard:
