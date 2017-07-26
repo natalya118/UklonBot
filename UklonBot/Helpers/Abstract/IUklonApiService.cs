@@ -3,7 +3,7 @@ using UklonBot.Models.UklonSide;
 
 namespace UklonBot.Helpers.Abstract
 {
-    interface IUklonApiService
+    public interface IUklonApiService
     {
         //string CreateOrder(Dialog currentDialog);
         double CalculateAmmount(Location fromLocation, Location toLocation);

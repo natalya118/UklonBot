@@ -31,17 +31,17 @@ namespace UklonBot.Dialogs.Registration
         {
             phone = await result;
 
-            UklonApiService uas = new UklonApiService();
-            uas.ConfirmPhone(phone);
+            //UklonApiService uas = new UklonApiService();
+            //uas.ConfirmPhone(phone);
             await context.PostAsync("Verification code have been sent to " + phone);
             context.Call(new ConfirmPhoneDialog(), ConfirmPhoneDialogResumeAfter);
         }
 
         private async Task ConfirmPhoneDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
-            UklonApiService uas = new UklonApiService();
-            var reg = uas.Register(phone, provider, providerId, await result);
-            context.Done(reg);
+            //UklonApiService uas = new UklonApiService();
+            //var reg = uas.Register(phone, provider, providerId, await result);
+            //context.Done(reg);
         }
     }
 }

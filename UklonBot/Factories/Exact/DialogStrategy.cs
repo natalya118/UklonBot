@@ -13,12 +13,12 @@ namespace UklonBot.Factories.Exact
     {
         private readonly IDialogFactory[] _dialogFactories;
 
-        public DialogStrategy(ITranslatorService translatorService, ILuisService luisService)
+        public DialogStrategy(ITranslatorService translatorService, ILuisService luisService, IUklonApiService uklonApiService)
         {
             _dialogFactories = new IDialogFactory[]
             {
                 new RootDialogFactory(this, translatorService, luisService),
-               // new AnimalsDialogFactory(translatorHelper, luisHelper)
+                new OrderDialogFactory(this, translatorService, luisService, uklonApiService)
             };
 
         }

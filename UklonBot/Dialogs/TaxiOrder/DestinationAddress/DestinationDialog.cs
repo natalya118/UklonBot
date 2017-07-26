@@ -16,7 +16,7 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
         private string _street;
         public async Task StartAsync(IDialogContext context)
         {
-            context.Call(new StreetDialog(), this.StreetDialogResumeAfterAsync);
+            //context.Call(new StreetDialog(), this.StreetDialogResumeAfterAsync);
         }
 
         private async Task StreetDialogResumeAfterAsync(IDialogContext context, IAwaitable<string> result)

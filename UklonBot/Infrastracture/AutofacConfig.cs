@@ -26,7 +26,7 @@ namespace UklonBot.Infrastracture
 
             
 
-            builder.Register(x => new DialogStrategy(x.Resolve<ITranslatorService>(), x.Resolve<ILuisService>())).As<IDialogStrategy>().SingleInstance();
+            //builder.Register(x => new DialogStrategy(x.Resolve<ITranslatorService>(), x.Resolve<ILuisService>())).As<IDialogStrategy>().SingleInstance();
 
             builder.Register(x => new RootDialog(x.Resolve<ILuisService>(), x.Resolve<ITranslatorService>(), x.Resolve<IDialogStrategy>())).As<IDialog<object>>();
 

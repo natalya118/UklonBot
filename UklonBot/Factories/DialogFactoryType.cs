@@ -11,12 +11,16 @@ namespace UklonBot.Factories
             Help
         }
 
-        public enum Animal
+        public enum Order
         {
-            AnimalWeight,
-            AirplanePlacementForAnimal,
-            CountryDestinationForAnimal,
-            AnimalDocuments
+            Address,
+            Street,
+            Number,
+            CorrectStreet,
+            Destination,
+            Reporting
         }
+
+   
     }
 }

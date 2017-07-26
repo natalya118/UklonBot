@@ -34,9 +34,9 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             string number = message.Text;
 
 
-            UklonApiService uas = new UklonApiService();
-            Location location = uas.GetPlaceLocation(street, number);
-            context.Done(location);            
+            //UklonApiService uas = new UklonApiService();
+            //Location location = uas.GetPlaceLocation(street, number);
+            //context.Done(location);            
        
         }
 

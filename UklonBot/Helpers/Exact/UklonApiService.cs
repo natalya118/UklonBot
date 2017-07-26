@@ -18,14 +18,11 @@ namespace UklonBot.Services.Implementations
     {
         private readonly IUnitOfWork _uow;
 
-        UklonApiService(IUnitOfWork uow)
+        public UklonApiService(IUnitOfWork uow)
         {
             _uow = uow;
         }
-        public UklonApiService()
-        {
-            
-        }
+        
         //public string CreateOrder(Dialog currentDialog)
         //{
         //    string url = "https://test.uklon.com.ua/api/v1/orders";
