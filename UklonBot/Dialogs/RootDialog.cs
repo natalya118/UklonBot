@@ -67,9 +67,10 @@ namespace UklonBot.Dialogs
                     var channeId = activity.Recipient.Id;
                     context.Call(new RegisterDialog(channel, channeId), this.RegistrationDialogResumeAfter);
                     break;
-                //    case "Change city":
-                //        context.Call(new ChangeCityDialog(), DialogResumeAfter);
-                //        break;
+                case "Change city":
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity, LangType.ru), this.DialogResumeAfter);
+
+                    break;
                 case "Help":
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Help, LangType.ru), this.DialogResumeAfter);
 

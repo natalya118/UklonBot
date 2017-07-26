@@ -1,25 +1,29 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.FormFlow;
 using UklonBot.Models.BotSide.OrderTaxi;
 using UklonBot.Helpers;
+using UklonBot.Helpers.Abstract;
 
 namespace UklonBot.Dialogs.TaxiOrder
 {
     [Serializable]
     public class ChangeCityDialog : IDialog<object>
     {
+        private static ITranslatorService _translatorService;
+        public ChangeCityDialog(ITranslatorService translatorService)
+        {
+            _translatorService = translatorService;
+        }
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(await StringExtensions.ToUserLocaleAsync("What city are you in?", context));
-            //Creating dialog from changeCity model
-           
-            var changeCityFormDialog = FormDialog.FromForm(ChangeCity.BuildForm, FormOptions.PromptInStart);
-            
 
-            context.Call(changeCityFormDialog, this.DialogResumeAfter);
+            PromptDialog.Choice(context,
+                this.DialogResumeAfter, new List<string>(){"Kiev", "Lviv", "Dnepr"}, await _translatorService.TranslateText("Выберите город", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
+
             //context.Wait(MessageReceivedAsync);
         }
 
@@ -28,10 +32,11 @@ namespace UklonBot.Dialogs.TaxiOrder
             var message = await result;
         }
 
-        private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
+        private async Task DialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
-            await context.PostAsync( await "Your city have been changed successfully".ToUserLocaleAsync(context));
-            //context.Call(new RootDialog(), null);
+            var message = await result;
+            await context.PostAsync( await _translatorService.TranslateText("Город изменен", StateHelper.GetUserLanguageCode(context)));
+            context.Done((Activity) null);
         }
     }
 }

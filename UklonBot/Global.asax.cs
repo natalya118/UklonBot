@@ -23,7 +23,7 @@ namespace UklonBot
             builder.Register(x => new TranslatorService()).As<ITranslatorService>().SingleInstance();
             builder.Register(x => new LuisService(x.Resolve<ITranslatorService>())).As<ILuisService>().SingleInstance();
 
-
+            builder.Register(x => new UklonApiService()).As<IUklonApiService>().SingleInstance();
 
             builder.Register(x => new DialogStrategy(x.Resolve<ITranslatorService>(), x.Resolve<ILuisService>())).As<IDialogStrategy>().SingleInstance();
 

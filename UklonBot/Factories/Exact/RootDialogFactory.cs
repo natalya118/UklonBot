@@ -28,8 +28,8 @@ namespace UklonBot.Factories.Exact
                     return new OrderDialog(_translatorService);
                 case DialogFactoryType.Root.Help:
                     return new HelpDialog(_translatorService, _luisService, userLocalLang);
-                //case DialogFactoryType.Root.AnimalsTransportation:
-                //    return new AnimalsTransportationDialog(_translatorHelper, _luisHelper, _dialogStrategy, userLocalLang);
+                case DialogFactoryType.Root.ChangeCity:
+                    return new ChangeCityDialog(_translatorService);
                 //case DialogFactoryType.Root.PanoramaCard:
                 //    return new PanoramaCardDialog(_crmService, _translatorHelper, userLocalLang);
                 //case DialogFactoryType.Root.EmailSubscription:

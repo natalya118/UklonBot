@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Dialogs.Common;
@@ -10,7 +8,6 @@ using UklonBot.Dialogs.TaxiOrder;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
 using UklonBot.Models;
-using UklonBot.Services.Implementations;
 
 namespace UklonBot.Dialogs.ModifyOrder
 {
@@ -63,7 +60,7 @@ namespace UklonBot.Dialogs.ModifyOrder
                 case "Change address":
                     break;
                 case "Change city":
-                    context.Call(new ChangeCityDialog(), null);
+                   // context.Call(new ChangeCityDialog(), null);
                     break;
                 case "Cancel order":
                     context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.CancelDialogResumeAfter);
