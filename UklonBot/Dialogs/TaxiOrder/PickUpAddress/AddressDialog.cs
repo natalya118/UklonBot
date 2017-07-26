@@ -105,7 +105,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         }
         private async Task DestinationDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
-            _to = _uklonApiService.GetPlaceLocation(_street, await result as string);
+            _to = (Location) await result;
             context.Done(new TaxiLocations(_from, _to));
 
         }

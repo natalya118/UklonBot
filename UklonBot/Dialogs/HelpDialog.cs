@@ -34,10 +34,6 @@ namespace UklonBot.Dialogs
                 case "How to order taxi":
                     await context.PostAsync(await _translatorService.TranslateText("Попросите меня заказать такси и предоставьте Ваши данные", StateHelper.GetUserLanguageCode(context)));
                     break;
-
-                default:
-
-                    break;
             }
 
             //context.Wait(MessageReceivedAsync);

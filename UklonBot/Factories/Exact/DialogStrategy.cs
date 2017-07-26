@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
-using UklonBot.Models;
 
 namespace UklonBot.Factories.Exact
 {
@@ -17,7 +14,7 @@ namespace UklonBot.Factories.Exact
         {
             _dialogFactories = new IDialogFactory[]
             {
-                new RootDialogFactory(this, translatorService, luisService),
+                new RootDialogFactory(this, translatorService, luisService, uklonApiService),
                 new OrderDialogFactory(this, translatorService, luisService, uklonApiService)
             };
 

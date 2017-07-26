@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
-using UklonBot.Services.Implementations;
 using Microsoft.Bot.Builder.Luis;
-using UklonBot.Dialogs.Common;
-using UklonBot.Dialogs.TaxiOrder;
 using UklonBot.Dialogs.Registration;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
-using UklonBot.Models;
-using ILuisService = Microsoft.Bot.Builder.Luis.ILuisService;
 
 namespace UklonBot.Dialogs
 {
@@ -23,7 +17,7 @@ namespace UklonBot.Dialogs
     {
         private static Helpers.Abstract.ILuisService _luisService;
         private static ITranslatorService _translatorService;
-        private LangType _userLocalLang;
+        
         private static IDialogStrategy _dialogStrategy;
         public RootDialog(Helpers.Abstract.ILuisService luisService, ITranslatorService translatorService, IDialogStrategy dialogStrategy)
         {
@@ -44,13 +38,8 @@ namespace UklonBot.Dialogs
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result as Activity;
-            //UklonApiService uas = new UklonApiService();
-            //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order, _userLocalLang), this.DialogResumeAfter);
-
-            _userLocalLang = LangType.uk;
-
             StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
-            //context.Call(new ReportingDialog(), null);
+            
             
             var luisAnswer = await _luisService.GetResult(activity.Text);
 

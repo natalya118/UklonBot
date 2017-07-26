@@ -13,19 +13,21 @@ namespace UklonBot.Factories.Exact
         private readonly ILuisService _luisService;
         private readonly IDialogStrategy _dialogStrategy;
         private readonly ITranslatorService _translatorService;
+        private readonly IUklonApiService _uklonApiService;
 
-        public RootDialogFactory(IDialogStrategy dialogStrategy, ITranslatorService translatorService, ILuisService luisService)
+        public RootDialogFactory(IDialogStrategy dialogStrategy, ITranslatorService translatorService, ILuisService luisService, IUklonApiService uklonApiService)
         {
             _luisService = luisService;
             _translatorService = translatorService;
             _dialogStrategy = dialogStrategy;
+            _uklonApiService = uklonApiService;
         }
         public IDialog<object> CreateDialog(Enum value)
         {
             switch (value)
             {
                 case DialogFactoryType.Root.Order:
-                    return new OrderDialog(_translatorService, _dialogStrategy);
+                    return new OrderDialog(_translatorService, _dialogStrategy, _uklonApiService);
                 case DialogFactoryType.Root.Help:
                     return new HelpDialog(_translatorService, _luisService);
                 case DialogFactoryType.Root.ChangeCity:

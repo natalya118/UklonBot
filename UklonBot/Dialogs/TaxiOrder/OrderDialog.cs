@@ -19,10 +19,12 @@ namespace UklonBot.Dialogs.TaxiOrder
     {
         private static ITranslatorService _translatorService;
         private static IDialogStrategy _dialogStrategy;
-        public OrderDialog(ITranslatorService translatorService, IDialogStrategy dialogStrategy)
+        private static IUklonApiService _uklonApiService;
+        public OrderDialog(ITranslatorService translatorService, IDialogStrategy dialogStrategy, IUklonApiService uklonApiService)
         {
             _translatorService = translatorService;
             _dialogStrategy = dialogStrategy;
+            _uklonApiService = uklonApiService;
         }
         private TaxiLocations taxiLocations;
         public async Task StartAsync(IDialogContext context)
@@ -33,20 +35,18 @@ namespace UklonBot.Dialogs.TaxiOrder
         private async Task AddressDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             taxiLocations = await result as TaxiLocations;
-            //UklonApiService uas = new UklonApiService();
+         
+            var amount = _uklonApiService.CalculateAmmount(taxiLocations.FromLocation, taxiLocations.ToLocation);
+            taxiLocations.Cost = amount;
+            var message = context.MakeMessage();
 
-            //var amount = uas.CalculateAmmount(taxiLocations.FromLocation, taxiLocations.ToLocation);
-            //taxiLocations.Cost = amount;
-            //await context.PostAsync("amount = " + amount);
-            //await context.PostAsync("from = " + taxiLocations.FromLocation.AddressName);
-            //await context.PostAsync("to = " + taxiLocations.ToLocation.AddressName);
-            //var message = context.MakeMessage();
+            var attachment = GetOrderCard(context, taxiLocations);
+            message.Attachments.Add(await attachment);
 
-            //var attachment = GetOrderCard(context, taxiLocations);
-            //message.Attachments.Add(await attachment);
-
-            //await context.PostAsync(message);
+            await context.PostAsync(message);
             //context.Call(new ChoiceDialog(new List<string>() { "Send", "Modify" }, "Would you like to modify your order?", "Choose"), ChoiceDialogResumeAfterAsync);
+            PromptDialog.Choice(context,
+                ChoiceDialogResumeAfterAsync, new List<string>() { "1", "2"}, await _translatorService.TranslateText("1) Изменить детали; 2) Отправить заказ", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
 
         }
         public async Task DisplayOrderDetails(IDialogContext context)
@@ -58,7 +58,7 @@ namespace UklonBot.Dialogs.TaxiOrder
             message.Attachments.Add(await attachment);
 
             await context.PostAsync(message);
-            context.Call(new ChoiceDialog(new List<string>() { "Send", "Modify" }, "Would you like to modify your order?", "Choose"), ChoiceDialogResumeAfterAsync);
+            //context.Call(new ChoiceDialog(new List<string>() { "Send", "Modify" }, "Would you like to modify your order?", "Choose"), ChoiceDialogResumeAfterAsync);
 
             //  context.Wait(this.MessageReceivedAsync);
         }
@@ -66,19 +66,16 @@ namespace UklonBot.Dialogs.TaxiOrder
         private async Task ChoiceDialogResumeAfterAsync(IDialogContext context, IAwaitable<string> result)
         {
             var res = await result;
-            var resEn = await _translatorService.TranslateIntoEnglish(res.ToLower());
-            switch (resEn)
+            switch (res)
             {
-                //case "change":
-                //    context.Call(new ModifyOrderDialog(), null);
-                //    break;
-                //case "modify":
-                //    context.Call(new ModifyOrderDialog(), null);
-                //    break;
-                case "send":
-                    await context.PostAsync(await "Your order have been sent".ToUserLocaleAsync(context));
-                    context.Call(new ReportingDialog(), null);
+                case "1":
+                    //context.Call(new ModifyOrderDialog(), null);
                     break;
+                case "2":
+                    //context.Call(new ModifyOrderDialog(), null);
+                    break;
+                default:
+                    break;;
             }
         }
 
@@ -90,20 +87,9 @@ namespace UklonBot.Dialogs.TaxiOrder
                 Facts = new List<Fact> { new Fact(await "Location".ToUserLocaleAsync(context), loc.FromLocation.AddressName + ", " + loc.FromLocation.HouseNumber ),
                     new Fact(await "Destination".ToUserLocaleAsync(context), loc.ToLocation.AddressName + ", " + loc.ToLocation.HouseNumber),
                     new Fact(await "City".ToUserLocaleAsync(context), "Kiyv")},
-                //Items = new List<ReceiptItem>
-                //{
-                //    new ReceiptItem("Data Transfer", price: "$ 38.45", quantity: "368", image: new CardImage(url: "https://github.com/amido/azure-vector-icons/raw/master/renders/traffic-manager.png")),
-                //    new ReceiptItem("App Service", price: "$ 45.00", quantity: "720", image: new CardImage(url: "https://github.com/amido/azure-vector-icons/raw/master/renders/cloud-service.png")),
-                //},
-
+                
                 Total = loc.Cost.ToString(),
-                //Buttons = new List<CardAction>
-                //{
-                //    new CardAction(
-                //        "More information",
-                //        "https://account.windowsazure.com/content/6.10.1.38-.8225.160809-1618/aux-pre/images/offer-icon-freetrial.png",
-                //        "https://azure.microsoft.com/en-us/pricing/")
-                //}
+
             };
 
             return receiptCard.ToAttachment();

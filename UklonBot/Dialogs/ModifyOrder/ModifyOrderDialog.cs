@@ -15,12 +15,14 @@ namespace UklonBot.Dialogs.ModifyOrder
     public class ModifyOrderDialog : IDialog
     {
         private static ITranslatorService _translatorService;
-        private readonly LangType _userLocalLang;
+        private static IUklonApiService _uklonApiService;
+        private static ILuisService _luisService;
 
-        public ModifyOrderDialog(ITranslatorService translatorService, LangType langType)
+        public ModifyOrderDialog(ITranslatorService translatorService, IUklonApiService uklonApiService, ILuisService luisService)
         {
             _translatorService = translatorService;
-            _userLocalLang = langType;
+            _uklonApiService = uklonApiService;
+            _luisService = luisService;
         }
         public async Task StartAsync(IDialogContext context)
         {
