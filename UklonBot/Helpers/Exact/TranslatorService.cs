@@ -13,6 +13,7 @@ using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 using System.Collections.Generic;
+using System.Web.Configuration;
 using Microsoft.Bot.Builder.Dialogs;
 
 namespace UklonBot.Services.Implementations
@@ -27,7 +28,9 @@ namespace UklonBot.Services.Implementations
 
             using (var client = new HttpClient())
             {
-                string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
+                
+
+                string ApiKey = WebConfigurationManager.AppSettings["MsTranslatorKey"];
                 var accessToken = await GetAuthenticationToken(ApiKey);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 var response = await client.GetAsync(url + query);
@@ -47,7 +50,7 @@ namespace UklonBot.Services.Implementations
 
             using (var client = new HttpClient())
             {
-                string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
+                string ApiKey = WebConfigurationManager.AppSettings["MsTranslatorKey"];
                 var accessToken = await GetAuthenticationToken(ApiKey);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 var response = await client.GetAsync(url + query);
@@ -68,7 +71,7 @@ namespace UklonBot.Services.Implementations
 
             using (var client = new HttpClient())
             {
-                string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
+                string ApiKey = WebConfigurationManager.AppSettings["MsTranslatorKey"];
                 var accessToken = await GetAuthenticationToken(ApiKey);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 var response = await client.GetAsync(url + query);
@@ -85,7 +88,7 @@ namespace UklonBot.Services.Implementations
         public async Task<string> GetLanguage(string inputText)
         {
             string query = "http://api.microsofttranslator.com/v2/Http.svc/Detect?text=" + inputText;
-            string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
+            string ApiKey = WebConfigurationManager.AppSettings["MsTranslatorKey"];
             var accessToken = await GetAuthenticationToken(ApiKey);
             using (var client = new HttpClient())
             {
@@ -134,7 +137,7 @@ namespace UklonBot.Services.Implementations
             {
 
                 var req = ConfigurationManager.ConnectionStrings["TranslatorLangTypeEndpoint"].ConnectionString + HttpUtility.UrlEncode(text);
-                string ApiKey = "bf03fe8bea6148a39509ece922a9ceb7";
+                string ApiKey = WebConfigurationManager.AppSettings["UklonClientId"];
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetAuthenticationToken(ApiKey));
 
                 var response = await httpClient.GetAsync(req);

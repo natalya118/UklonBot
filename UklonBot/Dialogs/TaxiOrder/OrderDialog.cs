@@ -66,18 +66,24 @@ namespace UklonBot.Dialogs.TaxiOrder
 
         private async Task ChoiceDialogResumeAfterAsync(IDialogContext context, IAwaitable<string> result)
         {
-            var t = _uklonApiService.CreateOrder(taxiLocations, "3da7h9i2if49fgil9");
+            
             var res = await result;
-            switch (res)
+
+                switch (res.Substring(0,1))
             {
                 case "1":
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Modify), ModifyDialogAfter);
                     break;
                 case "2":
-                    //context.Call(new ModifyOrderDialog(), null);
+                    var t = _uklonApiService.CreateOrder(taxiLocations, context.Activity.Id);
+                    if (t != null)
+                    {
+                        await context.PostAsync(await _translatorService.TranslateText("Заказ успешно создан!",
+                            StateHelper.GetUserLanguageCode(context)));
+                        StateHelper.SetOrder(context, t);
+                    }
                     break;
-                default:
-                    break;;
+                
             }
         }
 

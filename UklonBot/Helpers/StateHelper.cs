@@ -1,7 +1,6 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using System;
-using UklonBot.Models;
 
 namespace UklonBot.Helpers
 {
@@ -74,14 +73,14 @@ namespace UklonBot.Helpers
         }
 
 
-        public static async void SetCurrentUserData(Activity activity, ChannelUser channelUser)
+        public static async void SetOrder(Activity activity, string orderId)
         {
             try
             {
                 StateClient stateClient = activity.GetStateClient();
                 BotData userData = stateClient.BotState.GetUserData(activity.ChannelId, activity.From.Id);
 
-                userData.SetProperty<ChannelUser>("CurrentUser", channelUser);
+                userData.SetProperty<string>("order", orderId);
                 await stateClient.BotState.SetUserDataAsync(activity.ChannelId, activity.From.Id, userData);
             }
             catch (Exception ex)
@@ -91,11 +90,11 @@ namespace UklonBot.Helpers
 
         }
 
-        public static void SetCurrentUserData(IDialogContext context, ChannelUser channelUser)
+        public static void SetOrder(IDialogContext context, string orderId)
         {
             try
             {
-                context.UserData.SetValue("CurrentUser", channelUser);
+                context.UserData.SetValue("order", orderId);
             }
             catch (Exception ex)
             {
@@ -104,16 +103,16 @@ namespace UklonBot.Helpers
 
         }
 
-        public static ChannelUser GetCurrentUser(Activity activity)
+        public static string GetOrder(Activity activity)
         {
             try
             {
                 StateClient stateClient = activity.GetStateClient();
                 BotData userData = stateClient.BotState.GetUserData(activity.ChannelId, activity.From.Id);
 
-                var currentUser = userData.GetProperty<ChannelUser>("CurrentUser");
+                var order = userData.GetProperty<string>("order");
 
-                return currentUser;
+                return order;
             }
             catch (Exception ex)
             {
@@ -122,12 +121,12 @@ namespace UklonBot.Helpers
 
         }
 
-        public static ChannelUser GetCurrentUserData(IDialogContext context)
+        public static string GetOrder(IDialogContext context)
         {
             try
             {
-                ChannelUser result;
-                context.UserData.TryGetValue("CurrentUser", out result);
+                string result;
+                context.UserData.TryGetValue("order", out result);
 
                 return result;
             }

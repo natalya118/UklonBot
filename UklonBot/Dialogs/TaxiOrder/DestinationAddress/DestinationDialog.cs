@@ -4,8 +4,6 @@ using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
-using UklonBot.Models;
-
 namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
 {
     [Serializable]

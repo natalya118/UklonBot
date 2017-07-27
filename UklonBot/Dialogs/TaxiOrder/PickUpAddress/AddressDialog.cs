@@ -78,7 +78,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             await context.PostAsync( await 
                 _translatorService.TranslateText($"Your street is {_street} and your number is {_number}.", StateHelper.GetUserLanguageCode(context)));
             PromptDialog.Choice(context,
-                ChoiceDialogResumeAfter, new List<string>() { "1", "2" }, await _translatorService.TranslateText("Предоставить адрес пункта назначения, или отправить машину?", StateHelper.GetUserLanguageCode(context)), "");
+                ChoiceDialogResumeAfter, new List<string>() { "1) Отправить машину", "2) Ввести адрес" }, await _translatorService.TranslateText("Предоставить адрес пункта назначения, или отправить машину?", StateHelper.GetUserLanguageCode(context)), "");
             //await this.SendWelcomeMessageAsync(context);
             
         }
@@ -88,7 +88,8 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task ChoiceDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
 
         {
-            switch (await result)
+            var r = await result;
+            switch (r.Substring(0,1))
 
             {
                 case "1":

@@ -1,5 +1,4 @@
 ﻿using UklonBot.Helpers.Abstract;
-using UklonBot.Models;
 using UklonBot.Models.Repositories.Abstract;
 
 namespace UklonBot.Helpers.Exact
@@ -43,8 +42,8 @@ namespace UklonBot.Helpers.Exact
             var currentUser = _uow.ChannelUsers.FirstOrDefault(u => u.ProviderId == providerId);
             if (currentUser != null)
                 return true;
-            else
-                return false;
+            
+            return false;
         }
     }
 }

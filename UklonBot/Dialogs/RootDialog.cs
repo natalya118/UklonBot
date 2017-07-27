@@ -27,11 +27,11 @@ namespace UklonBot.Dialogs
             _userService = userService;
         }
 
-        public async Task StartAsync(IDialogContext context)
+        public Task StartAsync(IDialogContext context)
         {
 
             context.Wait(this.MessageReceivedAsync);
-           // return Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
 
@@ -39,10 +39,11 @@ namespace UklonBot.Dialogs
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result as Activity;
+
             StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
 
-            if (!_userService.isUserRegistered(context.Activity.Id))
-                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), DialogResumeAfter);
+            //if (!_userService.isUserRegistered(context.Activity.Id))
+            //    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), DialogResumeAfter);
             var luisAnswer = await _luisService.GetResult(activity.Text);
 
             switch (luisAnswer.topScoringIntent.intent)

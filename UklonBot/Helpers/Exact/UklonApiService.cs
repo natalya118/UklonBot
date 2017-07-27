@@ -376,7 +376,7 @@ namespace UklonBot.Helpers.Exact
 
             RecreateOrderInfo recreateOrderInfo = new RecreateOrderInfo
             {
-                ExtraCost = 0,
+                ExtraCost = 5,
                 UklonDriverOnly = true
             };
 
