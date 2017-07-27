@@ -3,14 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
-using UklonBot.Dialogs.Common;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
-using UklonBot.Models;
 using UklonBot.Models.BotSide.OrderTaxi;
-using UklonBot.Services.Implementations;
 
 namespace UklonBot.Dialogs.TaxiOrder
 {
@@ -29,15 +26,19 @@ namespace UklonBot.Dialogs.TaxiOrder
         private TaxiLocations taxiLocations;
         public async Task StartAsync(IDialogContext context)
         {
+            //var res = _uklonApiService.Register("380994821071", "emulator", "3da7h9i2if49fgil9", "477441");
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
             
         }
         private async Task AddressDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             taxiLocations = await result as TaxiLocations;
-         
-            var amount = _uklonApiService.CalculateAmmount(taxiLocations.FromLocation, taxiLocations.ToLocation);
-            taxiLocations.Cost = amount;
+
+            if (taxiLocations != null)
+            {
+                var amount = _uklonApiService.CalculateAmmount(taxiLocations.FromLocation, taxiLocations.ToLocation);
+                taxiLocations.Cost = amount;
+            }
             var message = context.MakeMessage();
 
             var attachment = GetOrderCard(context, taxiLocations);
@@ -46,7 +47,7 @@ namespace UklonBot.Dialogs.TaxiOrder
             await context.PostAsync(message);
             //context.Call(new ChoiceDialog(new List<string>() { "Send", "Modify" }, "Would you like to modify your order?", "Choose"), ChoiceDialogResumeAfterAsync);
             PromptDialog.Choice(context,
-                ChoiceDialogResumeAfterAsync, new List<string>() { "1", "2"}, await _translatorService.TranslateText("1) Изменить детали; 2) Отправить заказ", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
+                ChoiceDialogResumeAfterAsync, new List<string>() { "1) Изменить", "2) Отправить"}, await _translatorService.TranslateText("1) Изменить детали; 2) Отправить заказ", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
 
         }
         public async Task DisplayOrderDetails(IDialogContext context)
@@ -65,17 +66,46 @@ namespace UklonBot.Dialogs.TaxiOrder
 
         private async Task ChoiceDialogResumeAfterAsync(IDialogContext context, IAwaitable<string> result)
         {
+            var t = _uklonApiService.CreateOrder(taxiLocations, "3da7h9i2if49fgil9");
             var res = await result;
             switch (res)
             {
                 case "1":
-                    //context.Call(new ModifyOrderDialog(), null);
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Modify), ModifyDialogAfter);
                     break;
                 case "2":
                     //context.Call(new ModifyOrderDialog(), null);
                     break;
                 default:
                     break;;
+            }
+        }
+
+        private async Task ModifyDialogAfter(IDialogContext context, IAwaitable<object> result)
+        {
+            var res = await result as string;
+            switch (res)
+            {
+                case "1":
+
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    // context.Call(new ChangeCityDialog(), null);
+                    break;
+                case "4":
+                    //context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.CancelDialogResumeAfter);
+
+                    break;
+                case "5":
+                    context.Call(new ReportingDialog(), null);
+                    break;
+                default:
+                {
+                    await context.PostAsync("none");
+                    break;
+                }
             }
         }
 

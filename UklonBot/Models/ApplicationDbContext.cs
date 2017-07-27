@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity;
 
 namespace UklonBot.Models
 {
@@ -14,6 +10,7 @@ namespace UklonBot.Models
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<ChannelUser> ChannelUsers { get; set; }
 
         public static ApplicationDbContext Create()
         {

@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Bot.Builder.Dialogs;
+using UklonBot.Dialogs.ModifyOrder;
 using UklonBot.Dialogs.TaxiOrder.DestinationAddress;
 using UklonBot.Dialogs.TaxiOrder.PickUpAddress;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
-using UklonBot.Models;
 
 namespace UklonBot.Factories.Exact
 {
@@ -33,6 +33,8 @@ namespace UklonBot.Factories.Exact
                     return new NumberDialog(_translatorService);
                 case DialogFactoryType.Order.Destination:
                     return new DestinationDialog(_uklonApiService, _dialogStrategy);
+                case DialogFactoryType.Order.Modify:
+                    return new ModifyOrderDialog(_translatorService, _uklonApiService, _luisService);
                 default:
                     return null;
             }

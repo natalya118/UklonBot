@@ -1,6 +1,7 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using System;
+using UklonBot.Models;
 
 namespace UklonBot.Helpers
 {
@@ -73,6 +74,70 @@ namespace UklonBot.Helpers
         }
 
 
+        public static async void SetCurrentUserData(Activity activity, ChannelUser channelUser)
+        {
+            try
+            {
+                StateClient stateClient = activity.GetStateClient();
+                BotData userData = stateClient.BotState.GetUserData(activity.ChannelId, activity.From.Id);
+
+                userData.SetProperty<ChannelUser>("CurrentUser", channelUser);
+                await stateClient.BotState.SetUserDataAsync(activity.ChannelId, activity.From.Id, userData);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public static void SetCurrentUserData(IDialogContext context, ChannelUser channelUser)
+        {
+            try
+            {
+                context.UserData.SetValue("CurrentUser", channelUser);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public static ChannelUser GetCurrentUser(Activity activity)
+        {
+            try
+            {
+                StateClient stateClient = activity.GetStateClient();
+                BotData userData = stateClient.BotState.GetUserData(activity.ChannelId, activity.From.Id);
+
+                var currentUser = userData.GetProperty<ChannelUser>("CurrentUser");
+
+                return currentUser;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public static ChannelUser GetCurrentUserData(IDialogContext context)
+        {
+            try
+            {
+                ChannelUser result;
+                context.UserData.TryGetValue("CurrentUser", out result);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
 
 
     }

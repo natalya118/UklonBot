@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Dialogs;
+using UklonBot.Dialogs.Registration;
 using UklonBot.Dialogs.TaxiOrder;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
-using UklonBot.Models;
 
 namespace UklonBot.Factories.Exact
 {
@@ -32,10 +32,8 @@ namespace UklonBot.Factories.Exact
                     return new HelpDialog(_translatorService, _luisService);
                 case DialogFactoryType.Root.ChangeCity:
                     return new ChangeCityDialog(_translatorService);
-                //case DialogFactoryType.Root.PanoramaCard:
-                //    return new PanoramaCardDialog(_crmService, _translatorHelper, userLocalLang);
-                //case DialogFactoryType.Root.EmailSubscription:
-                //    return new EmailSubscribitionDialog(_translatorHelper, userLocalLang);
+                case DialogFactoryType.Root.Register:
+                    return new RegisterDialog(_translatorService, _uklonApiService, _luisService);
                 default:
                     return null;
             }

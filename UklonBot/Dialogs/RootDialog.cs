@@ -4,7 +4,6 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
 using Microsoft.Bot.Builder.Luis;
-using UklonBot.Dialogs.Registration;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
@@ -19,18 +18,20 @@ namespace UklonBot.Dialogs
         private static ITranslatorService _translatorService;
         
         private static IDialogStrategy _dialogStrategy;
-        public RootDialog(Helpers.Abstract.ILuisService luisService, ITranslatorService translatorService, IDialogStrategy dialogStrategy)
+        private static IUserService _userService;
+        public RootDialog(Helpers.Abstract.ILuisService luisService, ITranslatorService translatorService, IDialogStrategy dialogStrategy, IUserService userService)
         {
             _luisService = luisService;
             _translatorService = translatorService;
             _dialogStrategy = dialogStrategy;
+            _userService = userService;
         }
 
-        public Task StartAsync(IDialogContext context)
+        public async Task StartAsync(IDialogContext context)
         {
-           
+
             context.Wait(this.MessageReceivedAsync);
-            return Task.CompletedTask;
+           // return Task.CompletedTask;
         }
 
 
@@ -39,8 +40,9 @@ namespace UklonBot.Dialogs
         {
             var activity = await result as Activity;
             StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
-            
-            
+
+            if (!_userService.isUserRegistered(context.Activity.Id))
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), DialogResumeAfter);
             var luisAnswer = await _luisService.GetResult(activity.Text);
 
             switch (luisAnswer.topScoringIntent.intent)
@@ -52,9 +54,8 @@ namespace UklonBot.Dialogs
                 //        context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.DialogResumeAfter);
                 //        break;
                 case "Registration":
-                    var channel = activity.ChannelId;
-                    var channeId = activity.Recipient.Id;
-                    context.Call(new RegisterDialog(channel, channeId), this.RegistrationDialogResumeAfter);
+                    
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), this.RegistrationDialogResumeAfter);
                     break;
                 case "Change city":
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), this.DialogResumeAfter);
@@ -106,9 +107,9 @@ namespace UklonBot.Dialogs
 
            // context.Call(new NameDialog(), this.NameDialogResumeAfter);
         }
-        private async Task RegistrationDialogResumeAfter(IDialogContext context, IAwaitable<bool> result)
+        private async Task RegistrationDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
-            if(await result)
+            if((bool) await result)
                 await context.PostAsync("Congratulations! You've successfully registered :)");
             else
                 await context.PostAsync("Ooops");

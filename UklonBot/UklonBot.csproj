@@ -57,6 +57,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0-beta1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.1.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bot.Builder, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Microsoft.Bot.Builder.3.8.0\lib\net46\Microsoft.Bot.Builder.dll</HintPath>
     </Reference>
@@ -137,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CheckProviderIdController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\Common\ChoiceDialog.cs" />
     <Compile Include="Dialogs\Common\YesNoDialog.cs" />
@@ -166,9 +170,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Abstract\IUserService.cs" />
+    <Compile Include="Helpers\Exact\UserService.cs" />
     <Compile Include="Helpers\StateHelper.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Infrastracture\AutofacConfig.cs" />
+    <Compile Include="Migrations\201707261419569_channel_users_migration.cs" />
+    <Compile Include="Migrations\201707261419569_channel_users_migration.Designer.cs">
+      <DependentUpon>201707261419569_channel_users_migration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\BotSide\ChangeCar.cs" />
     <Compile Include="Models\BotSide\LuisRes.cs" />
@@ -177,6 +188,9 @@
     <Compile Include="Models\BotSide\OrderTaxi\ProvideDestinationWay.cs" />
     <Compile Include="Models\BotSide\OrderTaxi\TaxiLocations.cs" />
     <Compile Include="Models\BotSide\Registration\NewUser.cs" />
+    <Compile Include="Models\ChannelUser.cs" />
+    <Compile Include="Models\CheckProviderId\CheckProviderIdResultViewModel.cs" />
+    <Compile Include="Models\CheckProviderId\ProviderIdCheckRequestViewModel.cs" />
     <Compile Include="Models\Cities.cs" />
     <Compile Include="Models\LangType.cs" />
     <Compile Include="Models\Repositories\Abstract\IUnitOfWork.cs" />
@@ -225,6 +239,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dialogs\Help\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201707261419569_channel_users_migration.resx">
+      <DependentUpon>201707261419569_channel_users_migration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

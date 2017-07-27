@@ -3,11 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UklonBot.Models
 {
-    public class User
+    public class ChannelUser
     {
         [Key]
         [Required]
-        public string ViberId { get; set; }
+        public string ProviderId { get; set; }
+
+        public string Provider { get; set; }
 
         public string PhoneNumber { get; set; }
 

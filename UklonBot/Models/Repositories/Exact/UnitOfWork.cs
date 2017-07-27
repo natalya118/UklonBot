@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using UklonBot.Models.Repositories.Abstract;
+﻿using UklonBot.Models.Repositories.Abstract;
 
 namespace UklonBot.Models.Repositories.Exact
 {
@@ -10,6 +6,7 @@ namespace UklonBot.Models.Repositories.Exact
     {
         private readonly ApplicationDbContext _context = new ApplicationDbContext();
         private GenericRepository<User> _usersRepository;
+        private GenericRepository<ChannelUser> _channelUsersRepository;
         public void Dispose()
         {
             _context.Dispose();
@@ -17,7 +14,9 @@ namespace UklonBot.Models.Repositories.Exact
 
         public GenericRepository<User> Users => _usersRepository ?? (_usersRepository = new GenericRepository<User>(_context));
 
-       
+        public GenericRepository<ChannelUser> ChannelUsers => _channelUsersRepository ??
+                                                              (_channelUsersRepository =
+                                                                  new GenericRepository<ChannelUser>(_context));
 
         public void Save()
         {

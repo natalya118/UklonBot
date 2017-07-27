@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Connector;
 using UklonBot.Dialogs.Common;
-using UklonBot.Dialogs.TaxiOrder;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
-using UklonBot.Models;
 
 namespace UklonBot.Dialogs.ModifyOrder
 {
@@ -26,57 +23,39 @@ namespace UklonBot.Dialogs.ModifyOrder
         }
         public async Task StartAsync(IDialogContext context)
         {
+            //Dictionary<int,string> options = new Dictionary<int, string>()
+            //{
+            //    {1, "Добавить 5 грн" },
+            //    {2, "Изменить адрес" },
+            //    {3, "Изменить город" },
+            //    {4, "Отменить заказ" },
+            //    {5, "Всё правильно, подтвердить" }
+
+            //};
+
             List<string> options = new List<string>()
             {
-                "Add 5 USD",
-                "Change address",
-                "Change city",
-                "Cancel order",
-                "Ok"
+                "1) Добавить 5 грн",
+                "2) Изменить адрес",
+                "3) Изменить город",
+                "4) Отменить заказ",
+                "5) Всё ок, подтвердить"
 
             };
-            context.Call(
-                new ChoiceDialog(options, "Please, check details of your order",
-                    "Please, choose one of the list variants"),
-                ModifyOrderDialogResumeAfter);
+            PromptDialog.Choice(context,
+                ModifyOrderDialogResumeAfter, options, await _translatorService.TranslateText("Что вы хотите изменить?", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
+
+            //context.Call(
+            //    new ChoiceDialog(options, "Please, check details of your order",
+            //        "Please, choose one of the list variants"),
+            //    ModifyOrderDialogResumeAfter);
         }
-
-        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            var message = await result;
-
-
-
-        }
-
+        
         private async Task ModifyOrderDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             var res = await result;
-            await context.PostAsync(res);
-            var resEn = await _translatorService.TranslateIntoEnglish(res) as string;
-            switch (resEn)
-            {
-                case "Add 5 uan":
-
-                    break;
-                case "Change address":
-                    break;
-                case "Change city":
-                   // context.Call(new ChangeCityDialog(), null);
-                    break;
-                case "Cancel order":
-                    context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.CancelDialogResumeAfter);
-
-                    break;
-                case "Ok":
-                    context.Call(new ReportingDialog(), null);
-                    break;
-                default:
-                {
-                    await context.PostAsync("none");
-                    break;
-                }
-            }
+            context.Done(res.Substring(0,1));
+            
         }
         private async Task CancelDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {

@@ -18,7 +18,8 @@ namespace UklonBot.Factories
             Number,
             CorrectStreet,
             Destination,
-            Reporting
+            Reporting,
+            Modify
         }
 
    

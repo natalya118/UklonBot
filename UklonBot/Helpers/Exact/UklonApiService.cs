@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -7,116 +6,119 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Configuration;
+using Newtonsoft.Json;
 using UklonBot.Helpers.Abstract;
 using UklonBot.Models;
+using UklonBot.Models.BotSide.OrderTaxi;
 using UklonBot.Models.Repositories.Abstract;
 using UklonBot.Models.UklonSide;
 
-namespace UklonBot.Services.Implementations
+namespace UklonBot.Helpers.Exact
 {
     public class UklonApiService : IUklonApiService
     {
         private readonly IUnitOfWork _uow;
-
+        
         public UklonApiService(IUnitOfWork uow)
         {
             _uow = uow;
         }
-        
-        //public string CreateOrder(Dialog currentDialog)
-        //{
-        //    string url = "https://test.uklon.com.ua/api/v1/orders";
 
-        //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-        //    request.Headers.Add("client_id", WebConfigurationManager.AppSettings["UklonClientId"]);
-        //    request.Headers.Add("Locale", "ru");
-        //    request.Headers.Add("City", "kiev");
+        public string CreateOrder(TaxiLocations locations, string providerId)
+        {
+            string url = "https://test.uklon.com.ua/api/v1/orders";
 
-        //    request.ContentType = "application/json";
-        //    request.Method = "POST";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Headers.Add("client_id", WebConfigurationManager.AppSettings["UklonClientId"]);
+            request.Headers.Add("Locale", "ru");
+            request.Headers.Add("City", "kiev");
 
-        //    Location startPoint, endPoint;
+            request.ContentType = "application/json";
+            request.Method = "POST";
 
-        //    try
-        //    {
-        //        startPoint = GetPlaceLocation(currentDialog.PickupStreet, currentDialog.PickupHouseNumber);
-        //        endPoint = GetPlaceLocation(currentDialog.DestinationStreet, currentDialog.DestinationHouseNumber);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return null;
-        //    }
+            Location startPoint, endPoint;
+
+            //try
+            //{
+            //    startPoint = locations.;
+            //    endPoint = GetPlaceLocation(locations.ToLocation.AddressName, locations.ToLocation.HouseNumber);
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
 
 
-        //    if (startPoint == null || endPoint == null)
-        //        throw new ArgumentException("Wrong addresses");
+            if (locations.FromLocation == null || locations.ToLocation == null)
+                throw new ArgumentException("Wrong addresses");
 
-        //    RoutePoint start = new RoutePoint
-        //    {
-        //        AddressName = currentDialog.PickupStreet,
-        //        CityId = startPoint.CityId,
-        //        HouseNumber = currentDialog.PickupHouseNumber,
-        //        IsPlace = startPoint.IsPlace,
-        //        Lat = startPoint.Lat,
-        //        Lng = startPoint.Lng,
-        //        Atype = startPoint.Atype
-        //    };
+            RoutePoint start = new RoutePoint
+            {
+                AddressName = locations.FromLocation.AddressName,
+                CityId = locations.FromLocation.CityId,
+                HouseNumber = locations.FromLocation.HouseNumber,
+                IsPlace = locations.FromLocation.IsPlace,
+                Lat = locations.FromLocation.Lat,
+                Lng = locations.FromLocation.Lng,
+                Atype = locations.FromLocation.Atype
+            };
 
-        //    RoutePoint end = new RoutePoint
-        //    {
-        //        AddressName = currentDialog.DestinationStreet,
-        //        CityId = endPoint.CityId,
-        //        HouseNumber = currentDialog.DestinationHouseNumber,
-        //        IsPlace = endPoint.IsPlace,
-        //        Lat = endPoint.Lat,
-        //        Lng = endPoint.Lng,
-        //        Atype = endPoint.Atype
-        //    };
+            RoutePoint end = new RoutePoint
+            {
+                AddressName = locations.ToLocation.AddressName,
+                CityId = locations.ToLocation.CityId,
+                HouseNumber = locations.ToLocation.HouseNumber,
+                IsPlace = locations.ToLocation.IsPlace,
+                Lat = locations.ToLocation.Lat,
+                Lng = locations.ToLocation.Lng,
+                Atype = locations.ToLocation.Atype
+            };
 
-        //    Route route = new Route
-        //    {
-        //        Comment = "created from bot",
-        //        Entrance = 1,
-        //        IsOfficeBuilding = false,
-        //        RoutePoints = new List<RoutePoint>
-        //        {
-        //            start,
-        //            end
-        //        }
-        //    };
+            Route route = new Route
+            {
+                Comment = "created from bot",
+                Entrance = 1,
+                IsOfficeBuilding = false,
+                RoutePoints = new List<RoutePoint>
+                {
+                    start,
+                    end
+                }
+            };
+            var cur = _uow.ChannelUsers.FirstOrDefault(u => u.ProviderId == providerId);
 
-        //    OrderToCreate order = new OrderToCreate
-        //    {
-        //        CityId = startPoint.CityId,
-        //        //// todo implement different types
-        //        CarType = 1,
-        //        Phone = _uow.Users.FirstOrDefault(u => u.ViberId == currentDialog.ViberUserId).PhoneNumber,
-        //        Route = route,
-        //        ClientName = currentDialog.ViberUserId,
-        //        PaymentType = 0
-        //    };
+            OrderToCreate order = new OrderToCreate
+            {
+                CityId = locations.FromLocation.CityId,
+                //// todo implement different types
+                CarType = 1,
+                Phone = _uow.ChannelUsers.FirstOrDefault(u => u.ProviderId == cur.ProviderId).PhoneNumber,
+                Route = route,
+                ClientName = cur.ProviderId,
+                PaymentType = 0
+            };
 
-        //    var postData = JsonConvert.SerializeObject(order);
+            var postData = JsonConvert.SerializeObject(order);
 
-        //    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-        //    {
-        //        streamWriter.Write(postData);
-        //    }
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                streamWriter.Write(postData);
+            }
 
-        //    HttpWebResponse response;
-        //    try
-        //    {
-        //        response = (HttpWebResponse)request.GetResponse();
-        //    }
-        //    catch (WebException e)
-        //    {
-        //        throw;
-        //    }
+            HttpWebResponse response;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            catch (WebException e)
+            {
+                throw;
+            }
 
-        //    string orderId = new StreamReader(response.GetResponseStream()).ReadToEnd();
-        //    OrderIdInfo orderIdInfo = JsonConvert.DeserializeObject<OrderIdInfo>(orderId);
-        //    return orderIdInfo.Uid;
-        //}
+            string orderId = new StreamReader(response.GetResponseStream()).ReadToEnd();
+            OrderIdInfo orderIdInfo = JsonConvert.DeserializeObject<OrderIdInfo>(orderId);
+            return orderIdInfo.Uid;
+        }
 
         public double CalculateAmmount(Location fromLocation, Location toLocation)
         {
@@ -431,7 +433,7 @@ namespace UklonBot.Services.Implementations
 
         public bool Authenticate(string phoneNumber, string viberId)
         {
-            string url = "https://test.uklon.com.ua/api/bot/account/auth";
+            string url = "https://test.uklon.com.ua/api/bots/ms/account/auth";
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Headers.Add("client_id", WebConfigurationManager.AppSettings["UklonClientId"]);
@@ -441,7 +443,7 @@ namespace UklonBot.Services.Implementations
 
             AuthInfo authInfo = new AuthInfo()
             {
-                Provider = "ViberBot",
+                Provider = "emulator",
                 ProviderId = viberId
             };
 
@@ -466,7 +468,7 @@ namespace UklonBot.Services.Implementations
                 _uow.Users.Update(currentUser);
             }
 
-            catch (WebException)
+            catch (WebException e)
             {
                 return false;
             }
@@ -476,7 +478,26 @@ namespace UklonBot.Services.Implementations
 
         public bool Register(string phoneNumber, string provider, string providerId, string phoneValidationCode)
         {
-            string url = "https://test.uklon.com.ua/api/bot/account/register";
+
+            //TODO move it to user service
+            var cur = _uow.ChannelUsers.FirstOrDefault(u => u.ProviderId == providerId);
+
+            if (cur == null)
+            {
+                cur = new ChannelUser()
+                {
+                    ProviderId = providerId,
+                    Provider = provider,
+                    IsPhoneNumberConfirmed = false
+
+                };
+
+                _uow.ChannelUsers.Create(cur);
+                _uow.Save();
+
+            }
+            //
+            string url = "https://test.uklon.com.ua/api/bots/ms/account/register";
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Headers.Add("client_id", WebConfigurationManager.AppSettings["UklonClientId"]);
@@ -489,11 +510,11 @@ namespace UklonBot.Services.Implementations
                 Provider = provider,
                 ProviderId = providerId,
                 Phone = phoneNumber,
-                Code = phoneValidationCode
+                Code = "267671"
             };
 
             var postData = JsonConvert.SerializeObject(autoRegisterInfo);
-
+            
             using (var streamWriter = new StreamWriter(request.GetRequestStream()))
             {
                 streamWriter.Write(postData);
@@ -506,13 +527,13 @@ namespace UklonBot.Services.Implementations
 
                 AuthResult authResult = JsonConvert.DeserializeObject<AuthResult>(resp);
 
-                //User currentUser = _uow.Users.FirstOrDefault(u => u.ViberId == viberId);
-                //currentUser.UklonUserToken = authResult.AccessToken;
-                //currentUser.UklonTokenExpirationDate = authResult.Expires;
-                //_uow.Users.Update(currentUser);
+                ChannelUser currentUser = _uow.ChannelUsers.FirstOrDefault(u => u.ProviderId == providerId);
+                currentUser.UklonUserToken = authResult.AccessToken;
+                currentUser.UklonTokenExpirationDate = authResult.Expires;
+                _uow.ChannelUsers.Update(currentUser);
             }
 
-            catch (WebException)
+            catch (WebException e)
             {
                 return false;
             }
@@ -547,7 +568,7 @@ namespace UklonBot.Services.Implementations
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 string test = new StreamReader(response.GetResponseStream()).ReadToEnd();
             }
-            catch (WebException e)
+            catch (WebException)
             {
                 //// todo throw
                 Trace.WriteLine("Server not responding");

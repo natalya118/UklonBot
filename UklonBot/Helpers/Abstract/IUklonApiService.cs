@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using UklonBot.Models.BotSide.OrderTaxi;
 using UklonBot.Models.UklonSide;
 
 namespace UklonBot.Helpers.Abstract
 {
     public interface IUklonApiService
     {
-        //string CreateOrder(Dialog currentDialog);
+        string CreateOrder(TaxiLocations locations, string providerId);
         double CalculateAmmount(Location fromLocation, Location toLocation);
         IEnumerable<string> GetPlaces(string query);
         OrderInfo GetOrderState(string dialogOrderId);
