@@ -1,13 +1,16 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Models;
 using UklonBot.Models.BotSide.OrderTaxi;
+using UklonBot.Models.UklonSide;
 
 namespace UklonBot.Dialogs.TaxiOrder
 {
@@ -17,22 +20,48 @@ namespace UklonBot.Dialogs.TaxiOrder
         private static ITranslatorService _translatorService;
         private static IDialogStrategy _dialogStrategy;
         private static IUklonApiService _uklonApiService;
-        public OrderDialog(ITranslatorService translatorService, IDialogStrategy dialogStrategy, IUklonApiService uklonApiService)
+        private static IUserService _userService;
+        public OrderDialog(ITranslatorService translatorService, IDialogStrategy dialogStrategy,
+            IUklonApiService uklonApiService, IUserService userService)
         {
             _translatorService = translatorService;
             _dialogStrategy = dialogStrategy;
             _uklonApiService = uklonApiService;
+            _userService = userService;
         }
         private TaxiLocations taxiLocations;
         public async Task StartAsync(IDialogContext context)
         {
-            var id = context.Activity.From.Id;
-            await context.PostAsync(id);
+       
+            if (!_userService.IsUserRegistered(context.Activity.From.Id))
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), RegisterDialogResumeAfterAsync);
 
-            //var res = _uklonApiService.Register("380994821071", "emulator", "3da7h9i2if49fgil9", "477441");
+            if (!_userService.IsUserCitySaved(context.Activity.From.Id))
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), ChooseCityDialogResumeAfter);
+
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
             
         }
+
+        private async Task RegisterDialogResumeAfterAsync(IDialogContext context, IAwaitable<object> result)
+        {
+            if ((bool)await result)
+            {
+                await context.PostAsync(await _translatorService.TranslateText(
+                    "Поздравляем, вы успешно зарегистрировались :) ", StateHelper.GetUserLanguageCode(context)));
+                if (!_userService.IsUserCitySaved(context.Activity.From.Id))
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), ChooseCityDialogResumeAfter);
+
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
+            }
+            else
+            {
+                await context.PostAsync(await _translatorService.TranslateText(
+                    "Что-то пошло не так. Давайте попробуем ещё раз. ", StateHelper.GetUserLanguageCode(context)));
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), this.RegisterDialogResumeAfterAsync);
+            }
+        }
+
         private async Task AddressDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             taxiLocations = await result as TaxiLocations;
@@ -83,10 +112,33 @@ namespace UklonBot.Dialogs.TaxiOrder
                     {
                         await context.PostAsync(await _translatorService.TranslateText("Заказ успешно создан!",
                             StateHelper.GetUserLanguageCode(context)));
+                        var status = _uklonApiService.GetOrderState(t, context);
                         StateHelper.SetOrder(context, t);
+                        
+                        await PeriodicFooAsync(new TimeSpan(0, 0, 3), context);
+                        
                     }
                     break;
                 
+            }
+        }
+        public async Task<OrderInfo> PeriodicFooAsync(TimeSpan interval, IDialogContext context)
+        {
+            CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+            CancellationToken token = cancelTokenSource.Token;
+            while (true)
+            {
+                var order = StateHelper.GetOrder(context);
+                var state = _uklonApiService.GetOrderState(order, context);
+                if (state.Status.Equals("done"))
+                {
+                    cancelTokenSource.Cancel();
+                    context.Done(state);
+
+                }
+                await context.PostAsync(state.Status);
+                
+                await Task.Delay(interval, token);
             }
         }
 
@@ -140,7 +192,11 @@ namespace UklonBot.Dialogs.TaxiOrder
                     
             }
         }
+        private async Task ChooseCityDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
+        {
+            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
 
+        }
         private async Task ChangeCityDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             context.Done((Activity) null);
@@ -150,10 +206,10 @@ namespace UklonBot.Dialogs.TaxiOrder
         {
             var receiptCard = new ReceiptCard
             {
-                Title = await "Order card".ToUserLocaleAsync(context) as string,
-                Facts = new List<Fact> { new Fact(await "Location".ToUserLocaleAsync(context), loc.FromLocation.AddressName + ", " + loc.FromLocation.HouseNumber ),
-                    new Fact(await "Destination".ToUserLocaleAsync(context), loc.ToLocation.AddressName + ", " + loc.ToLocation.HouseNumber),
-                    new Fact(await "City".ToUserLocaleAsync(context), "Kiyv")},
+                Title = await _translatorService.TranslateText("Детали заказа", StateHelper.GetUserLanguageCode(context)),
+                Facts = new List<Fact> { new Fact(await _translatorService.TranslateText("Откуда", StateHelper.GetUserLanguageCode(context)), loc.FromLocation.AddressName + ", " + loc.FromLocation.HouseNumber ),
+                    new Fact(await _translatorService.TranslateText("Куда", StateHelper.GetUserLanguageCode(context)), loc.ToLocation.AddressName + ", " + loc.ToLocation.HouseNumber),
+                    new Fact(await _translatorService.TranslateText("Город", StateHelper.GetUserLanguageCode(context)), await _translatorService.TranslateText(((Cities) loc.FromLocation.CityId).ToString(), StateHelper.GetUserLanguageCode(context)))},
                 
                 Total = loc.Cost.ToString(),
 

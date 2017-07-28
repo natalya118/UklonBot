@@ -30,27 +30,30 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         {
             
             var message = await result;
-            List<string> places = _uklonApiService.GetPlaces(message.Text, context).ToList();
+
             
-            if (places.Any())
-            {
-                PromptDialog.Choice(context,
-                    LocationDialogResumeAfter, places, await _translatorService.TranslateText("Выберите место", StateHelper.GetUserLanguageCode(context)), "Выберите место из списка");
-
-            }
-            else
-            {
-
-                var luisAnswer = await _luisService.GetResult(message.Text);
+                var test = await _translatorService.TranslateIntoEnglish(message.Text);
+                var luisAnswer = await _luisService.GetResult(test);
                 switch (luisAnswer.topScoringIntent.intent)
                 {
                     case "Cancel":
                         PromptDialog.Choice(context,
-                            LocationDialogResumeAfter,await _translatorService.TranslateList(new List<string>() { "Да", "Нет" }, context), await _translatorService.TranslateText("Отменить заказ?", StateHelper.GetUserLanguageCode(context)), "Выберите вариант");
+                            CancelDialogResumeAfter,await _translatorService.TranslateList(new List<string>() { "1) Да", "2) Нет" }, context), await _translatorService.TranslateText("Отменить заказ?", StateHelper.GetUserLanguageCode(context)), "Выберите вариант");
                
                         break;
-                }
+                default:
+                    List<string> places = _uklonApiService.GetPlaces(message.Text, context).ToList();
+
+                    if (places.Any())
+                    {
+                        PromptDialog.Choice(context,
+                            LocationDialogResumeAfter, places, await _translatorService.TranslateText("Выберите место", StateHelper.GetUserLanguageCode(context)), "Выберите место из списка");
+
+                    }
+                    break;
+                    
             }
+           
 
         }
 
@@ -63,15 +66,20 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task CancelDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             var res = await result;
-            var resEn = await _translatorService.TranslateIntoEnglish(res.ToLower());
-            if (resEn.Contains("yes"))
+            var num = res.Substring(0,1);
+            switch (num)
             {
-                await context.PostAsync(await "Ваш заказ был отменен".ToUserLocaleAsync(context));
-                context.Fail(null);
+                case "1":
+                    await context.PostAsync(await _translatorService.TranslateText("Ваш заказ был отменен", StateHelper.GetUserLanguageCode(context)));
+                    context.Fail(null);
+                    break;
+                case "2":
+                    await StartAsync(context);
+                    break;
+            }
 
             }
-            await StartAsync(context);
-        }
+            
 
 
     }

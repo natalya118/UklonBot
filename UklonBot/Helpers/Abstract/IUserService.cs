@@ -9,6 +9,8 @@ namespace UklonBot.Helpers.Abstract
 
         Cities GetUserCity(string providerId);
         bool IsUserRegistered(string providerId);
+
+        bool IsUserCitySaved(string providerId);
         bool ChangeCity(string providerId, string newCity);
 
     }

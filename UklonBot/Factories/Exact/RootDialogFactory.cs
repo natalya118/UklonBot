@@ -31,7 +31,7 @@ namespace UklonBot.Factories.Exact
             switch (value)
             {
                 case DialogFactoryType.Root.Order:
-                    return new OrderDialog(_translatorService, _dialogStrategy, _uklonApiService);
+                    return new OrderDialog(_translatorService, _dialogStrategy, _uklonApiService, _userService);
                 case DialogFactoryType.Root.Help:
                     return new HelpDialog(_translatorService, _luisService);
                 case DialogFactoryType.Root.ChangeCity:

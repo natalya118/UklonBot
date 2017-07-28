@@ -72,5 +72,13 @@ namespace UklonBot.Helpers.Exact
             _uow.Save();
             return true;
         }
+
+        public bool IsUserCitySaved(string providerId)
+        {
+            var currentUser = _uow.ChannelUsers.FirstOrDefault(u => u.ProviderId == providerId);
+            if (currentUser.City == 0)
+                return false;
+            return true;
+        }
     }
 }

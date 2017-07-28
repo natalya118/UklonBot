@@ -150,7 +150,6 @@
     <Compile Include="Dialogs\Registration\ConfirmPhoneDialog.cs" />
     <Compile Include="Dialogs\Registration\PhoneDialog.cs" />
     <Compile Include="Dialogs\Registration\RegisterDialog.cs" />
-    <Compile Include="Dialogs\Registration\RegistrationDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\DestinationAddress\DestinationAddressWayDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\DestinationAddress\DestinationDialog.cs" />

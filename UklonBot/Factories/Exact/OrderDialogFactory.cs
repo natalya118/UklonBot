@@ -14,12 +14,15 @@ namespace UklonBot.Factories.Exact
         private readonly IDialogStrategy _dialogStrategy;
         private readonly ITranslatorService _translatorService;
         private readonly IUklonApiService _uklonApiService;
-        public OrderDialogFactory(IDialogStrategy dialogStrategy, ITranslatorService translatorService, ILuisService luisService, IUklonApiService uklonApiService)
+        private readonly IUserService _userService;
+        public OrderDialogFactory(IDialogStrategy dialogStrategy, ITranslatorService translatorService, ILuisService luisService, 
+            IUklonApiService uklonApiService, IUserService userService)
         {
             _luisService = luisService;
             _translatorService = translatorService;
             _dialogStrategy = dialogStrategy;
             _uklonApiService = uklonApiService;
+            _userService = userService;
         }
         public IDialog<object> CreateDialog(Enum value)
         {

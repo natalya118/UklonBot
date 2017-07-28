@@ -39,7 +39,7 @@ namespace UklonBot.Dialogs.Registration
 
 
             _uklonApiService.ConfirmPhone(_phone);
-            await context.PostAsync("Verification code have been sent to " + _phone);
+            await context.PostAsync(await _translatorService.TranslateText("Verification code have been sent to " + _phone, StateHelper.GetUserLanguageCode(context)));
             context.Call(new ConfirmPhoneDialog(), ConfirmPhoneDialogResumeAfter);
         }
 

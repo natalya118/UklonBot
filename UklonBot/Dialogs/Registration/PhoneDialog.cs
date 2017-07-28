@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
 
 namespace UklonBot.Dialogs.Registration
@@ -18,7 +19,7 @@ namespace UklonBot.Dialogs.Registration
         }
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync("Please, input your number");
+            await context.PostAsync(await _translatorService.TranslateText("Введите свой номер", StateHelper.GetUserLanguageCode(context)));
             context.Wait(MessageReceivedAsync);
 
         }
@@ -33,7 +34,7 @@ namespace UklonBot.Dialogs.Registration
             }
             else
             {
-                await context.PostAsync("Please, start with 38...");
+                await context.PostAsync(await _translatorService.TranslateText("Номер должен начинаться с 38...", StateHelper.GetUserLanguageCode(context)));
                 await StartAsync(context);
             }
 
