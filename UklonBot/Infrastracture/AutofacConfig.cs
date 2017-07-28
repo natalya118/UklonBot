@@ -33,7 +33,7 @@ namespace UklonBot.Infrastracture
 
             //builder.Register(x => new UklonApiService(x.Resolve<IUnitOfWork>())).As<IUklonApiService>().SingleInstance();
 
-            builder.Register(x => new DialogStrategy(x.Resolve<ITranslatorService>(), x.Resolve<ILuisService>(), x.Resolve<IUklonApiService>())).As<IDialogStrategy>().SingleInstance();
+            builder.Register(x => new DialogStrategy(x.Resolve<ITranslatorService>(), x.Resolve<ILuisService>(), x.Resolve<IUklonApiService>(), x.Resolve<IUserService>())).As<IDialogStrategy>().SingleInstance();
 
             builder.Register(x => new RootDialog(x.Resolve<ILuisService>(), x.Resolve<ITranslatorService>(), x.Resolve<IDialogStrategy>(), x.Resolve<IUserService>())).As<IDialog<object>>();
 

@@ -10,11 +10,12 @@ namespace UklonBot.Factories.Exact
     {
         private readonly IDialogFactory[] _dialogFactories;
 
-        public DialogStrategy(ITranslatorService translatorService, ILuisService luisService, IUklonApiService uklonApiService)
+        public DialogStrategy(ITranslatorService translatorService, ILuisService luisService, IUklonApiService uklonApiService,
+            IUserService userService)
         {
             _dialogFactories = new IDialogFactory[]
             {
-                new RootDialogFactory(this, translatorService, luisService, uklonApiService),
+                new RootDialogFactory(this, translatorService, luisService, uklonApiService, userService),
                 new OrderDialogFactory(this, translatorService, luisService, uklonApiService),
                 new RegisterDialogFactory(this, translatorService, luisService, uklonApiService)
             };

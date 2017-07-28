@@ -8,7 +8,8 @@ namespace UklonBot.Helpers.Abstract
         void Authorize(string providerId);
 
         Cities GetUserCity(string providerId);
-        bool isUserRegistered(string providerId);
+        bool IsUserRegistered(string providerId);
+        bool ChangeCity(string providerId, string newCity);
 
     }
 }

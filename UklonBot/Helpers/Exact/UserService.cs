@@ -44,13 +44,33 @@ namespace UklonBot.Helpers.Exact
             return currentUser.City;
         }
 
-        public bool isUserRegistered(string providerId)
+        public bool IsUserRegistered(string providerId)
         {
             var currentUser = _uow.ChannelUsers.FirstOrDefault(u => u.ProviderId == providerId);
             if (currentUser != null)
                 return true;
             
             return false;
+        }
+
+        public bool ChangeCity(string providerId, string newCity)
+        {
+            var currentUser = _uow.ChannelUsers.FirstOrDefault(u => u.ProviderId == providerId);
+            switch (newCity)
+            {
+                case "Kiev":
+                    currentUser.City = Cities.Kiev;
+                    
+                    break;
+                case "Lviv":
+                    currentUser.City = Cities.Lviv;
+                    break;
+                case "Dnepr":
+                    currentUser.City = Cities.Dnepr;
+                    break;
+            }
+            _uow.Save();
+            return true;
         }
     }
 }
