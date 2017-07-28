@@ -671,7 +671,7 @@ namespace UklonBot.Helpers.Exact
             {
                 response = (HttpWebResponse)request.GetResponse();
             }
-            catch (WebException e)
+            catch (WebException)
             {
                 throw;
             }
@@ -1056,6 +1056,7 @@ namespace UklonBot.Helpers.Exact
                 {
                     ProviderId = providerId,
                     Provider = provider,
+                    PhoneNumber = phoneNumber,
                     IsPhoneNumberConfirmed = false
 
                 };
@@ -1078,7 +1079,7 @@ namespace UklonBot.Helpers.Exact
                 Provider = provider,
                 ProviderId = providerId,
                 Phone = phoneNumber,
-                Code = "267671"
+                Code = phoneValidationCode
             };
 
             var postData = JsonConvert.SerializeObject(autoRegisterInfo);

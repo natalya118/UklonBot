@@ -78,7 +78,7 @@ namespace UklonBot.Dialogs.TaxiOrder
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Modify), ModifyDialogAfter);
                     break;
                 case "2":
-                    var t = _uklonApiService.CreateOrder(taxiLocations, context.Activity.Id, context);
+                    var t = _uklonApiService.CreateOrder(taxiLocations, context.Activity.From.Id, context);
                     if (t != null)
                     {
                         await context.PostAsync(await _translatorService.TranslateText("Заказ успешно создан!",
@@ -95,15 +95,21 @@ namespace UklonBot.Dialogs.TaxiOrder
             var res = await result as string;
             switch (res)
             {
+
+                //add 5 uan
                 case "1":
                     _uklonApiService.RecreateOrder(StateHelper.GetOrder(context), context);
 
                     await context.PostAsync("none");
                     break;
+                // change address
                 case "2":
                     break;
+                //change city
                 case "3":
-                    // context.Call(new ChangeCityDialog(), null);
+                    PromptDialog.Choice(context,
+                        ConfirmChangeCityDialogResumeAfter, new List<String>(){"1) Да", "2) Нет"}, await _translatorService.TranslateText("Ваш текущий заказ будет отменен, продолжить?", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
+
                     break;
                 case "4":
                     //context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.CancelDialogResumeAfter);
@@ -118,6 +124,26 @@ namespace UklonBot.Dialogs.TaxiOrder
                     break;
                 }
             }
+        }
+
+        private async Task ConfirmChangeCityDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
+        {
+            var res = await result as string;
+            switch (res.Substring(0,1))
+            {
+                case "1":
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), ChangeCityDialogResumeAfter);
+                    break;
+                case "2":
+                    
+                    break;
+                    
+            }
+        }
+
+        private async Task ChangeCityDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
+        {
+            context.Done((Activity) null);
         }
 
         private static async Task<Attachment> GetOrderCard(IDialogContext context, TaxiLocations loc)
@@ -135,6 +161,7 @@ namespace UklonBot.Dialogs.TaxiOrder
 
             return receiptCard.ToAttachment();
         }
+        
 
     }
 }

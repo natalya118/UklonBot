@@ -43,13 +43,10 @@ namespace UklonBot.Dialogs
             var activity = await result as Activity;
 
             StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
-            var id = context.Activity.From.Id;
-            await context.PostAsync(id);
 
-            //if (!_userService.isUserRegistered(context.Activity.Id))
-
-            //    context.Call(new RegistrationDialog(), RegistrationDialogResumeAfter );
-                //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), RegistrationDialogResumeAfter);
+            if (!_userService.IsUserRegistered(context.Activity.From.Id))
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), RegistrationDialogResumeAfter);
+            
             var luisAnswer = await _luisService.GetResult(activity.Text);
 
             switch (luisAnswer.topScoringIntent.intent)

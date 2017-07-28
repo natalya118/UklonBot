@@ -11,8 +11,8 @@ namespace UklonBot.Dialogs.Registration
     [Serializable]
     public class RegisterDialog:IDialog<object>
     {
-        private string phone;
-        private string code;
+        private string _phone;
+        private string _code;
         private static ITranslatorService _translatorService;
         private static IUklonApiService _uklonApiService;
         private static ILuisService _luisService;
@@ -35,11 +35,11 @@ namespace UklonBot.Dialogs.Registration
 
         private async Task PhoneDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
-            phone = await result as string;
+            _phone = await result as string;
 
 
-            _uklonApiService.ConfirmPhone(phone);
-            await context.PostAsync("Verification code have been sent to " + phone);
+            _uklonApiService.ConfirmPhone(_phone);
+            await context.PostAsync("Verification code have been sent to " + _phone);
             context.Call(new ConfirmPhoneDialog(), ConfirmPhoneDialogResumeAfter);
         }
 
@@ -47,7 +47,7 @@ namespace UklonBot.Dialogs.Registration
         {
             var provider = context.Activity.ChannelId;
             var providerId = context.Activity.From.Id;
-            var res = _uklonApiService.Register(phone, provider, providerId, await result, context);
+            var res = _uklonApiService.Register(_phone, provider, providerId, await result, context);
             context.Done(res);
         }
     }
