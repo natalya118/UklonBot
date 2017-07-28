@@ -67,7 +67,23 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             if (mess != null)
             {
                 _street = mess;
-                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+                var lt = _uklonApiService.GetPlaceLocation(_street, null, context);
+                if (lt != null)
+                {
+                    _from = lt;
+                    await context.PostAsync(await
+                        _translatorService.TranslateText($"Место: {_street} ", StateHelper.GetUserLanguageCode(context)));
+                    PromptDialog.Choice(context,
+                        ChoiceDialogResumeAfter, new List<string>() { await _translatorService.TranslateText("1) Отправить машину", StateHelper.GetUserLanguageCode(context)),
+                            await _translatorService.TranslateText("2) Ввести адрес", StateHelper.GetUserLanguageCode(context))}, await _translatorService.TranslateText("Предоставить адрес пункта назначения, или отправить машину?", StateHelper.GetUserLanguageCode(context)), "");
+
+
+                }
+                else
+                {
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+                }
+                    
             }
             else
             {

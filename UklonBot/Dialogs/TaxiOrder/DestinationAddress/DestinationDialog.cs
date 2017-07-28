@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Connector;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
@@ -27,8 +28,27 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
 
         private async Task StreetDialogResumeAfterAsync(IDialogContext context, IAwaitable<object> result)
         {
-            this._street = await result as string;
-            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+            var mess = await result as string;
+            
+            if (mess != null)
+            {
+                _street = mess;
+                var lt = _uklonApiService.GetPlaceLocation(_street, null, context);
+                if (lt != null)
+                {
+                   context.Done(lt);
+                }
+                else
+                {
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+                }
+
+            }
+            else
+            {
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+            }
+           
         }
 
         private async Task NumberDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
