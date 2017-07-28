@@ -1,4 +1,5 @@
 ﻿using UklonBot.Helpers.Abstract;
+using UklonBot.Models;
 using UklonBot.Models.Repositories.Abstract;
 
 namespace UklonBot.Helpers.Exact
@@ -35,6 +36,12 @@ namespace UklonBot.Helpers.Exact
         {
             var currentUser = _uow.ChannelUsers.FirstOrDefault(u => u.ProviderId == providerId);
 
+        }
+
+        public Cities GetUserCity(string providerId)
+        {
+            var currentUser = _uow.ChannelUsers.FirstOrDefault(u => u.ProviderId == providerId);
+            return currentUser.City;
         }
 
         public bool isUserRegistered(string providerId)

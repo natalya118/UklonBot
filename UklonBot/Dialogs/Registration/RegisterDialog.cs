@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
+using UklonBot.Factories;
+using UklonBot.Factories.Abstract;
+using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
 
 namespace UklonBot.Dialogs.Registration
@@ -13,27 +16,26 @@ namespace UklonBot.Dialogs.Registration
         private static ITranslatorService _translatorService;
         private static IUklonApiService _uklonApiService;
         private static ILuisService _luisService;
+        private static IDialogStrategy _dialogStrategy;
 
-        public RegisterDialog(ITranslatorService translatorService, IUklonApiService uklonApiService, ILuisService luisService)
+        public RegisterDialog(ITranslatorService translatorService, IUklonApiService uklonApiService, ILuisService luisService, IDialogStrategy dialogStrategy)
         {
             _translatorService = translatorService;
             _uklonApiService = uklonApiService;
             _luisService = luisService;
+            _dialogStrategy = dialogStrategy;
 
         }
         public async Task StartAsync(IDialogContext context)
         {
-            var provider = context.Activity.ChannelId;
-            var providerId = context.Activity.Recipient.Id;
-            //_uklonApiService.ConfirmPhone("380988969775");
-            var res = _uklonApiService.Register("380988969775", "telegram", "dHmTUklSEg9", "267671");
-
-            //context.Call(new PhoneDialog(), PhoneDialogResumeAfter);
+            await context.PostAsync(await _translatorService.TranslateText("Давайте создадим ваш аккаунт",
+                StateHelper.GetUserLanguageCode(context)));
+           context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Phone), PhoneDialogResumeAfter);
         }
 
-        private async Task PhoneDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
+        private async Task PhoneDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
-            phone = await result;
+            phone = await result as string;
 
 
             _uklonApiService.ConfirmPhone(phone);
@@ -44,9 +46,9 @@ namespace UklonBot.Dialogs.Registration
         private async Task ConfirmPhoneDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             var provider = context.Activity.ChannelId;
-            var providerId = context.Activity.Recipient.Id;
-            //var res = _uklonApiService.Register(phone, provider, providerId, await result);
-            //context.Done(res);
+            var providerId = context.Activity.From.Id;
+            var res = _uklonApiService.Register(phone, provider, providerId, await result, context);
+            context.Done(res);
         }
     }
 }

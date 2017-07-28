@@ -8,14 +8,14 @@ using UklonBot.Helpers.Abstract;
 
 namespace UklonBot.Factories.Exact
 {
-    public class RootDialogFactory : IDialogFactory
+    public class RegisterDialogFactory : IDialogFactory
     {
         private readonly ILuisService _luisService;
         private readonly IDialogStrategy _dialogStrategy;
         private readonly ITranslatorService _translatorService;
         private readonly IUklonApiService _uklonApiService;
 
-        public RootDialogFactory(IDialogStrategy dialogStrategy, ITranslatorService translatorService, ILuisService luisService, IUklonApiService uklonApiService)
+        public RegisterDialogFactory(IDialogStrategy dialogStrategy, ITranslatorService translatorService, ILuisService luisService, IUklonApiService uklonApiService)
         {
             _luisService = luisService;
             _translatorService = translatorService;
@@ -26,16 +26,9 @@ namespace UklonBot.Factories.Exact
         {
             switch (value)
             {
-                case DialogFactoryType.Root.Order:
-                    return new OrderDialog(_translatorService, _dialogStrategy, _uklonApiService);
-                case DialogFactoryType.Root.Help:
-                    return new HelpDialog(_translatorService, _luisService);
-                case DialogFactoryType.Root.ChangeCity:
-                    return new ChangeCityDialog(_translatorService);
-                case DialogFactoryType.Root.Register:
-                    return new RegisterDialog(_translatorService, _uklonApiService, _luisService, _dialogStrategy);
-                case DialogFactoryType.Root.Phone:
+                case DialogFactoryType.Register.Phone:
                     return new PhoneDialog(_translatorService);
+                
                 default:
                     return null;
             }

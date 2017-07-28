@@ -26,6 +26,9 @@ namespace UklonBot.Dialogs.TaxiOrder
         private TaxiLocations taxiLocations;
         public async Task StartAsync(IDialogContext context)
         {
+            var id = context.Activity.From.Id;
+            await context.PostAsync(id);
+
             //var res = _uklonApiService.Register("380994821071", "emulator", "3da7h9i2if49fgil9", "477441");
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
             
@@ -36,7 +39,7 @@ namespace UklonBot.Dialogs.TaxiOrder
 
             if (taxiLocations != null)
             {
-                var amount = _uklonApiService.CalculateAmmount(taxiLocations.FromLocation, taxiLocations.ToLocation);
+                var amount = _uklonApiService.CalculateAmmount(taxiLocations.FromLocation, taxiLocations.ToLocation, context);
                 taxiLocations.Cost = amount;
             }
             var message = context.MakeMessage();
@@ -75,7 +78,7 @@ namespace UklonBot.Dialogs.TaxiOrder
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Modify), ModifyDialogAfter);
                     break;
                 case "2":
-                    var t = _uklonApiService.CreateOrder(taxiLocations, context.Activity.Id);
+                    var t = _uklonApiService.CreateOrder(taxiLocations, context.Activity.Id, context);
                     if (t != null)
                     {
                         await context.PostAsync(await _translatorService.TranslateText("Заказ успешно создан!",
@@ -93,7 +96,9 @@ namespace UklonBot.Dialogs.TaxiOrder
             switch (res)
             {
                 case "1":
+                    _uklonApiService.RecreateOrder(StateHelper.GetOrder(context), context);
 
+                    await context.PostAsync("none");
                     break;
                 case "2":
                     break;

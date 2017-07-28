@@ -29,7 +29,9 @@ namespace UklonBot.Infrastracture
             builder.Register(x => new UserService(x.Resolve<IUnitOfWork>())).As<IUserService>().SingleInstance();
             builder.Register(x => new LuisService(x.Resolve<ITranslatorService>())).As<ILuisService>().SingleInstance();
 
-            builder.Register(x => new UklonApiService(x.Resolve<IUnitOfWork>())).As<IUklonApiService>().SingleInstance();
+            builder.Register(x => new UklonApiService(x.Resolve<IUnitOfWork>(), x.Resolve<IUserService>())).As<IUklonApiService>().SingleInstance();
+
+            //builder.Register(x => new UklonApiService(x.Resolve<IUnitOfWork>())).As<IUklonApiService>().SingleInstance();
 
             builder.Register(x => new DialogStrategy(x.Resolve<ITranslatorService>(), x.Resolve<ILuisService>(), x.Resolve<IUklonApiService>())).As<IDialogStrategy>().SingleInstance();
 

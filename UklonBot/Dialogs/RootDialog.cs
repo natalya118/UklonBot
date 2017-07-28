@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
 using Microsoft.Bot.Builder.Luis;
+using UklonBot.Dialogs.Registration;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
@@ -41,9 +43,13 @@ namespace UklonBot.Dialogs
             var activity = await result as Activity;
 
             StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
+            var id = context.Activity.From.Id;
+            await context.PostAsync(id);
 
             //if (!_userService.isUserRegistered(context.Activity.Id))
-            //    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), DialogResumeAfter);
+
+            //    context.Call(new RegistrationDialog(), RegistrationDialogResumeAfter );
+                //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), RegistrationDialogResumeAfter);
             var luisAnswer = await _luisService.GetResult(activity.Text);
 
             switch (luisAnswer.topScoringIntent.intent)
@@ -114,6 +120,7 @@ namespace UklonBot.Dialogs
                 await context.PostAsync("Congratulations! You've successfully registered :)");
             else
                 await context.PostAsync("Ooops");
+            context.Wait(MessageReceivedAsync);
         }
         private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {

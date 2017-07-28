@@ -8,7 +8,8 @@ namespace UklonBot.Factories
             Order,
             Register,
             ChangeCity,
-            Help
+            Help, 
+            Phone
         }
 
         public enum Order
@@ -22,6 +23,10 @@ namespace UklonBot.Factories
             Modify
         }
 
+        public enum Register
+        {
+            Phone
+        }
    
     }
 }

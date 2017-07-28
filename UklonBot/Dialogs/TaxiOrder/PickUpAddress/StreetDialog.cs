@@ -30,7 +30,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         {
             
             var message = await result;
-            List<string> places = _uklonApiService.GetPlaces(message.Text).ToList();
+            List<string> places = _uklonApiService.GetPlaces(message.Text, context).ToList();
             
             if (places.Any())
             {

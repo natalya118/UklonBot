@@ -166,6 +166,7 @@
     <Compile Include="Factories\DialogFactoryType.cs" />
     <Compile Include="Factories\Exact\DialogStrategy.cs" />
     <Compile Include="Factories\Exact\OrderDialogFactory.cs" />
+    <Compile Include="Factories\Exact\RegisterDialogFactory.cs" />
     <Compile Include="Factories\Exact\RootDialogFactory.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -34,7 +34,7 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
         private async Task NumberDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             var number = await result as string;
-            context.Done(_uklonApiService.GetPlaceLocation(_street, number));
+            context.Done(_uklonApiService.GetPlaceLocation(_street, number, context));
             
         }
 

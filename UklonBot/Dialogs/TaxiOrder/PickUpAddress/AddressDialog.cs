@@ -73,7 +73,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 
         {
             _number = await result as string;
-            _from = _uklonApiService.GetPlaceLocation(_street, _number);
+            _from = _uklonApiService.GetPlaceLocation(_street, _number, context);
 
             await context.PostAsync( await 
                 _translatorService.TranslateText($"Your street is {_street} and your number is {_number}.", StateHelper.GetUserLanguageCode(context)));

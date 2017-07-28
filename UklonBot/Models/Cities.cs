@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace UklonBot.Models
+﻿namespace UklonBot.Models
 {
     public enum Cities
     {
         Unknown,
-        Kyiv,
+        Kiev,
         Lviv,
         Dnepr
     }
