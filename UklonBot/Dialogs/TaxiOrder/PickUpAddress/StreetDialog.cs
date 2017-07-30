@@ -41,15 +41,24 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                             CancelDialogResumeAfter,await _translatorService.TranslateList(new List<string>() { "1) Да", "2) Нет" }, context), await _translatorService.TranslateText("Отменить заказ?", StateHelper.GetUserLanguageCode(context)), "Выберите вариант");
                
                         break;
-                default:
-                    List<string> places = _uklonApiService.GetPlaces(message.Text, context).ToList();
+                    default:
+                        List<string> places = _uklonApiService.GetPlaces(message.Text, context).ToList();
 
-                    if (places.Any())
-                    {
-                        PromptDialog.Choice(context,
-                            LocationDialogResumeAfter, places, await _translatorService.TranslateText("Выберите место", StateHelper.GetUserLanguageCode(context)), "Выберите место из списка");
+                        if (places.Any())
+                        {
+                            PromptDialog.Choice(context,
+                                LocationDialogResumeAfter, places,
+                                await _translatorService.TranslateText("Выберите место",
+                                    StateHelper.GetUserLanguageCode(context)), "Выберите место из списка");
 
-                    }
+                        }
+                        else
+                        {
+                            await context.PostAsync(await _translatorService.TranslateText(
+                                "Не найдено улицы или места с таким названием. Попробуйте уточнить.",
+                                StateHelper.GetUserLanguageCode(context)));
+                        context.Wait(MessageReceivedAsync);
+                        }
                     break;
                     
             }

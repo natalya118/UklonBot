@@ -10,7 +10,7 @@ using UklonBot.Helpers.Abstract;
 
 namespace UklonBot.Dialogs
 {
-    [LuisModel("438d56b0-a693-4397-ab2a-f1a9d1d88a4f", "765918aed4b64da898474bc04dd383e9")]
+    [LuisModel("ef002f59-e196-4dd8-a208-387c6c38bf3a", "fdac920ffdb9473c85f5f73eb274d076")]
     [Serializable]
     public class RootDialog : IDialog<object>
     {
@@ -41,11 +41,26 @@ namespace UklonBot.Dialogs
         {
             var activity = await result as Activity;
 
+            
+
+            //if (!_userService.IsUserCitySaved(context.Activity.From.Id))
+            //    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
             StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
 
-           
+            if (! _userService.IsUserRegistered(context.Activity.From.Id))
+            {
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register),
+                    RegistrationDialogResumeAfter);
+            }
+            else if(!_userService.IsUserCitySaved(context.Activity.From.Id))
+            {
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
+            }
+            else
+            {
+                
+            
             var luisAnswer = await _luisService.GetResult(activity.Text);
-
             switch (luisAnswer.topScoringIntent.intent)
             {
                 case "Order taxi":
@@ -58,11 +73,11 @@ namespace UklonBot.Dialogs
                     break;
 
                 case "Change city":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), this.DialogResumeAfter);
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
                     break;
 
                 case "Help":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Help), this.DialogResumeAfter);
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Help), DialogResumeAfter);
                     break;
 
                 case "Greeting":
@@ -75,8 +90,8 @@ namespace UklonBot.Dialogs
                     context.Wait(MessageReceivedAsync);
                     break;
             }
-
-          }
+            }
+        }
 
         private async Task RegistrationDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {

@@ -20,7 +20,8 @@ namespace UklonBot.Factories
             CorrectStreet,
             Destination,
             Reporting,
-            Modify
+            Modify,
+            ConfirmPhone
         }
 
         public enum Register

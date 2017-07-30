@@ -32,12 +32,6 @@ namespace UklonBot.Dialogs.TaxiOrder
         private TaxiLocations taxiLocations;
         public async Task StartAsync(IDialogContext context)
         {
-       
-            if (!_userService.IsUserRegistered(context.Activity.From.Id))
-                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), RegisterDialogResumeAfterAsync);
-
-            if (!_userService.IsUserCitySaved(context.Activity.From.Id))
-                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), ChooseCityDialogResumeAfter);
 
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
             
@@ -70,6 +64,7 @@ namespace UklonBot.Dialogs.TaxiOrder
             {
                 var amount = _uklonApiService.CalculateAmmount(taxiLocations.FromLocation, taxiLocations.ToLocation, context);
                 taxiLocations.Cost = amount;
+                taxiLocations.ExtraCost = 0;
             }
             var message = context.MakeMessage();
 
@@ -115,28 +110,53 @@ namespace UklonBot.Dialogs.TaxiOrder
                         var status = _uklonApiService.GetOrderState(t, context);
                         StateHelper.SetOrder(context, t);
                         
-                        await PeriodicFooAsync(new TimeSpan(0, 0, 3), context);
-                        
+                        var orderDone = await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
+                        var message = context.MakeMessage();
+
+                        var attachment = GetDetailsCard(context, orderDone);
+                        message.Attachments.Add(await attachment);
+
+                        await context.PostAsync(message);
                     }
                     break;
                 
             }
         }
-        public async Task<OrderInfo> PeriodicFooAsync(TimeSpan interval, IDialogContext context)
+        public async Task<OrderInfo> CheckOrderStatus(TimeSpan interval, IDialogContext context)
         {
+            
             CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
             CancellationToken token = cancelTokenSource.Token;
+
+            //counter for api simulation
+            int count = 0;
             while (true)
             {
                 var order = StateHelper.GetOrder(context);
                 var state = _uklonApiService.GetOrderState(order, context);
-                if (state.Status.Equals("done"))
+                count++;
+                if (state.Status.Equals("done") || count == 3)
                 {
+                   
+                    //data for api simulation
+                    state.Driver = new Driver
+                    {
+                        Bl = "da",
+                        Name = "Vasya",
+                        Phone = "3801110011"
+                    };
+                    state.Vehicle = new Vehicle
+                    {
+                        Model = "Maybach",
+                        Color = "Dark Black"
+                    };
+                    state.PickupTime = "19:43";
+                    return state;
                     cancelTokenSource.Cancel();
-                    context.Done(state);
+                    
 
                 }
-                await context.PostAsync(state.Status);
+                await context.PostAsync(count + state.Status);
                 
                 await Task.Delay(interval, token);
             }
@@ -148,11 +168,14 @@ namespace UklonBot.Dialogs.TaxiOrder
             switch (res)
             {
 
-                //add 5 uan
+                //add 5 uan (before order sending)
                 case "1":
-                    _uklonApiService.RecreateOrder(StateHelper.GetOrder(context), context);
+                    taxiLocations.ExtraCost += 5;
+                    await context.PostAsync(await _translatorService.TranslateText("Добавлено 5 грн", StateHelper.GetUserLanguageCode(context)));
+                    await DisplayOrderDetails(context);
+                    PromptDialog.Choice(context,
+                        ChoiceDialogResumeAfterAsync, new List<string>() { "1) Изменить", "2) Отправить" }, await _translatorService.TranslateText("1) Изменить детали; 2) Отправить заказ", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
 
-                    await context.PostAsync("none");
                     break;
                 // change address
                 case "2":
@@ -160,11 +183,17 @@ namespace UklonBot.Dialogs.TaxiOrder
                 //change city
                 case "3":
                     PromptDialog.Choice(context,
-                        ConfirmChangeCityDialogResumeAfter, new List<String>(){"1) Да", "2) Нет"}, await _translatorService.TranslateText("Ваш текущий заказ будет отменен, продолжить?", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
+                        ConfirmChangeCityDialogResumeAfter, new List<String>(){"1) Да", "2) Нет"}, 
+                        await _translatorService.TranslateText("Ваш текущий заказ будет отменен, продолжить?", 
+                        StateHelper.GetUserLanguageCode(context)), "");
 
                     break;
                 case "4":
-                    //context.Call(new ChoiceDialog(new List<string>() { "Yes", "No" }, "Are you sure you want to cancel your order?", "Choose yes or no"), this.CancelDialogResumeAfter);
+                    PromptDialog.Choice(context,
+                        DialogResumeAfter, new List<String>() { "1) Да", "2) Нет" },
+                        await _translatorService.TranslateText("Ваш текущий заказ будет отменен, продолжить?",
+                            StateHelper.GetUserLanguageCode(context)), "");
+                    
 
                     break;
                 case "5":
@@ -184,7 +213,7 @@ namespace UklonBot.Dialogs.TaxiOrder
             switch (res.Substring(0,1))
             {
                 case "1":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), ChangeCityDialogResumeAfter);
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
                     break;
                 case "2":
                     
@@ -192,16 +221,32 @@ namespace UklonBot.Dialogs.TaxiOrder
                     
             }
         }
+        private async Task ConfirmCancelResumeAfter(IDialogContext context, IAwaitable<object> result)
+        {
+            var res = await result as string;
+            switch (res.Substring(0, 1))
+            {
+                case "1":
+                    context.Done((Activity) null);
+                    break;
+                case "2":
+
+                    break;
+
+            }
+        }
         private async Task ChooseCityDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
 
         }
-        private async Task ChangeCityDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
-        {
-            context.Done((Activity) null);
-        }
 
+        private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
+        {
+            context.Done((Activity)null);
+
+        }
+        
         private static async Task<Attachment> GetOrderCard(IDialogContext context, TaxiLocations loc)
         {
             var receiptCard = new ReceiptCard
@@ -209,7 +254,8 @@ namespace UklonBot.Dialogs.TaxiOrder
                 Title = await _translatorService.TranslateText("Детали заказа", StateHelper.GetUserLanguageCode(context)),
                 Facts = new List<Fact> { new Fact(await _translatorService.TranslateText("Откуда", StateHelper.GetUserLanguageCode(context)), loc.FromLocation.AddressName + ", " + loc.FromLocation.HouseNumber ),
                     new Fact(await _translatorService.TranslateText("Куда", StateHelper.GetUserLanguageCode(context)), loc.ToLocation.AddressName + ", " + loc.ToLocation.HouseNumber),
-                    new Fact(await _translatorService.TranslateText("Город", StateHelper.GetUserLanguageCode(context)), await _translatorService.TranslateText(((Cities) loc.FromLocation.CityId).ToString(), StateHelper.GetUserLanguageCode(context)))},
+                    new Fact(await _translatorService.TranslateText("Город", StateHelper.GetUserLanguageCode(context)), await _translatorService.TranslateText(((Cities) loc.FromLocation.CityId).ToString(), StateHelper.GetUserLanguageCode(context))),
+                    new Fact(await _translatorService.TranslateText("Доплата", StateHelper.GetUserLanguageCode(context)), loc.ExtraCost + " грн")},
                 
                 Total = loc.Cost.ToString(),
 
@@ -217,7 +263,28 @@ namespace UklonBot.Dialogs.TaxiOrder
 
             return receiptCard.ToAttachment();
         }
-        
 
+        private static async Task<Attachment> GetDetailsCard(IDialogContext context, OrderInfo info)
+        {
+            var receiptCard = new ReceiptCard
+            {
+                Title = await "Order details".ToUserLocaleAsync(context),
+                Facts = new List<Fact> { new Fact(await _translatorService.TranslateText("Марка автомобиля: ", StateHelper.GetUserLanguageCode(context)),
+                 info.Vehicle.Model),
+                    new Fact(await _translatorService.TranslateText("Цвет автомобиля: ", StateHelper.GetUserLanguageCode(context)),
+                        await _translatorService.TranslateText(info.Vehicle.Color, StateHelper.GetUserLanguageCode(context))),
+                    new Fact(await _translatorService.TranslateText("Имя водителя: ", StateHelper.GetUserLanguageCode(context)),
+                        info.Driver.Name),
+                    new Fact(await _translatorService.TranslateText("Номер водителя: ", StateHelper.GetUserLanguageCode(context)),
+                        info.Driver.Phone),
+                    new Fact(await _translatorService.TranslateText("Время прибытия: ", StateHelper.GetUserLanguageCode(context)),
+                        info.PickupTime)
+                },
+
+                Total = "$ 90.95"
+            };
+
+            return receiptCard.ToAttachment();
+        }
     }
 }

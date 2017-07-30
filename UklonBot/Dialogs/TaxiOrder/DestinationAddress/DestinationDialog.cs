@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Connector;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;

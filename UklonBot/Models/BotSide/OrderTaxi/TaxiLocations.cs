@@ -14,6 +14,8 @@ namespace UklonBot.Models.BotSide.OrderTaxi
         public Location ToLocation { get; set; }
 
         public double Cost { get; set; }
+
+        public int ExtraCost { get; set; }
         public TaxiLocations(Location fromL, Location toL)
         {
             this.FromLocation = fromL;

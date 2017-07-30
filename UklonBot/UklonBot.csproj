@@ -179,9 +179,12 @@
     <Compile Include="Migrations\201707261419569_channel_users_migration.Designer.cs">
       <DependentUpon>201707261419569_channel_users_migration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201707300925415_temp.cs" />
+    <Compile Include="Migrations\201707300925415_temp.Designer.cs">
+      <DependentUpon>201707300925415_temp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
-    <Compile Include="Models\BotSide\ChangeCar.cs" />
     <Compile Include="Models\BotSide\LuisRes.cs" />
     <Compile Include="Models\BotSide\OrderTaxi\PickUpAddress.cs" />
     <Compile Include="Models\BotSide\OrderTaxi\ChangeCity.cs" />
@@ -243,6 +246,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201707261419569_channel_users_migration.resx">
       <DependentUpon>201707261419569_channel_users_migration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707300925415_temp.resx">
+      <DependentUpon>201707300925415_temp.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

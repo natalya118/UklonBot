@@ -28,7 +28,7 @@ namespace UklonBot.Dialogs.Registration
         }
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(await _translatorService.TranslateText("Давайте создадим ваш аккаунт",
+            await context.PostAsync(await _translatorService.TranslateText("Сначала нужно зарегистрироваться. Сразу после этого вы сможете сделать заказ.",
                 StateHelper.GetUserLanguageCode(context)));
            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Phone), PhoneDialogResumeAfter);
         }
@@ -39,15 +39,15 @@ namespace UklonBot.Dialogs.Registration
 
 
             _uklonApiService.ConfirmPhone(_phone);
-            await context.PostAsync(await _translatorService.TranslateText("Verification code have been sent to " + _phone, StateHelper.GetUserLanguageCode(context)));
-            context.Call(new ConfirmPhoneDialog(), ConfirmPhoneDialogResumeAfter);
+            await context.PostAsync(await _translatorService.TranslateText("Код подтверждения был отправлен на номер " + _phone, StateHelper.GetUserLanguageCode(context)));
+            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ConfirmPhone), ConfirmPhoneDialogResumeAfter);
         }
 
-        private async Task ConfirmPhoneDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
+        private async Task ConfirmPhoneDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             var provider = context.Activity.ChannelId;
             var providerId = context.Activity.From.Id;
-            var res = _uklonApiService.Register(_phone, provider, providerId, await result, context);
+            var res = _uklonApiService.Register(_phone, provider, providerId, await result as string, context);
             context.Done(res);
         }
     }
