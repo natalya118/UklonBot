@@ -196,16 +196,6 @@
     <Compile Include="Models\CheckProviderId\CheckProviderIdResultViewModel.cs" />
     <Compile Include="Models\CheckProviderId\ProviderIdCheckRequestViewModel.cs" />
     <Compile Include="Models\Cities.cs" />
-    <Compile Include="Models\FacebookModels\FacebookAddress.cs" />
-    <Compile Include="Models\FacebookModels\FacebookAdjustment.cs" />
-    <Compile Include="Models\FacebookModels\FacebookAttachment.cs" />
-    <Compile Include="Models\FacebookModels\FacebookButton.cs" />
-    <Compile Include="Models\FacebookModels\FacebookElement.cs" />
-    <Compile Include="Models\FacebookModels\FacebookMessage.cs" />
-    <Compile Include="Models\FacebookModels\FacebookPayload.cs" />
-    <Compile Include="Models\FacebookModels\FacebookPaymentSummary.cs" />
-    <Compile Include="Models\FacebookModels\FacebookPriceList.cs" />
-    <Compile Include="Models\FacebookModels\FacebookSummary.cs" />
     <Compile Include="Models\LangType.cs" />
     <Compile Include="Models\Repositories\Abstract\IUnitOfWork.cs" />
     <Compile Include="Models\Repositories\Exact\GenericRepository.cs" />

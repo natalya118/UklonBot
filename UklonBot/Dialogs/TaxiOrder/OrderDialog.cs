@@ -95,14 +95,12 @@ namespace UklonBot.Dialogs.TaxiOrder
                             StateHelper.GetUserLanguageCode(context)));
                         var status = _uklonApiService.GetOrderState(t, context);
                         StateHelper.SetOrder(context, t);
-                        
-                        var orderDone = await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
-                        var message = context.MakeMessage();
+                        //PromptDialog.Choice(context,
+                        //    DialogResumeAfter, new List<String>() { "1) Да", "2) Нет" },
+                        //    await _translatorService.TranslateText("Диалоггг?",
+                        //        StateHelper.GetUserLanguageCode(context)), "");
+                        await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
 
-                        var attachment = GetDetailsCard(context, orderDone);
-                        message.Attachments.Add(await attachment);
-
-                        await context.PostAsync(message);
                         
                     }
                     break;
@@ -178,11 +176,15 @@ namespace UklonBot.Dialogs.TaxiOrder
                         Color = "Dark Black"
                     };
                     state.PickupTime = "19:43";
-                    
-                    return state;
 
-                    //cancelTokenSource.Cancel();
-                    
+                    var message = context.MakeMessage();
+
+                    var attachment = GetDetailsCard(context, state);
+                    message.Attachments.Add(await attachment);
+
+                    await context.PostAsync(message);
+                    cancelTokenSource.Cancel();
+
 
                 }
                 await context.PostAsync(count + state.Status);

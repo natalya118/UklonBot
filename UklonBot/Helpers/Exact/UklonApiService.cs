@@ -813,7 +813,7 @@ namespace UklonBot.Helpers.Exact
             var uriBuilder = new UriBuilder(url);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["q"] = queryPlace;
-            query["limit"] = "5";
+            query["limit"] = "10";
             uriBuilder.Query = query.ToString();
             url = uriBuilder.ToString();
 

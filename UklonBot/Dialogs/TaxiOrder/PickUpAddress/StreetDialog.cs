@@ -15,6 +15,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private static ITranslatorService _translatorService;
         private static ILuisService _luisService;
         private static IUklonApiService _uklonApiService;
+        
         public StreetDialog(ITranslatorService translatorService, ILuisService luisService, IUklonApiService uklonApiService)
         {
             _translatorService = translatorService;
@@ -37,26 +38,40 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                 switch (luisAnswer.topScoringIntent.intent)
                 {
                     case "Cancel":
-                        PromptDialog.Choice(context,
-                            CancelDialogResumeAfter,await _translatorService.TranslateList(new List<string>() { "1) Да", "2) Нет" }, context), await _translatorService.TranslateText("Отменить заказ?", StateHelper.GetUserLanguageCode(context)), "Выберите вариант");
-               
-                        break;
+                    //PromptDialog.Choice(context,
+                    //    CancelDialogResumeAfter,await _translatorService.TranslateList(new List<string>() { "1) Да", "2) Нет" }, context), await _translatorService.TranslateText("Отменить заказ?", StateHelper.GetUserLanguageCode(context)), "Выберите вариант");
+                    context.Done((Activity)null);
+                    break;
                     default:
                     {
                         try
                         {
                             List<string> places = _uklonApiService.GetPlaces(message.Text, context).ToList();
+                           
                             if (places.Any())
                             {
+                                if(context.Activity.ChannelId.Equals("telegram"))
                                 PromptDialog.Choice(context,
                                     LocationDialogResumeAfter, places,
                                     await _translatorService.TranslateText("Выберите место",
-                                        StateHelper.GetUserLanguageCode(context)), "Выберите место из списка");
+                                        StateHelper.GetUserLanguageCode(context)), "Выберите место из списка", 3, PromptStyle.Keyboard);
+                                else
+                                    PromptDialog.Choice(context,
+                                        LocationDialogResumeAfter, places,
+                                        await _translatorService.TranslateText("Выберите место",
+                                            StateHelper.GetUserLanguageCode(context)), "Выберите место из списка");
+                            }
+                            else
+                            {
+                                await context.PostAsync(await _translatorService.TranslateText(
+                                    "Не найдено улицы или места с таким названием. Попробуйте уточнить.",
+                                    StateHelper.GetUserLanguageCode(context)));
+                                context.Wait(MessageReceivedAsync);
                             }
                         }
-                        catch (ArgumentException)
+                        catch (Exception e )
                         {
-
+                            
                             await context.PostAsync(await _translatorService.TranslateText(
                                 "Не найдено улицы или места с таким названием. Попробуйте уточнить.",
                                 StateHelper.GetUserLanguageCode(context)));

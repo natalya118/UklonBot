@@ -96,15 +96,28 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task NumberDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
 
         {
-            _number = await result as string;
-            _from = _uklonApiService.GetPlaceLocation(_street, _number, context);
-
-            await context.PostAsync( await 
-                _translatorService.TranslateText($"Улица: {_street} , номер : {_number}.", StateHelper.GetUserLanguageCode(context)));
-            PromptDialog.Choice(context,
-                ChoiceDialogResumeAfter, new List<string>() { await _translatorService.TranslateText("1) Отправить машину", StateHelper.GetUserLanguageCode(context)),
-                    await _translatorService.TranslateText("2) Ввести адрес", StateHelper.GetUserLanguageCode(context))}, await _translatorService.TranslateText("Предоставить адрес пункта назначения, или отправить машину?", StateHelper.GetUserLanguageCode(context)), "");
+           
             
+            _from = _uklonApiService.GetPlaceLocation(_street, await result as string, context);
+            if (_from == null)
+            {
+                await context.PostAsync(await
+                    _translatorService.TranslateText("Не найдено место с таким номером. Уточните, пожалуйста",
+                        StateHelper.GetUserLanguageCode(context)));
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+            }
+            else
+            {
+                _number = await result as string;
+                await context.PostAsync(await
+                    _translatorService.TranslateText($"Улица: {_street} , номер : {_number}.", StateHelper.GetUserLanguageCode(context)));
+                PromptDialog.Choice(context,
+                    ChoiceDialogResumeAfter, new List<string>() { await _translatorService.TranslateText("1) Отправить машину", StateHelper.GetUserLanguageCode(context)),
+                        await _translatorService.TranslateText("2) Ввести адрес", StateHelper.GetUserLanguageCode(context))}, await _translatorService.TranslateText("Предоставить адрес пункта назначения, или отправить машину?", StateHelper.GetUserLanguageCode(context)), "");
+
+
+            }
+
         }
 
         private async Task ChoiceDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
