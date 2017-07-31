@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
+using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
 namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
 {
@@ -11,11 +12,13 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
     {
         private static IUklonApiService _uklonApiService;
         private static IDialogStrategy _dialogStrategy;
+        private static ITranslatorService _translatorService;
 
-        public DestinationDialog(IUklonApiService uklonApiService, IDialogStrategy dialogStrategy)
+        public DestinationDialog(IUklonApiService uklonApiService, IDialogStrategy dialogStrategy, ITranslatorService translatorService)
         {
             _uklonApiService = uklonApiService;
             _dialogStrategy = dialogStrategy;
+            _translatorService = translatorService;
         }
 
         private string _street;
@@ -45,7 +48,8 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
             }
             else
             {
-                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+                
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Street), StreetDialogResumeAfterAsync);
             }
            
         }
@@ -53,8 +57,17 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
         private async Task NumberDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             var number = await result as string;
-            context.Done(_uklonApiService.GetPlaceLocation(_street, number, context));
-            
+            if (_uklonApiService.GetPlaceLocation(_street, number, context) != null)
+            {
+                context.Done(_uklonApiService.GetPlaceLocation(_street, number, context));
+            }
+            else
+            {
+                await context.PostAsync(
+                    await _translatorService.TranslateText("Не найдено места с таким номером. Уточните, пожалуйста", StateHelper.GetUserLanguageCode(context)));
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+            }
+
         }
 
     }

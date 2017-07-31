@@ -102,7 +102,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             if (_from == null)
             {
                 await context.PostAsync(await
-                    _translatorService.TranslateText("Не найдено место с таким номером. Уточните, пожалуйста",
+                    _translatorService.TranslateText("Место не найдено. Уточните, пожалуйста",
                         StateHelper.GetUserLanguageCode(context)));
                 context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
             }
@@ -110,7 +110,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             {
                 _number = await result as string;
                 await context.PostAsync(await
-                    _translatorService.TranslateText($"Улица: {_street} , номер : {_number}.", StateHelper.GetUserLanguageCode(context)));
+                    _translatorService.TranslateText($"{_street} , {_number}.", StateHelper.GetUserLanguageCode(context)));
                 PromptDialog.Choice(context,
                     ChoiceDialogResumeAfter, new List<string>() { await _translatorService.TranslateText("1) Отправить машину", StateHelper.GetUserLanguageCode(context)),
                         await _translatorService.TranslateText("2) Ввести адрес", StateHelper.GetUserLanguageCode(context))}, await _translatorService.TranslateText("Предоставить адрес пункта назначения, или отправить машину?", StateHelper.GetUserLanguageCode(context)), "");
