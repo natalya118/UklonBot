@@ -12,7 +12,7 @@ namespace UklonBot.Helpers.Abstract
         IEnumerable<string> GetPlaces(string query, IDialogContext context);
         OrderInfo GetOrderState(string dialogOrderId, IDialogContext context);
         void CancelOrder(string currentDialogOrderId, IDialogContext context);
-        string RecreateOrder(string orderId, IDialogContext context);
+        string RecreateOrder(string orderId, int extraCost, IDialogContext context);
         string GetRecreatedOrderId(string orderId, IDialogContext context);
         Location GetPlaceLocation(string currentDialogPickupAddress, string currentDialogPickupHouse, IDialogContext context);
         bool Authenticate(string phoneNumber, string viberId, IDialogContext context);

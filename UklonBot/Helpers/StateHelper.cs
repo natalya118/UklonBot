@@ -26,13 +26,20 @@ namespace UklonBot.Helpers
 
         public static void SetUserLanguageCode(IDialogContext context, string languageCode)
         {
-            try
+            if (languageCode != "ua" || languageCode != "ru" || languageCode != "en")
             {
-                context.UserData.SetValue("LanguageCode", languageCode);
+                context.UserData.SetValue("LanguageCode", "ru");
             }
-            catch (Exception ex)
+            else
             {
-                throw ex;
+                try
+                {
+                    context.UserData.SetValue("LanguageCode", languageCode);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
 
         }

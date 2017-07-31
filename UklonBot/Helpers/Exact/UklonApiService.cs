@@ -813,7 +813,7 @@ namespace UklonBot.Helpers.Exact
             var uriBuilder = new UriBuilder(url);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["q"] = queryPlace;
-            query["limit"] = "10";
+            query["limit"] = "5";
             uriBuilder.Query = query.ToString();
             url = uriBuilder.ToString();
 
@@ -929,7 +929,7 @@ namespace UklonBot.Helpers.Exact
             }
         }
 
-        public string RecreateOrder(string orderId, IDialogContext context)
+        public string RecreateOrder(string orderId, int extraCost, IDialogContext context)
         {
             string url = $"https://test.uklon.com.ua/api/v1/orders/{orderId}/recreate";
 
@@ -944,7 +944,7 @@ namespace UklonBot.Helpers.Exact
 
             RecreateOrderInfo recreateOrderInfo = new RecreateOrderInfo
             {
-                ExtraCost = 5,
+                ExtraCost = extraCost,
                 UklonDriverOnly = true
             };
 

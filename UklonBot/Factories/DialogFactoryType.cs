@@ -21,7 +21,8 @@ namespace UklonBot.Factories
             Destination,
             Reporting,
             Modify,
-            ConfirmPhone
+            ConfirmPhone,
+            ModifyAfterCreation
         }
 
         public enum Register

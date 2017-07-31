@@ -41,19 +41,19 @@ namespace UklonBot.Dialogs
         {
             var activity = await result as Activity;
 
-            
-
-            //if (!_userService.IsUserCitySaved(context.Activity.From.Id))
-            //    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
+            if (!_userService.IsUserCitySaved(context.Activity.From.Id))
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
             StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
 
             if (! _userService.IsUserRegistered(context.Activity.From.Id))
             {
+                //await context.PostAsync("not registered");
                 context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register),
                     RegistrationDialogResumeAfter);
             }
             else if(!_userService.IsUserCitySaved(context.Activity.From.Id))
             {
+                await context.PostAsync("no city");
                 context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
             }
             else
@@ -105,7 +105,7 @@ namespace UklonBot.Dialogs
             {
                 await context.PostAsync(await _translatorService.TranslateText(
                     "Что-то пошло не так. Давайте попробуем ещё раз. ", StateHelper.GetUserLanguageCode(context)));
-                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), this.RegistrationDialogResumeAfter);
+                //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), this.RegistrationDialogResumeAfter);
             }
 
         }

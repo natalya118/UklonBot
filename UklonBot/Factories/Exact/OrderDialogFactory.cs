@@ -41,6 +41,8 @@ namespace UklonBot.Factories.Exact
                     return new ModifyOrderDialog(_translatorService, _uklonApiService, _luisService);
                 case DialogFactoryType.Order.ConfirmPhone:
                     return new ConfirmPhoneDialog(_translatorService);
+                case DialogFactoryType.Order.ModifyAfterCreation:
+                    return new ModifyAfterCreationDialog(_translatorService);
                 default:
                     return null;
             }
