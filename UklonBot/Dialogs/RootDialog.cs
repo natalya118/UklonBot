@@ -78,12 +78,12 @@ namespace UklonBot.Dialogs
                                 StateHelper.GetUserLanguageCode(context));
 
                             await context.PostAsync(await _translatorService.TranslateText(
-                                "Пожалуйста, ответьте на пару вопросов, чтобы мы могли быстрее помочь вам найти " +
+                                "Ответьте на пару вопросов, чтобы мы могли быстрее помочь вам найти " +
                                 res, StateHelper.GetUserLanguageCode(context)));
                         }
                         else { 
                         await context.PostAsync(await _translatorService.TranslateText(
-                                "Пожалуйста, ответьте на пару вопросов, чтобы мы могли быстрее помочь вам найти вашу вещь", StateHelper.GetUserLanguageCode(context)));
+                                "Ответьте на пару вопросов, чтобы мы могли быстрее помочь вам найти вашу вещь", StateHelper.GetUserLanguageCode(context)));
                         }
                         context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Loss), DialogResumeAfter);
                         break;
@@ -101,7 +101,11 @@ namespace UklonBot.Dialogs
                     context.Wait(MessageReceivedAsync);
                     break;
 
-                default:
+                case "Complaint":
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Complaint), DialogResumeAfter);
+                        break;
+
+                    default:
                     await context.PostAsync(await _translatorService.TranslateText("Я не уверен, что понял вас правильно. Перефразируйте, пожалуйста. ", StateHelper.GetUserLanguageCode(context)));
                     context.Wait(MessageReceivedAsync);
                     break;
@@ -116,7 +120,7 @@ namespace UklonBot.Dialogs
         private async Task RankDialogAfter(IDialogContext context, IAwaitable<object> result)
         {
             await context.PostAsync(await _translatorService.TranslateText(
-                "Спасибо, что воспользовались UKLON!",
+                "Ваш отзыв принят. Спасибо, что воспользовались UKLON!",
                 StateHelper.GetUserLanguageCode(context)));
             context.Done((Activity)null);
         }

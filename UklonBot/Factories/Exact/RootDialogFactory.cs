@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Dialogs;
+using UklonBot.Dialogs.Complaint;
 using UklonBot.Dialogs.Help;
 using UklonBot.Dialogs.Registration;
 using UklonBot.Dialogs.TaxiOrder;
@@ -45,6 +46,10 @@ namespace UklonBot.Factories.Exact
                     return new LossDialog(_translatorService, _luisService, _dialogStrategy);
                 case DialogFactoryType.Root.LossDetails:
                     return new LossDetailsDialog(_translatorService,_luisService);
+                case DialogFactoryType.Root.Complaint:
+                    return new ComplaintDialog(_translatorService, _dialogStrategy);
+                case DialogFactoryType.Root.ComplaintReason:
+                    return new ComplaintReasonDialog(_translatorService);
                 default:
                     return null;
             }
