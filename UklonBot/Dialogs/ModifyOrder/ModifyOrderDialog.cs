@@ -23,27 +23,19 @@ namespace UklonBot.Dialogs.ModifyOrder
         }
         public async Task StartAsync(IDialogContext context)
         {
-            //Dictionary<int,string> options = new Dictionary<int, string>()
-            //{
-            //    {1, "Добавить 5 грн" },
-            //    {2, "Изменить адрес" },
-            //    {3, "Изменить город" },
-            //    {4, "Отменить заказ" },
-            //    {5, "Всё правильно, подтвердить" }
-
-            //};
-
+           
             List<string> options = new List<string>()
             {
-                "1) Добавить 5 грн",
-                "2) Изменить адрес",
-                "3) Изменить город",
-                "4) Отменить заказ",
-                "5) Всё ок, подтвердить"
+                await _translatorService.TranslateText("1) + 5 грн", StateHelper.GetUserLanguageCode(context)),
+                    await _translatorService.TranslateText("2) Изменить адрес", StateHelper.GetUserLanguageCode(context)),
+                        await _translatorService.TranslateText( "3) Изменить город", StateHelper.GetUserLanguageCode(context)),
+                            await _translatorService.TranslateText( "4) Отменить заказ", StateHelper.GetUserLanguageCode(context)),
+                                await _translatorService.TranslateText("5) Всё ок, отправить", StateHelper.GetUserLanguageCode(context))
 
             };
             PromptDialog.Choice(context,
-                ModifyOrderDialogResumeAfter, options, await _translatorService.TranslateText("Что вы хотите изменить?", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
+                ModifyOrderDialogResumeAfter, options, 
+                await _translatorService.TranslateText("Что вы хотите изменить?", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
 
             //context.Call(
             //    new ChoiceDialog(options, "Please, check details of your order",

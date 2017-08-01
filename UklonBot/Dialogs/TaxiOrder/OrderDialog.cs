@@ -99,9 +99,9 @@ namespace UklonBot.Dialogs.TaxiOrder
                         //    DialogResumeAfter, new List<String>() { "1) Да", "2) Нет" },
                         //    await _translatorService.TranslateText("Диалоггг?",
                         //        StateHelper.GetUserLanguageCode(context)), "");
+                        //await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
+                        //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ModifyAfterCreation), ModifyAfterCreationDialogAfter);
                         await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
-
-                        
                     }
                     break;
                 
@@ -148,7 +148,8 @@ namespace UklonBot.Dialogs.TaxiOrder
 
         public async Task<OrderInfo> CheckOrderStatus(TimeSpan interval, IDialogContext context)
         {
-            
+            //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ModifyAfterCreation), ModifyAfterCreationDialogAfter);
+
             CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
             CancellationToken token = cancelTokenSource.Token;
 
@@ -167,13 +168,13 @@ namespace UklonBot.Dialogs.TaxiOrder
                     state.Driver = new Driver
                     {
                         Bl = "da",
-                        Name = "Vasya",
+                        Name = "Максим",
                         Phone = "3801110011"
                     };
                     state.Vehicle = new Vehicle
                     {
                         Model = "Maybach",
-                        Color = "Dark Black"
+                        Color = "Черный"
                     };
                     state.PickupTime = "19:43";
 
@@ -202,6 +203,7 @@ namespace UklonBot.Dialogs.TaxiOrder
                 //add 5 uan (before order sending)
                 case "1":
                     _taxiLocations.ExtraCost += 5;
+                    _taxiLocations.Cost += 5;
                     await context.PostAsync(await _translatorService.TranslateText("Добавлено 5 грн", StateHelper.GetUserLanguageCode(context)));
                     await DisplayOrderDetails(context);
                     PromptDialog.Choice(context,
@@ -283,20 +285,7 @@ namespace UklonBot.Dialogs.TaxiOrder
                         break;
                 }
         }
-        //private async Task ConfirmCancelResumeAfter(IDialogContext context, IAwaitable<object> result)
-        //{
-        //    var res = await result as string;
-        //    switch (res.Substring(0, 1))
-        //    {
-        //        case "1":
-        //            context.Done((Activity) null);
-        //            break;
-        //        case "2":
-
-        //            break;
-
-        //    }
-        //}
+  
 
         private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {

@@ -9,7 +9,10 @@ namespace UklonBot.Factories
             Register,
             ChangeCity,
             Help, 
-            Phone
+            Phone,
+            Loss,
+            LossDetails
+
         }
 
         public enum Order

@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
 using Microsoft.Bot.Builder.Luis;
+using Newtonsoft.Json;
 using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Models.BotSide;
 
 namespace UklonBot.Dialogs
 {
@@ -58,18 +61,34 @@ namespace UklonBot.Dialogs
                 
             
             var luisAnswer = await _luisService.GetResult(activity.Text);
-            switch (luisAnswer.topScoringIntent.intent)
+                
+                                switch (luisAnswer.topScoringIntent.intent)
             {
                 case "Order taxi":
 
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order), DialogResumeAfter);
                     break;
-               
-                case "Registration":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), RegistrationDialogResumeAfter);
-                    break;
 
-                case "Change city":
+                    case "Loss":
+                        if (luisAnswer.entities.Length > 0)
+                        {
+                            var ent = luisAnswer.entities.First().ToString();
+                            var res = await _translatorService.TranslateText(
+                                JsonConvert.DeserializeObject<LuisEntity>(ent).entity,
+                                StateHelper.GetUserLanguageCode(context));
+
+                            await context.PostAsync(await _translatorService.TranslateText(
+                                "Пожалуйста, ответьте на пару вопросов, чтобы мы могли быстрее помочь вам найти " +
+                                res, StateHelper.GetUserLanguageCode(context)));
+                        }
+                        else { 
+                        await context.PostAsync(await _translatorService.TranslateText(
+                                "Пожалуйста, ответьте на пару вопросов, чтобы мы могли быстрее помочь вам найти вашу вещь", StateHelper.GetUserLanguageCode(context)));
+                        }
+                        context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Loss), DialogResumeAfter);
+                        break;
+
+                    case "Change city":
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
                     break;
 

@@ -28,7 +28,7 @@ namespace UklonBot.Dialogs.ModifyOrder
                
             };
             PromptDialog.Choice(context,
-                ModifyOrderDialogResumeAfter, options, await _translatorService.TranslateText("", StateHelper.GetUserLanguageCode(context)), "");
+                ModifyOrderDialogResumeAfter, options, await _translatorService.TranslateText("Хотите изменить что-нибудь?", StateHelper.GetUserLanguageCode(context)), "");
 
   
         }

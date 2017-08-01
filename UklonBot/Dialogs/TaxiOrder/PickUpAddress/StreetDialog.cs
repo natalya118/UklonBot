@@ -38,9 +38,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                 switch (luisAnswer.topScoringIntent.intent)
                 {
                     case "Cancel":
-                    //PromptDialog.Choice(context,
-                    //    CancelDialogResumeAfter,await _translatorService.TranslateList(new List<string>() { "1) Да", "2) Нет" }, context), await _translatorService.TranslateText("Отменить заказ?", StateHelper.GetUserLanguageCode(context)), "Выберите вариант");
-                    context.Done((Activity)null);
+                        await context.PostAsync(await _translatorService.TranslateText("Ваш заказ был отменен", StateHelper.GetUserLanguageCode(context))); context.Done((Activity)null);
                     break;
                     default:
                     {
@@ -69,7 +67,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                                 context.Wait(MessageReceivedAsync);
                             }
                         }
-                        catch (Exception e )
+                        catch (Exception)
                         {
                             
                             await context.PostAsync(await _translatorService.TranslateText(
@@ -93,23 +91,6 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             context.Done(res);
         }
 
-        private async Task CancelDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
-        {
-            var res = await result;
-            var num = res.Substring(0,1);
-            switch (num)
-            {
-                case "1":
-                    await context.PostAsync(await _translatorService.TranslateText("Ваш заказ был отменен", StateHelper.GetUserLanguageCode(context)));
-                    context.Fail(null);
-                    break;
-                case "2":
-                    await StartAsync(context);
-                    break;
-            }
-
-            }
-            
 
 
     }

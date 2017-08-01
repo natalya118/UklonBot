@@ -146,6 +146,8 @@
     <Compile Include="Dialogs\Common\YesNoDialog.cs" />
     <Compile Include="Dialogs\GreetingDialog.cs" />
     <Compile Include="Dialogs\HelpDialog.cs" />
+    <Compile Include="Dialogs\Help\LossDetailsDialog.cs" />
+    <Compile Include="Dialogs\Help\LossDialog.cs" />
     <Compile Include="Dialogs\ModifyOrder\ModifyAfterCreationDialog.cs" />
     <Compile Include="Dialogs\ModifyOrder\ModifyOrderDialog.cs" />
     <Compile Include="Dialogs\Registration\ConfirmPhoneDialog.cs" />
@@ -186,6 +188,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\BotSide\LuisEntity.cs" />
     <Compile Include="Models\BotSide\LuisRes.cs" />
     <Compile Include="Models\BotSide\OrderTaxi\PickUpAddress.cs" />
     <Compile Include="Models\BotSide\OrderTaxi\ChangeCity.cs" />
@@ -241,9 +244,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogs\Help\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201707261419569_channel_users_migration.resx">
       <DependentUpon>201707261419569_channel_users_migration.cs</DependentUpon>
