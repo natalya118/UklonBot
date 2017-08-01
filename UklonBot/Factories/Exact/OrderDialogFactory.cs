@@ -2,6 +2,7 @@
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Dialogs.ModifyOrder;
 using UklonBot.Dialogs.Registration;
+using UklonBot.Dialogs.TaxiOrder;
 using UklonBot.Dialogs.TaxiOrder.DestinationAddress;
 using UklonBot.Dialogs.TaxiOrder.PickUpAddress;
 using UklonBot.Factories.Abstract;
@@ -43,6 +44,8 @@ namespace UklonBot.Factories.Exact
                     return new ConfirmPhoneDialog(_translatorService);
                 case DialogFactoryType.Order.ModifyAfterCreation:
                     return new ModifyAfterCreationDialog(_translatorService);
+                case DialogFactoryType.Order.Rank:
+                    return new RankDialog(_translatorService);
                 default:
                     return null;
             }

@@ -95,18 +95,40 @@ namespace UklonBot.Dialogs.TaxiOrder
                             StateHelper.GetUserLanguageCode(context)));
                         var status = _uklonApiService.GetOrderState(t, context);
                         StateHelper.SetOrder(context, t);
-                        //PromptDialog.Choice(context,
-                        //    DialogResumeAfter, new List<String>() { "1) Да", "2) Нет" },
-                        //    await _translatorService.TranslateText("Диалоггг?",
-                        //        StateHelper.GetUserLanguageCode(context)), "");
-                        //await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
-                        //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ModifyAfterCreation), ModifyAfterCreationDialogAfter);
-                        await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
+
+                        //var rrr = await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
+
+                        var order = StateHelper.GetOrder(context);
+                        var state = _uklonApiService.GetOrderState(order, context);
+                        state.Driver = new Driver
+                        {
+                            Bl = "da",
+                            Name = "Максим",
+                            Phone = "3801110011"
+                        };
+                        state.Vehicle = new Vehicle
+                        {
+                            Model = "Maybach",
+                            Color = "Черный"
+                        };
+                        state.PickupTime = "19:43";
+
+                        var message = context.MakeMessage();
+
+                        var attachment = GetDetailsCard(context, state);
+                        message.Attachments.Add(await attachment);
+
+                        await context.PostAsync(message);
+                        
+
                     }
                     break;
                 
             }
+            context.Done((Activity)null);
         }
+
+       
 
         private async Task ModifyAfterCreationDialogAfter(IDialogContext context, IAwaitable<object> result)
         {
@@ -184,6 +206,7 @@ namespace UklonBot.Dialogs.TaxiOrder
                     message.Attachments.Add(await attachment);
 
                     await context.PostAsync(message);
+                    context.Done((Activity)null);
                     cancelTokenSource.Cancel();
 
 

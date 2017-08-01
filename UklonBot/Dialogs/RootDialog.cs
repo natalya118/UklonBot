@@ -66,7 +66,7 @@ namespace UklonBot.Dialogs
             {
                 case "Order taxi":
 
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order), DialogResumeAfter);
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order), OrderDialogResumeAfter);
                     break;
 
                     case "Loss":
@@ -109,6 +109,17 @@ namespace UklonBot.Dialogs
             }
         }
 
+        private async Task OrderDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
+        {
+            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Rank), RankDialogAfter);
+        }
+        private async Task RankDialogAfter(IDialogContext context, IAwaitable<object> result)
+        {
+            await context.PostAsync(await _translatorService.TranslateText(
+                "Спасибо, что воспользовались UKLON!",
+                StateHelper.GetUserLanguageCode(context)));
+            context.Done((Activity)null);
+        }
         private async Task RegistrationDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             if ((bool) await result)
