@@ -16,8 +16,8 @@ namespace UklonBot.Factories.Exact
             _dialogFactories = new IDialogFactory[]
             {
                 new RootDialogFactory(this, translatorService, luisService, uklonApiService, userService),
-                new OrderDialogFactory(this, translatorService, luisService, uklonApiService, userService),
-                new RegisterDialogFactory(this, translatorService, luisService, uklonApiService)
+                new OrderDialogFactory(this, translatorService, luisService, uklonApiService, userService)
+               
             };
 
         }

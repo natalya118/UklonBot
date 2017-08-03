@@ -31,10 +31,7 @@ namespace UklonBot.Factories
             Rank
         }
 
-        public enum Register
-        {
-            Phone
-        }
+      
    
     }
 }
