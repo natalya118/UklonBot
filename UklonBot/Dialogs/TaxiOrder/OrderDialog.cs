@@ -20,6 +20,9 @@ namespace UklonBot.Dialogs.TaxiOrder
         private static IDialogStrategy _dialogStrategy;
         private static IUklonApiService _uklonApiService;
         private static IUserService _userService;
+        private TaxiLocations _taxiLocations;
+        private int _extraCost;
+
         public OrderDialog(ITranslatorService translatorService, IDialogStrategy dialogStrategy,
             IUklonApiService uklonApiService, IUserService userService)
         {
@@ -28,13 +31,11 @@ namespace UklonBot.Dialogs.TaxiOrder
             _uklonApiService = uklonApiService;
             _userService = userService;
         }
-        private TaxiLocations _taxiLocations;
-        private int _extraCost;
+
+        
         public async Task StartAsync(IDialogContext context)
         {
-
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
-            
         }
 
       
@@ -54,7 +55,8 @@ namespace UklonBot.Dialogs.TaxiOrder
             message.Attachments.Add(await attachment);
 
             await context.PostAsync(message);
-            //context.Call(new ChoiceDialog(new List<string>() { "Send", "Modify" }, "Would you like to modify your order?", "Choose"), ChoiceDialogResumeAfterAsync);
+
+
             PromptDialog.Choice(context,
                 ChoiceDialogResumeAfterAsync, new List<string>() { await _translatorService.TranslateText("1) Изменить" , StateHelper.GetUserLanguageCode(context)), 
                                     await _translatorService.TranslateText("2) Отправить", StateHelper.GetUserLanguageCode(context))}, 
@@ -71,9 +73,7 @@ namespace UklonBot.Dialogs.TaxiOrder
             message.Attachments.Add(await attachment);
 
             await context.PostAsync(message);
-            //context.Call(new ChoiceDialog(new List<string>() { "Send", "Modify" }, "Would you like to modify your order?", "Choose"), ChoiceDialogResumeAfterAsync);
-
-            //  context.Wait(this.MessageReceivedAsync);
+           
         }
 
         private async Task ChoiceDialogResumeAfterAsync(IDialogContext context, IAwaitable<string> result)
@@ -95,29 +95,29 @@ namespace UklonBot.Dialogs.TaxiOrder
                         var status = _uklonApiService.GetOrderState(t, context);
                         StateHelper.SetOrder(context, t);
 
-                        //var rrr = await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
-
+                        await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
+                        //context.Wait(MessageReceivedAsync);
                         var order = StateHelper.GetOrder(context);
-                        var state = _uklonApiService.GetOrderState(order, context);
-                        state.Driver = new Driver
-                        {
-                            Bl = "da",
-                            Name = "Максим",
-                            Phone = "3801110011"
-                        };
-                        state.Vehicle = new Vehicle
-                        {
-                            Model = "Maybach",
-                            Color = "Черный"
-                        };
-                        state.PickupTime = "19:43";
+                        //var state = _uklonApiService.GetOrderState(order, context);
+                        //state.Driver = new Driver
+                        //{
+                        //    Bl = "da",
+                        //    Name = "Максим",
+                        //    Phone = "3801110011"
+                        //};
+                        //state.Vehicle = new Vehicle
+                        //{
+                        //    Model = "Maybach",
+                        //    Color = "Черный"
+                        //};
+                        //state.PickupTime = "19:43";
 
-                        var message = context.MakeMessage();
+                        //var message = context.MakeMessage();
 
-                        var attachment = GetDetailsCard(context, state);
-                        message.Attachments.Add(await attachment);
+                        //var attachment = GetDetailsCard(context, state);
+                        //message.Attachments.Add(await attachment);
 
-                        await context.PostAsync(message);
+                        //await context.PostAsync(message);
                         
 
                     }
@@ -127,7 +127,12 @@ namespace UklonBot.Dialogs.TaxiOrder
             context.Done((Activity)null);
         }
 
-       
+
+
+        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            await context.PostAsync("mess received");
+        }
 
         private async Task ModifyAfterCreationDialogAfter(IDialogContext context, IAwaitable<object> result)
         {
@@ -255,8 +260,9 @@ namespace UklonBot.Dialogs.TaxiOrder
                     
 
                     break;
+                    //send
                 case "5":
-                    context.Call(new ReportingDialog(), null);
+                    _uklonApiService.CreateOrder(_taxiLocations, context.Activity.From.Id, context);
                     break;
                 default:
                 {
@@ -274,10 +280,9 @@ namespace UklonBot.Dialogs.TaxiOrder
 
                 //change pick up address
                 case "1":
-                    
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
                     break;
-                // change destination
+                
                     
                 //cancel
                 case "2":
