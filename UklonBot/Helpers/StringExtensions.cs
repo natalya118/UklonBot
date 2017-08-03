@@ -6,6 +6,7 @@ namespace UklonBot.Helpers
 {
     public static class StringExtensions
     {
+
         public static async System.Threading.Tasks.Task<string> ToUserLocaleAsync(this string text, IDialogContext context)
         {
             var userLanguageCode = StateHelper.GetUserLanguageCode(context);

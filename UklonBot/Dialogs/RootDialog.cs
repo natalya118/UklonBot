@@ -43,73 +43,76 @@ namespace UklonBot.Dialogs
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result as Activity;
-          
-            StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
 
-            if (! _userService.IsUserRegistered(context.Activity.From.Id))
+            if (activity != null)
             {
-                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register),
-                    RegistrationDialogResumeAfter);
-            }
-            else if(!_userService.IsUserCitySaved(context.Activity.From.Id))
-            {
+                StateHelper.SetUserLanguageCode(context, await _translatorService.GetLanguage(activity.Text));
+
+                if (! _userService.IsUserRegistered(context.Activity.From.Id))
+                {
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register),
+                        RegistrationDialogResumeAfter);
+                }
+                else if(!_userService.IsUserCitySaved(context.Activity.From.Id))
+                {
                 
-                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
-            }
-            else
-            {
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
+                }
+                else
+                {
                 
             
-            var luisAnswer = await _luisService.GetResult(activity.Text);
+                    var luisAnswer = await _luisService.GetResult(activity.Text);
                 
-                                switch (luisAnswer.topScoringIntent.intent)
-            {
-                case "Order taxi":
+                    switch (luisAnswer.topScoringIntent.intent)
+                    {
+                        case "Order taxi":
 
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order), OrderDialogResumeAfter);
-                    break;
+                            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Order), OrderDialogResumeAfter);
+                            break;
 
-                    case "Loss":
-                        if (luisAnswer.entities.Length > 0)
-                        {
-                            var ent = luisAnswer.entities.First().ToString();
-                            var res = await _translatorService.TranslateText(
-                                JsonConvert.DeserializeObject<LuisEntity>(ent).entity,
-                                StateHelper.GetUserLanguageCode(context));
+                        case "Loss":
+                            if (luisAnswer.entities.Length > 0)
+                            {
+                                var ent = luisAnswer.entities.First().ToString();
+                                var res = await _translatorService.TranslateText(
+                                    JsonConvert.DeserializeObject<LuisEntity>(ent).entity,
+                                    StateHelper.GetUserLanguageCode(context));
 
-                            await context.PostAsync(await _translatorService.TranslateText(
-                                "Ответьте на пару вопросов, чтобы мы могли быстрее помочь вам найти " +
-                                res, StateHelper.GetUserLanguageCode(context)));
-                        }
-                        else { 
-                        await context.PostAsync(await _translatorService.TranslateText(
-                                "Ответьте на пару вопросов, чтобы мы могли быстрее помочь вам найти вашу вещь", StateHelper.GetUserLanguageCode(context)));
-                        }
-                        context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Loss), DialogResumeAfter);
-                        break;
+                                await context.PostAsync(await _translatorService.TranslateText(
+                                    "Ответьте на несколько вопросов, чтобы мы могли быстрее помочь вам найти " +
+                                    res, StateHelper.GetUserLanguageCode(context)));
+                            }
+                            else { 
+                                await context.PostAsync(await _translatorService.TranslateText(
+                                    "Ответьте на несколько вопросов, чтобы мы могли быстрее помочь вам найти вашу вещь", StateHelper.GetUserLanguageCode(context)));
+                            }
+                            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Loss), DialogResumeAfter);
+                            break;
 
-                    case "Change city":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
-                    break;
+                        case "Change city":
+                            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity), DialogResumeAfter);
+                            break;
 
-                case "Help":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Help), DialogResumeAfter);
-                    break;
+                        case "Help":
+                            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Help), DialogResumeAfter);
+                            break;
 
-                case "Greeting":
-                    await context.PostAsync(await _translatorService.TranslateText("Привет! Как я могу вам помочь?", StateHelper.GetUserLanguageCode(context)));
-                    context.Wait(MessageReceivedAsync);
-                    break;
+                        case "Greeting":
+                            await context.PostAsync(await _translatorService.TranslateText("Привет! Как я могу вам помочь?", StateHelper.GetUserLanguageCode(context)));
+                            context.Wait(MessageReceivedAsync);
+                            break;
 
-                case "Complaint":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Complaint), DialogResumeAfter);
-                        break;
+                        case "Complaint":
+                            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Complaint), DialogResumeAfter);
+                            break;
 
-                    default:
-                    await context.PostAsync(await _translatorService.TranslateText("Я не уверен, что понял вас правильно. Перефразируйте, пожалуйста. ", StateHelper.GetUserLanguageCode(context)));
-                    context.Wait(MessageReceivedAsync);
-                    break;
-            }
+                        default:
+                            await context.PostAsync(await _translatorService.TranslateText("Я не уверен, что понял вас правильно. Перефразируйте, пожалуйста. ", StateHelper.GetUserLanguageCode(context)));
+                            context.Wait(MessageReceivedAsync);
+                            break;
+                    }
+                }
             }
         }
 
@@ -124,6 +127,7 @@ namespace UklonBot.Dialogs
                 StateHelper.GetUserLanguageCode(context)));
             context.Done((Activity)null);
         }
+
         private async Task RegistrationDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             if ((bool) await result)

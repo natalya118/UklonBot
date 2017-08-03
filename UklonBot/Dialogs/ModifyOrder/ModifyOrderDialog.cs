@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
-using UklonBot.Dialogs.Common;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
 
@@ -12,14 +11,10 @@ namespace UklonBot.Dialogs.ModifyOrder
     public class ModifyOrderDialog : IDialog
     {
         private static ITranslatorService _translatorService;
-        private static IUklonApiService _uklonApiService;
-        private static ILuisService _luisService;
 
-        public ModifyOrderDialog(ITranslatorService translatorService, IUklonApiService uklonApiService, ILuisService luisService)
+        public ModifyOrderDialog(ITranslatorService translatorService)
         {
             _translatorService = translatorService;
-            _uklonApiService = uklonApiService;
-            _luisService = luisService;
         }
         public async Task StartAsync(IDialogContext context)
         {
@@ -35,12 +30,8 @@ namespace UklonBot.Dialogs.ModifyOrder
             };
             PromptDialog.Choice(context,
                 ModifyOrderDialogResumeAfter, options, 
-                await _translatorService.TranslateText("Что вы хотите изменить?", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
-
-            //context.Call(
-            //    new ChoiceDialog(options, "Please, check details of your order",
-            //        "Please, choose one of the list variants"),
-            //    ModifyOrderDialogResumeAfter);
+                await _translatorService.TranslateText("Что вы хотите изменить?", StateHelper.GetUserLanguageCode(context)), "");
+            
         }
         
         private async Task ModifyOrderDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
@@ -49,18 +40,18 @@ namespace UklonBot.Dialogs.ModifyOrder
             context.Done(res.Substring(0,1));
             
         }
-        private async Task CancelDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
-        {
-            var res = await result;
-            var resEn = await _translatorService.TranslateIntoEnglish(res.ToLower()) as string;
-            if (resEn.Contains("yes"))
-            {
-                await context.PostAsync(await "Your order was cancelled".ToUserLocaleAsync(context));
-                //context.Call(new RootDialog(), null);
+        //private async Task CancelDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
+        //{
+        //    var res = await result;
+        //    var resEn = await _translatorService.TranslateIntoEnglish(res.ToLower()) as string;
+        //    if (resEn.Contains("yes"))
+        //    {
+        //        await context.PostAsync(await "Your order was cancelled".ToUserLocaleAsync(context));
+        //        //context.Call(new RootDialog(), null);
 
-            }
-            await StartAsync(context);
-        }
+        //    }
+        //    await StartAsync(context);
+        //}
 
     }
 }

@@ -39,7 +39,7 @@ namespace UklonBot.Factories.Exact
                 case DialogFactoryType.Order.Destination:
                     return new DestinationDialog(_uklonApiService, _dialogStrategy, _translatorService);
                 case DialogFactoryType.Order.Modify:
-                    return new ModifyOrderDialog(_translatorService, _uklonApiService, _luisService);
+                    return new ModifyOrderDialog(_translatorService);
                 case DialogFactoryType.Order.ConfirmPhone:
                     return new ConfirmPhoneDialog(_translatorService);
                 case DialogFactoryType.Order.ModifyAfterCreation:

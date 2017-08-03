@@ -12,17 +12,14 @@ namespace UklonBot.Dialogs.Registration
     public class RegisterDialog:IDialog<object>
     {
         private string _phone;
-        private string _code;
         private static ITranslatorService _translatorService;
         private static IUklonApiService _uklonApiService;
-        private static ILuisService _luisService;
         private static IDialogStrategy _dialogStrategy;
 
-        public RegisterDialog(ITranslatorService translatorService, IUklonApiService uklonApiService, ILuisService luisService, IDialogStrategy dialogStrategy)
+        public RegisterDialog(ITranslatorService translatorService, IUklonApiService uklonApiService, IDialogStrategy dialogStrategy)
         {
             _translatorService = translatorService;
             _uklonApiService = uklonApiService;
-            _luisService = luisService;
             _dialogStrategy = dialogStrategy;
 
         }

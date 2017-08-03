@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.Bot.Builder.Dialogs;
-using UklonBot.Dialogs;
 using UklonBot.Dialogs.Registration;
-using UklonBot.Dialogs.TaxiOrder;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
 

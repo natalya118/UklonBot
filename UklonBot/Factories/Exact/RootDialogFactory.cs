@@ -39,15 +39,15 @@ namespace UklonBot.Factories.Exact
                 case DialogFactoryType.Root.ChangeCity:
                     return new ChangeCityDialog(_translatorService, _userService);
                 case DialogFactoryType.Root.Register:
-                    return new RegisterDialog(_translatorService, _uklonApiService, _luisService, _dialogStrategy);
+                    return new RegisterDialog(_translatorService, _uklonApiService, _dialogStrategy);
                 case DialogFactoryType.Root.Phone:
                     return new PhoneDialog(_translatorService);
                 case DialogFactoryType.Root.Loss:
-                    return new LossDialog(_translatorService, _luisService, _dialogStrategy);
+                    return new LossDialog(_translatorService, _dialogStrategy);
                 case DialogFactoryType.Root.LossDetails:
                     return new LossDetailsDialog(_translatorService,_luisService);
                 case DialogFactoryType.Root.Complaint:
-                    return new ComplaintDialog(_translatorService, _dialogStrategy);
+                    return new ComplaintDialog(_translatorService);
                 case DialogFactoryType.Root.ComplaintReason:
                     return new ComplaintReasonDialog(_translatorService);
                 default:

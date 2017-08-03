@@ -20,7 +20,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         {
             await context.PostAsync(await _translatorService.TranslateText("Номер здания: ",StateHelper.GetUserLanguageCode(context)));
 
-            context.Wait(this.MessageReceivedAsync);
+            context.Wait(MessageReceivedAsync);
         }
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {

@@ -38,7 +38,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                 switch (luisAnswer.topScoringIntent.intent)
                 {
                     case "Cancel":
-                        await context.PostAsync(await _translatorService.TranslateText("Ваш заказ был отменен", StateHelper.GetUserLanguageCode(context))); context.Done((Activity)null);
+                        await context.PostAsync(await _translatorService.TranslateText("Ваш заказ был отменен", StateHelper.GetUserLanguageCode(context))); context.Fail(null);
                     break;
                     default:
                     {

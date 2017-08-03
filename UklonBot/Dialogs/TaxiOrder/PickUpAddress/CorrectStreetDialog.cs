@@ -12,7 +12,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         public async Task StartAsync(IDialogContext context)
         {
             await context.PostAsync(await StringExtensions.ToUserLocaleAsync("Please, provide correct pick up street", context));
-            context.Wait(this.MessageReceivedAsync);
+            context.Wait(MessageReceivedAsync);
         }
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {

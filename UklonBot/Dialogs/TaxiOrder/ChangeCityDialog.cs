@@ -23,16 +23,10 @@ namespace UklonBot.Dialogs.TaxiOrder
         {
 
             PromptDialog.Choice(context,
-                this.DialogResumeAfter, new List<string>(){"Kiev", "Lviv", "Dnepr"}, await _translatorService.TranslateText("Выберите город", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
-
-            //context.Wait(MessageReceivedAsync);
+                DialogResumeAfter, new List<string>(){"Kiev", "Lviv", "Dnepr"}, await _translatorService.TranslateText("Выберите город", StateHelper.GetUserLanguageCode(context)), "");
+            
         }
-
-        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            var message = await result;
-        }
-
+        
         private async Task DialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             var message = await result;

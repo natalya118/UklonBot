@@ -13,12 +13,10 @@ namespace UklonBot.Dialogs.Help
     public class LossDialog : IDialog<object>
     {
         private static ITranslatorService _translatorService;
-        private static ILuisService _luisService;
         private static IDialogStrategy _dialogStrategy;
-        public LossDialog(ITranslatorService translatorService, ILuisService luisService, IDialogStrategy dialogStrategy)
+        public LossDialog(ITranslatorService translatorService, IDialogStrategy dialogStrategy)
         {
             _translatorService = translatorService;
-            _luisService = luisService;
             _dialogStrategy = dialogStrategy;
         }
 

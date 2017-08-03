@@ -20,20 +20,24 @@ namespace UklonBot.Dialogs
         public async Task StartAsync(IDialogContext context)
         {
             await context.PostAsync(await _translatorService.TranslateText("Как я могу вам помочь?", StateHelper.GetUserLanguageCode(context)));
-            context.Wait(this.MessageReceivedAsync);
+            context.Wait(MessageReceivedAsync);
         }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result as Activity;
 
-           
-                        var luisAnswer = await _luisService.GetResult(activity.Text);
-            switch (luisAnswer.topScoringIntent.intent)
+
+            if (activity != null)
             {
-                case "How to order taxi":
-                    await context.PostAsync(await _translatorService.TranslateText("Попросите меня заказать такси и предоставьте Ваши данные", StateHelper.GetUserLanguageCode(context)));
-                    break;
+                var activityText = activity.Text;
+                var luisAnswer = await _luisService.GetResult(activityText);
+                switch (luisAnswer.topScoringIntent.intent)
+                {
+                    case "How to order taxi":
+                        await context.PostAsync(await _translatorService.TranslateText("Попросите меня заказать такси и предоставьте Ваши данные", StateHelper.GetUserLanguageCode(context)));
+                        break;
+                }
             }
 
             //context.Wait(MessageReceivedAsync);

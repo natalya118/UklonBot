@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
@@ -32,7 +30,7 @@ namespace UklonBot.Dialogs.TaxiOrder
             };
             PromptDialog.Choice(context,
                 LossDetailDialogResumeAfter, options,
-                await _translatorService.TranslateText("Оцените поездку", StateHelper.GetUserLanguageCode(context)), "", 3, promptStyle: PromptStyle.Auto);
+                await _translatorService.TranslateText("Оцените поездку", StateHelper.GetUserLanguageCode(context)), "");
 
 
         }

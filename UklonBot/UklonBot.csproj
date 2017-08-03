@@ -142,8 +142,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CheckProviderIdController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
-    <Compile Include="Dialogs\Common\ChoiceDialog.cs" />
-    <Compile Include="Dialogs\Common\YesNoDialog.cs" />
     <Compile Include="Dialogs\Complaint\ComplaintReasonDialog.cs" />
     <Compile Include="Dialogs\Complaint\ComplaintDialog.cs" />
     <Compile Include="Dialogs\GreetingDialog.cs" />
@@ -156,7 +154,6 @@
     <Compile Include="Dialogs\Registration\PhoneDialog.cs" />
     <Compile Include="Dialogs\Registration\RegisterDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
-    <Compile Include="Dialogs\TaxiOrder\DestinationAddress\DestinationAddressWayDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\DestinationAddress\DestinationDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\AddressDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\ChangeCityDialog.cs" />
