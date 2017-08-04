@@ -22,6 +22,8 @@ namespace UklonBot.Dialogs.TaxiOrder
         private static IUserService _userService;
         private TaxiLocations _taxiLocations;
         private int _extraCost;
+        private static CancellationTokenSource cancelTokenSource;
+        private static CancellationToken token;
 
         public OrderDialog(ITranslatorService translatorService, IDialogStrategy dialogStrategy,
             IUklonApiService uklonApiService, IUserService userService)
@@ -30,6 +32,9 @@ namespace UklonBot.Dialogs.TaxiOrder
             _dialogStrategy = dialogStrategy;
             _uklonApiService = uklonApiService;
             _userService = userService;
+            cancelTokenSource = new CancellationTokenSource();
+            token = cancelTokenSource.Token;
+
         }
 
         
@@ -94,37 +99,32 @@ namespace UklonBot.Dialogs.TaxiOrder
                             StateHelper.GetUserLanguageCode(context)));
                         var status = _uklonApiService.GetOrderState(t, context);
                         StateHelper.SetOrder(context, t);
-
-                        await CheckOrderStatus(new TimeSpan(0, 0, 2), context);
-                        //context.Wait(MessageReceivedAsync);
-                        var order = StateHelper.GetOrder(context);
-                        //var state = _uklonApiService.GetOrderState(order, context);
-                        //state.Driver = new Driver
-                        //{
-                        //    Bl = "da",
-                        //    Name = "Максим",
-                        //    Phone = "3801110011"
-                        //};
-                        //state.Vehicle = new Vehicle
-                        //{
-                        //    Model = "Maybach",
-                        //    Color = "Черный"
-                        //};
-                        //state.PickupTime = "19:43";
-
-                        //var message = context.MakeMessage();
-
-                        //var attachment = GetDetailsCard(context, state);
-                        //message.Attachments.Add(await attachment);
-
-                        //await context.PostAsync(message);
+                       
+                        Task task1 = new Task(() =>
+                        {
+                         //TODO check what status is when driver is already chosen 
+                            while (!token.IsCancellationRequested || status.Status.Equals("done"))
+                            {
+                                var order = StateHelper.GetOrder(context);
+                               status = _uklonApiService.GetOrderState(order, context);
+                                Thread.Sleep(5000);
+                            }
+                            
+                            
+                        });
+                        task1.Start();
                         
+                      
+                            
+
+                        context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ModifyAfterCreation), ModifyAfterCreationDialogAfter);
+                       
 
                     }
                     break;
                 
             }
-            context.Done((Activity)null);
+            //context.Done((Activity)null);
         }
 
 
@@ -138,6 +138,8 @@ namespace UklonBot.Dialogs.TaxiOrder
         {
             var res = await result as string;
             _extraCost = _taxiLocations.ExtraCost;
+            cancelTokenSource.Cancel();
+
             switch (res)
             {
 
@@ -172,7 +174,7 @@ namespace UklonBot.Dialogs.TaxiOrder
             }
         }
 
-        public async Task<OrderInfo> CheckOrderStatus(TimeSpan interval, IDialogContext context)
+        public async Task CheckOrderStatus(TimeSpan interval, IDialogContext context)
         {
             //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ModifyAfterCreation), ModifyAfterCreationDialogAfter);
 
@@ -181,13 +183,13 @@ namespace UklonBot.Dialogs.TaxiOrder
 
             //counter for api simulation
             int count = 0;
-            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ModifyAfterCreation), ModifyAfterCreationDialogAfter);
             while (true)
             {
-                var order = StateHelper.GetOrder(context);
-                var state = _uklonApiService.GetOrderState(order, context);
+                //var order = StateHelper.GetOrder(context);
+                //var state = _uklonApiService.GetOrderState(order, context);
+                var state = new OrderInfo();
                 count++;
-                if (state.Status.Equals("done") || count == 3)
+                if (state.Status.Equals("done") || count == 4)
                 {
                    
                     //data for api simulation
@@ -215,8 +217,9 @@ namespace UklonBot.Dialogs.TaxiOrder
 
 
                 }
-                await context.PostAsync(count + state.Status);
-                
+                await context.PostAsync(count + "нр");
+
+                //
                 await Task.Delay(interval, token);
             }
         }
