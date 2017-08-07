@@ -34,7 +34,7 @@ namespace UklonBot.Dialogs.Registration
         private async Task PhoneDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             _phone = await result as string;
-
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
 
             _uklonApiService.ConfirmPhone(_phone);
             await context.PostAsync(Resources.sent_code + _phone);

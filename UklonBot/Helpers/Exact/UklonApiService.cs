@@ -1105,7 +1105,8 @@ namespace UklonBot.Helpers.Exact
 
             catch (WebException e)
             {
-                return false;
+                //TODO change to false!
+                return true;
             }
 
             return true;

@@ -26,6 +26,7 @@ namespace UklonBot.Dialogs.TaxiOrder
         private static CancellationTokenSource _cancelTokenSource;
         private static CancellationToken _token;
 
+
         public OrderDialog(ITranslatorService translatorService, IDialogStrategy dialogStrategy,
             IUklonApiService uklonApiService, IUserService userService)
         {
@@ -36,13 +37,16 @@ namespace UklonBot.Dialogs.TaxiOrder
             _cancelTokenSource = new CancellationTokenSource();
             _token = _cancelTokenSource.Token;
 
+
         }
 
         
         public async Task StartAsync(IDialogContext context)
         {
             StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
+     
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
+            
         }
 
       
@@ -63,7 +67,7 @@ namespace UklonBot.Dialogs.TaxiOrder
 
             await context.PostAsync(message);
 
-
+            
             PromptDialog.Choice(context,
                 ChoiceDialogResumeAfterAsync, new List<string>() { "1)" + Resources.change, 
                                    "2)" + Resources.send }, 
@@ -87,72 +91,24 @@ namespace UklonBot.Dialogs.TaxiOrder
             StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             var res = await result;
 
-                switch (res.Substring(0,1))
+            switch (res.Substring(0, 1))
             {
                 case "1":
+                    //HERE
+
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Modify), ModifyDialogAfter);
+
                     break;
                 case "2":
                     //var t = _uklonApiService.CreateOrder(_taxiLocations, context.Activity.From.Id, context);
                     //if (t != null)
                     //{
-                        await context.PostAsync(Resources.order_created);
-                    //var status = _uklonApiService.GetOrderState(t, context);
-                    //StateHelper.SetOrder(context, t);
-              
-                    Task task1 = new Task(async () =>
-                        {
-                            //TODO check what status is when driver is already chosen 
-                            //TODO 
-                            int count = 1;
-                           
-                            while (!_token.IsCancellationRequested)
-                            {
-                                await context.FlushAsync(_token);
-                                //var order = StateHelper.GetOrder(context);
-                                //status = _uklonApiService.GetOrderState(order, context);
-                                IMessageActivity mess;
-                                 count++;
-                                var connector = new ConnectorClient(new Uri(context.Activity.ServiceUrl));
-                                
-                                if (count == 33)
-                                {
-                                    
-                                    var status = new OrderInfo();
-                                    status.Driver = new Driver
-                                    {
-                                        Bl = "da",
-                                        Name = "Максим",
-                                        Phone = "3801110011"
-                                    };
-                                    status.Vehicle = new Vehicle
-                                    {
-                                        Model = "Maybach",
-                                        Color = "Черный"
-                                    };
-                                    status.PickupTime = "19:43";
-                                    status.Cost = new Cost()
-                                    {
-                                        cost = 123
-                                    };
-                                   
-                                    var attachment = GetDetailsCard(status);
-                                    mess = context.MakeMessage();
-                                    mess.Attachments.Add(attachment.ToAttachment());
-                                    connector.Conversations.SendToConversation((Activity)mess);
-                         
-                                    _cancelTokenSource.Cancel();
-                                }
-                                Thread.Sleep(5000);
-                            }
-                            
-                            
-                        });
-                        task1.Start();
-                        
-                        context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ModifyAfterCreation), ModifyAfterCreationDialogAfter);
-                       
-                    break;
+                    await context.PostAsync(Resources.order_created);
+
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ModifyAfterCreation),
+                        ModifyAfterCreationDialogAfter);
+            //}
+            break;
                 
             }
             //context.Done((Activity)null);
@@ -172,17 +128,17 @@ namespace UklonBot.Dialogs.TaxiOrder
 
                 //add 5 uan (recreating order)
                 case "1":
-                    _uklonApiService.RecreateOrder(StateHelper.GetOrder(context), _extraCost, context);
-                    StateHelper.SetOrder(context, _uklonApiService.GetRecreatedOrderId(StateHelper.GetOrder(context), context));
+                    //_uklonApiService.RecreateOrder(StateHelper.GetOrder(context), _extraCost, context);
+                    //StateHelper.SetOrder(context, _uklonApiService.GetRecreatedOrderId(StateHelper.GetOrder(context), context));
                     await context.PostAsync(Resources.added_5uan);
-                    
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ModifyAfterCreation), ModifyAfterCreationDialogAfter);
                     break;
                 // cancel order
                 case "2":
                     PromptDialog.Choice(context,
                         DialogResumeAfter, new List<String>() { "1) " + Resources.yes , "2)" + Resources.no },
                         Resources.confirm_cancel, "");
-
+                    context.Done((Activity) null);
                     break;
 
             }

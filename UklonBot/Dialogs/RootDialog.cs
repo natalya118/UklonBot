@@ -47,12 +47,7 @@ namespace UklonBot.Dialogs
             context.Wait(MessageReceivedAsync);
             return Task.CompletedTask;
         }
-        public static string GetResourceTitle<T>(string key)
-        {
-            ResourceManager rm = new ResourceManager(typeof(T));
-            string someString = rm.GetString(key);
-            return someString;
-        }
+   
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {

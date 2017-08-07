@@ -28,10 +28,11 @@ namespace UklonBot.Dialogs.TaxiOrder
         
         private async Task DialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             var message = await result;
             var res = _userService.ChangeCity(context.Activity.From.Id, message);
             if(res)
-                await context.PostAsync(Resources.choose_city);
+                await context.PostAsync(Resources.changed_city);
             context.Done((Activity) null);
         }
     }
