@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.Complaint
 {
@@ -20,19 +21,17 @@ namespace UklonBot.Dialogs.Complaint
         {
             List<string> options = new List<string>()
             {
-                await _translatorService.TranslateText("1) Машина приехала невовремя", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("2) Водитель слишком навязчивый", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("3) Не понравилась музыка", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("4) Неисправный транспорт", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("5) Другое", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("6) Отмена", StateHelper.GetUserLanguageCode(context))
+                "1) " + Resources.car_not_in_time,
+                "2) " + Resources.intrusive_driver,
+                "3) " + Resources.bad_music,
+                "4) " + Resources.defective_transport,
+                "5) " + Resources.other,
+                "6) " + Resources.cancel,
 
             };
             PromptDialog.Choice(context,
                 ComplaintDialogResumeAfter, options,
-                await _translatorService.TranslateText("Что вам не понравилось?", StateHelper.GetUserLanguageCode(context)), "");
-
-
+                 Resources.prompt_what_was_bad, "");
         }
 
         private async Task ComplaintDialogResumeAfter(IDialogContext context, IAwaitable<string> result)

@@ -5,6 +5,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.Complaint
 {
@@ -27,7 +28,7 @@ namespace UklonBot.Dialogs.Complaint
             };
             PromptDialog.Choice(context,
                 ComplaintDialogResumeAfterAsync, options,
-                await _translatorService.TranslateText("Выберите поездку, на которую хотите пожаловаться", StateHelper.GetUserLanguageCode(context)), "");
+                Resources.choose_trip_to_complaint, "");
 
 
         }
@@ -36,25 +37,23 @@ namespace UklonBot.Dialogs.Complaint
         {
             List<string> options = new List<string>()
             {
-                await _translatorService.TranslateText("1) Машина приехала невовремя", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("2) Водитель слишком навязчивый", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("3) Не понравилась музыка", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("4) Неисправный транспорт", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("5) Другое", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("6) Отмена", StateHelper.GetUserLanguageCode(context))
+                "1) " + Resources.car_not_in_time,
+                "2) " + Resources.intrusive_driver,
+                "3) " + Resources.bad_music,
+                "4) " + Resources.defective_transport,
+                "5) " + Resources.other,
+                "6) " + Resources.cancel,
 
             };
             PromptDialog.Choice(context,
                 ComplaintReasonDialogResumeAfter, options,
-                await _translatorService.TranslateText("Что вам не понравилось?", StateHelper.GetUserLanguageCode(context)), "");
+                Resources.prompt_what_was_bad, "");
             
         }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            await context.PostAsync(await _translatorService.TranslateText(
-                "Спасибо! Мы сделаем всё, чтобы вам было комфортно в UKLON. ",
-                StateHelper.GetUserLanguageCode(context)));
+            await context.PostAsync(Resources.thanks_for_complaint);
             context.Done((Activity)null);
         }
         private async Task ComplaintReasonDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
@@ -64,21 +63,15 @@ namespace UklonBot.Dialogs.Complaint
             switch (res.Substring(0,1))
             {
                 case "5":
-                    await context.PostAsync(await _translatorService.TranslateText(
-                        "Добавьте комментарий ",
-                        StateHelper.GetUserLanguageCode(context)));
+                    await context.PostAsync(Resources.add_comment);
                     context.Wait(MessageReceivedAsync);
                     break;
                 case "6":
-                    await context.PostAsync(await _translatorService.TranslateText(
-                        "Заявка отменена.",
-                        StateHelper.GetUserLanguageCode(context)));
+                    await context.PostAsync(Resources.order_cancelled);
                     context.Done((Activity) null);
                     break;
                 default:
-                    await context.PostAsync(await _translatorService.TranslateText(
-                        "Спасибо! Мы сделаем всё, чтобы вам было комфортно в UKLON. ",
-                        StateHelper.GetUserLanguageCode(context)));
+                    await context.PostAsync(Resources.thanks_for_complaint);
                     context.Done((Activity)null);
                     break;
             }

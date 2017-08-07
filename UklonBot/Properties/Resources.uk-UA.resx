@@ -120,14 +120,26 @@
   <data name="added_5uan" xml:space="preserve">
     <value>Додано 5 грн</value>
   </data>
+  <data name="add_comment" xml:space="preserve">
+    <value>Додайте коментар: </value>
+  </data>
+  <data name="bad_music" xml:space="preserve">
+    <value>Не сподобалась музика</value>
+  </data>
   <data name="building_number" xml:space="preserve">
     <value>Введіть номер будівлі:</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Скасувати</value>
   </data>
   <data name="car_brand" xml:space="preserve">
     <value>Марка авто: </value>
   </data>
   <data name="car_color" xml:space="preserve">
     <value>Колір машини: </value>
+  </data>
+  <data name="car_not_in_time" xml:space="preserve">
+    <value>Машина запізнилася</value>
   </data>
   <data name="change" xml:space="preserve">
     <value>Змінити</value>
@@ -144,11 +156,17 @@
   <data name="choose_place_from_list" xml:space="preserve">
     <value>Оберіть місце зі списку</value>
   </data>
+  <data name="choose_trip_to_complaint" xml:space="preserve">
+    <value>Оберіть поїздку на яку хочете поскаржитися</value>
+  </data>
   <data name="city" xml:space="preserve">
     <value>Місто</value>
   </data>
   <data name="confirm_cancel" xml:space="preserve">
     <value>Ваше поточне замовлення буде скасовано, продовжити?</value>
+  </data>
+  <data name="defective_transport" xml:space="preserve">
+    <value>Несправний транспорт</value>
   </data>
   <data name="destination_address" xml:space="preserve">
     <value>Куди</value>
@@ -165,11 +183,20 @@
   <data name="Greeting" xml:space="preserve">
     <value>Вітаю!</value>
   </data>
+  <data name="how_can_i_help_you" xml:space="preserve">
+    <value>Як я можу вам допомогти?</value>
+  </data>
+  <data name="how_to_order_taxi" xml:space="preserve">
+    <value>Попросіть мене замовити таксі і надайте Ваші дані</value>
+  </data>
   <data name="input_address" xml:space="preserve">
     <value>Введіть адресу</value>
   </data>
   <data name="input_destination" xml:space="preserve">
     <value>2) Надати адресу призначення</value>
+  </data>
+  <data name="intrusive_driver" xml:space="preserve">
+    <value>Нав'язливий водій</value>
   </data>
   <data name="loss_sth" xml:space="preserve">
     <value>Дайте відповідь на кілька питань, щоб ми могли допомогти вам швидше знайти вашу річ</value>
@@ -192,6 +219,9 @@
   <data name="order_details" xml:space="preserve">
     <value>Деталі замовлення</value>
   </data>
+  <data name="other" xml:space="preserve">
+    <value>Інше</value>
+  </data>
   <data name="pickup_address" xml:space="preserve">
     <value>Звідки</value>
   </data>
@@ -213,6 +243,12 @@
   <data name="prompt_destination" xml:space="preserve">
     <value>Хочете вказати пункт призначення, чи відправити машину зараз (таксометр)?</value>
   </data>
+  <data name="prompt_what_was_bad" xml:space="preserve">
+    <value>Що вам не сподобалося?</value>
+  </data>
+  <data name="rate_trip" xml:space="preserve">
+    <value>Оцініть поїздку</value>
+  </data>
   <data name="registration_fail" xml:space="preserve">
     <value>Щось пішло не так. Давайте спробуємо ще раз.</value>
   </data>
@@ -230,6 +266,9 @@
   </data>
   <data name="street" xml:space="preserve">
     <value>Вулиця: </value>
+  </data>
+  <data name="thanks_for_complaint" xml:space="preserve">
+    <value>Дякуємо! Ми зробимо все, щоб вам було комфортно в UKLON.</value>
   </data>
   <data name="thank_you" xml:space="preserve">
     <value>Ваш відгук прийнято. Дякуємо, що скористалися UKLON!</value>

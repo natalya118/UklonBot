@@ -162,7 +162,6 @@
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\CorrectStreetDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\StreetDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\RankDialog.cs" />
-    <Compile Include="Dialogs\TaxiOrder\ReportingDialog.cs" />
     <Compile Include="Factories\Abstract\IDialogFactory.cs" />
     <Compile Include="Factories\Abstract\IDialogStrategy.cs" />
     <Compile Include="Factories\DialogFactoryType.cs" />
