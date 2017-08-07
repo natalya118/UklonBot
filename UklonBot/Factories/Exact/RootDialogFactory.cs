@@ -37,7 +37,7 @@ namespace UklonBot.Factories.Exact
                 case DialogFactoryType.Root.Help:
                     return new HelpDialog(_translatorService, _luisService);
                 case DialogFactoryType.Root.ChangeCity:
-                    return new ChangeCityDialog(_translatorService, _userService);
+                    return new ChangeCityDialog(_userService);
                 case DialogFactoryType.Root.Register:
                     return new RegisterDialog(_translatorService, _uklonApiService, _dialogStrategy);
                 case DialogFactoryType.Root.Phone:

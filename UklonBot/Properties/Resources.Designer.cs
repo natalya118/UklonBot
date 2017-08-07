@@ -61,11 +61,65 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Added 5 uan.
+        /// </summary>
+        internal static string added_5uan {
+            get {
+                return ResourceManager.GetString("added_5uan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter number of the building.
         /// </summary>
         internal static string building_number {
             get {
                 return ResourceManager.GetString("building_number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Car brand:.
+        /// </summary>
+        internal static string car_brand {
+            get {
+                return ResourceManager.GetString("car_brand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Car color: .
+        /// </summary>
+        internal static string car_color {
+            get {
+                return ResourceManager.GetString("car_color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change.
+        /// </summary>
+        internal static string change {
+            get {
+                return ResourceManager.GetString("change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The city has been changed.
+        /// </summary>
+        internal static string changed_city {
+            get {
+                return ResourceManager.GetString("changed_city", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose city.
+        /// </summary>
+        internal static string choose_city {
+            get {
+                return ResourceManager.GetString("choose_city", resourceCulture);
             }
         }
         
@@ -84,6 +138,60 @@ namespace UklonBot.Properties {
         internal static string choose_place_from_list {
             get {
                 return ResourceManager.GetString("choose_place_from_list", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to City.
+        /// </summary>
+        internal static string city {
+            get {
+                return ResourceManager.GetString("city", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your current order will be canceled, continue?.
+        /// </summary>
+        internal static string confirm_cancel {
+            get {
+                return ResourceManager.GetString("confirm_cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Destination.
+        /// </summary>
+        internal static string destination_address {
+            get {
+                return ResourceManager.GetString("destination_address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Driver&apos;s name: .
+        /// </summary>
+        internal static string driver_name {
+            get {
+                return ResourceManager.GetString("driver_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Driver&apos;s phone: .
+        /// </summary>
+        internal static string driver_phone {
+            get {
+                return ResourceManager.GetString("driver_phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extra cost.
+        /// </summary>
+        internal static string extra_cost {
+            get {
+                return ResourceManager.GetString("extra_cost", resourceCulture);
             }
         }
         
@@ -133,6 +241,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string no {
+            get {
+                return ResourceManager.GetString("no", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I&apos;m not sure if I understood you correctly. Rephrase your message, please..
         /// </summary>
         internal static string Not_understand {
@@ -147,6 +264,42 @@ namespace UklonBot.Properties {
         internal static string order_cancelled {
             get {
                 return ResourceManager.GetString("order_cancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order created successfully.
+        /// </summary>
+        internal static string order_created {
+            get {
+                return ResourceManager.GetString("order_created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order details.
+        /// </summary>
+        internal static string order_details {
+            get {
+                return ResourceManager.GetString("order_details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pickup address.
+        /// </summary>
+        internal static string pickup_address {
+            get {
+                return ResourceManager.GetString("pickup_address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pickup time: .
+        /// </summary>
+        internal static string pickup_time {
+            get {
+                return ResourceManager.GetString("pickup_time", resourceCulture);
             }
         }
         
@@ -174,6 +327,15 @@ namespace UklonBot.Properties {
         internal static string place_or_street_not_found {
             get {
                 return ResourceManager.GetString("place_or_street_not_found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change details or send?.
+        /// </summary>
+        internal static string prompt_change_details_or_send {
+            get {
+                return ResourceManager.GetString("prompt_change_details_or_send", resourceCulture);
             }
         }
         
@@ -214,6 +376,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        internal static string send {
+            get {
+                return ResourceManager.GetString("send", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1) Send a taxi.
         /// </summary>
         internal static string send_taxi {
@@ -237,6 +408,33 @@ namespace UklonBot.Properties {
         internal static string thank_you {
             get {
                 return ResourceManager.GetString("thank_you", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to uan.
+        /// </summary>
+        internal static string uan {
+            get {
+                return ResourceManager.GetString("uan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to change address?.
+        /// </summary>
+        internal static string wanna_change_addreess {
+            get {
+                return ResourceManager.GetString("wanna_change_addreess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string yes {
+            get {
+                return ResourceManager.GetString("yes", resourceCulture);
             }
         }
     }

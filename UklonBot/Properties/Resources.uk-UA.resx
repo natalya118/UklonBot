@@ -117,14 +117,50 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="added_5uan" xml:space="preserve">
+    <value>Додано 5 грн</value>
+  </data>
   <data name="building_number" xml:space="preserve">
     <value>Введіть номер будівлі:</value>
+  </data>
+  <data name="car_brand" xml:space="preserve">
+    <value>Марка авто: </value>
+  </data>
+  <data name="car_color" xml:space="preserve">
+    <value>Колір машини: </value>
+  </data>
+  <data name="change" xml:space="preserve">
+    <value>Змінити</value>
+  </data>
+  <data name="changed_city" xml:space="preserve">
+    <value>Місто змінено</value>
+  </data>
+  <data name="choose_city" xml:space="preserve">
+    <value>Оберіть місто</value>
   </data>
   <data name="choose_place" xml:space="preserve">
     <value>Оберіть місце</value>
   </data>
   <data name="choose_place_from_list" xml:space="preserve">
     <value>Оберіть місце зі списку</value>
+  </data>
+  <data name="city" xml:space="preserve">
+    <value>Місто</value>
+  </data>
+  <data name="confirm_cancel" xml:space="preserve">
+    <value>Ваше поточне замовлення буде скасовано, продовжити?</value>
+  </data>
+  <data name="destination_address" xml:space="preserve">
+    <value>Куди</value>
+  </data>
+  <data name="driver_name" xml:space="preserve">
+    <value>Ім'я водія: </value>
+  </data>
+  <data name="driver_phone" xml:space="preserve">
+    <value>Номер водія: </value>
+  </data>
+  <data name="extra_cost" xml:space="preserve">
+    <value>Доплата</value>
   </data>
   <data name="Greeting" xml:space="preserve">
     <value>Вітаю!</value>
@@ -141,11 +177,26 @@
   <data name="loss_thing" xml:space="preserve">
     <value>Дайте відповідь на кілька питань, щоб ми могли допомогти вам швидше знайти </value>
   </data>
+  <data name="no" xml:space="preserve">
+    <value>Ні</value>
+  </data>
   <data name="Not_understand" xml:space="preserve">
     <value>Не впевнений, що правильно вас зрозумів. Перефразуйте, будь ласка.</value>
   </data>
   <data name="order_cancelled" xml:space="preserve">
     <value>Ваше замовлення було скасовано</value>
+  </data>
+  <data name="order_created" xml:space="preserve">
+    <value>Замовлення успішно створено</value>
+  </data>
+  <data name="order_details" xml:space="preserve">
+    <value>Деталі замовлення</value>
+  </data>
+  <data name="pickup_address" xml:space="preserve">
+    <value>Звідки</value>
+  </data>
+  <data name="pickup_time" xml:space="preserve">
+    <value>Час прибуття: </value>
   </data>
   <data name="place_not_found" xml:space="preserve">
     <value>Не знайдено місця з таким номером. Уточніть, будь ласка</value>
@@ -155,6 +206,9 @@
   </data>
   <data name="place_or_street_not_found" xml:space="preserve">
     <value>Не знайдено жодної вулиці чи місця з такою назвою. Спробуйте уточнити.</value>
+  </data>
+  <data name="prompt_change_details_or_send" xml:space="preserve">
+    <value>Змінити деталі чи надіслати?</value>
   </data>
   <data name="prompt_destination" xml:space="preserve">
     <value>Хочете вказати пункт призначення, чи відправити машину зараз (таксометр)?</value>
@@ -168,6 +222,9 @@
   <data name="searching_car" xml:space="preserve">
     <value>Шукаємо машину...</value>
   </data>
+  <data name="send" xml:space="preserve">
+    <value>Надіслати</value>
+  </data>
   <data name="send_taxi" xml:space="preserve">
     <value>1) Відправити таксі</value>
   </data>
@@ -176,5 +233,14 @@
   </data>
   <data name="thank_you" xml:space="preserve">
     <value>Ваш відгук прийнято. Дякуємо, що скористалися UKLON!</value>
+  </data>
+  <data name="uan" xml:space="preserve">
+    <value>грн</value>
+  </data>
+  <data name="wanna_change_addreess" xml:space="preserve">
+    <value>Хочете змінити адресу?</value>
+  </data>
+  <data name="yes" xml:space="preserve">
+    <value>Так</value>
   </data>
 </root>

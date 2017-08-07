@@ -10,6 +10,7 @@ using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
 using UklonBot.Models.BotSide.OrderTaxi;
 using UklonBot.Models.UklonSide;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.TaxiOrder
 {
@@ -83,10 +84,9 @@ namespace UklonBot.Dialogs.TaxiOrder
 
 
             PromptDialog.Choice(context,
-                ChoiceDialogResumeAfterAsync, new List<string>() { await _translatorService.TranslateText("1) Изменить" , StateHelper.GetUserLanguageCode(context)), 
-                                    await _translatorService.TranslateText("2) Отправить", StateHelper.GetUserLanguageCode(context))}, 
-                await _translatorService.TranslateText("1) Изменить детали; 2) Отправить заказ", 
-                StateHelper.GetUserLanguageCode(context)), "");
+                ChoiceDialogResumeAfterAsync, new List<string>() { "1)" + Resources.change, 
+                                   "2)" + Resources.send }, 
+                Resources.prompt_change_details_or_send, "");
 
         }
         public async Task DisplayOrderDetails(IDialogContext context)
@@ -115,8 +115,7 @@ namespace UklonBot.Dialogs.TaxiOrder
                     //var t = _uklonApiService.CreateOrder(_taxiLocations, context.Activity.From.Id, context);
                     //if (t != null)
                     //{
-                        await context.PostAsync(await _translatorService.TranslateText("Заказ успешно создан!",
-                            StateHelper.GetUserLanguageCode(context)));
+                        await context.PostAsync(Resources.order_created);
                     //var status = _uklonApiService.GetOrderState(t, context);
                     //StateHelper.SetOrder(context, t);
               
@@ -191,15 +190,14 @@ namespace UklonBot.Dialogs.TaxiOrder
                 case "1":
                     _uklonApiService.RecreateOrder(StateHelper.GetOrder(context), _extraCost, context);
                     StateHelper.SetOrder(context, _uklonApiService.GetRecreatedOrderId(StateHelper.GetOrder(context), context));
-                    await context.PostAsync(await _translatorService.TranslateText("Добавлено 5 грн", StateHelper.GetUserLanguageCode(context)));
+                    await context.PostAsync(Resources.added_5uan);
                     
                     break;
                 // cancel order
                 case "2":
                     PromptDialog.Choice(context,
-                        DialogResumeAfter, new List<String>() { "1) Да", "2) Нет" },
-                        await _translatorService.TranslateText("Ваш текущий заказ будет отменен, продолжить?",
-                            StateHelper.GetUserLanguageCode(context)), "");
+                        DialogResumeAfter, new List<String>() { "1) " + Resources.yes , "2)" + Resources.no },
+                        Resources.confirm_cancel, "");
 
                     break;
 
@@ -218,32 +216,29 @@ namespace UklonBot.Dialogs.TaxiOrder
                 case "1":
                     _taxiLocations.ExtraCost += 5;
                     _taxiLocations.Cost += 5;
-                    await context.PostAsync(await _translatorService.TranslateText("Добавлено 5 грн", StateHelper.GetUserLanguageCode(context)));
+                    await context.PostAsync(Resources.added_5uan);
                     await DisplayOrderDetails(context);
                     PromptDialog.Choice(context,
-                        ChoiceDialogResumeAfterAsync, new List<string>() { "1) Изменить", "2) Отправить" }, await _translatorService.TranslateText("1) Изменить детали; 2) Отправить заказ", StateHelper.GetUserLanguageCode(context)), "");
+                        ChoiceDialogResumeAfterAsync, new List<string>() { "1) " + Resources.change , "2) " + Resources.send }, Resources.prompt_change_details_or_send, "");
 
                     break;
                 // change address
                 case "2":
                     PromptDialog.Choice(context,
-                        ChangeAddressDialogResumeAfter, new List<String>() { "1) Да", "2) Нет"},
-                        await _translatorService.TranslateText("Хотите ввести новый адрес?",
-                            StateHelper.GetUserLanguageCode(context)), "");
+                        ChangeAddressDialogResumeAfter, new List<String>() { "1) " + Resources.yes, "2)" + Resources.no },
+                        Resources.wanna_change_addreess, "");
                     break;
                 //change city
                 case "3":
                     PromptDialog.Choice(context,
-                        ConfirmChangeCityDialogResumeAfter, new List<String>(){"1) Да", "2) Нет"}, 
-                        await _translatorService.TranslateText("Ваш текущий заказ будет отменен, продолжить?", 
-                        StateHelper.GetUserLanguageCode(context)), "");
+                        ConfirmChangeCityDialogResumeAfter, new List<String>(){ "1) " + Resources.yes, "2)" + Resources.no }, 
+                        Resources.confirm_cancel, "");
 
                     break;
                 case "4":
                     PromptDialog.Choice(context,
-                        DialogResumeAfter, new List<String>() { "1) Да", "2) Нет" },
-                        await _translatorService.TranslateText("Ваш текущий заказ будет отменен, продолжить?",
-                            StateHelper.GetUserLanguageCode(context)), "");
+                        DialogResumeAfter, new List<String>() { "1) " + Resources.yes, "2)" + Resources.no },
+                        Resources.confirm_cancel, "");
                     
 
                     break;
@@ -311,11 +306,11 @@ namespace UklonBot.Dialogs.TaxiOrder
         {
             var receiptCard = new ReceiptCard
             {
-                Title = await _translatorService.TranslateText("Детали заказа", StateHelper.GetUserLanguageCode(context)),
-                Facts = new List<Fact> { new Fact(await _translatorService.TranslateText("Откуда", StateHelper.GetUserLanguageCode(context)), loc.FromLocation.AddressName + ", " + loc.FromLocation.HouseNumber ),
-                    new Fact(await _translatorService.TranslateText("Куда", StateHelper.GetUserLanguageCode(context)), loc.ToLocation.AddressName + ", " + loc.ToLocation.HouseNumber),
-                    new Fact(await _translatorService.TranslateText("Город", StateHelper.GetUserLanguageCode(context)), await _translatorService.TranslateText((_userService.GetUserCity(context.Activity.From.Id)).ToString(), StateHelper.GetUserLanguageCode(context))),
-                    new Fact(await _translatorService.TranslateText("Доплата", StateHelper.GetUserLanguageCode(context)), loc.ExtraCost + " грн")},
+                Title = Resources.order_details,
+                Facts = new List<Fact> { new Fact(Resources.pickup_address, loc.FromLocation.AddressName + ", " + loc.FromLocation.HouseNumber ),
+                    new Fact(Resources.destination_address, loc.ToLocation.AddressName + ", " + loc.ToLocation.HouseNumber),
+                    new Fact(Resources.city +  await _translatorService.TranslateText((_userService.GetUserCity(context.Activity.From.Id)).ToString(), StateHelper.GetUserLanguageCode(context))),
+                    new Fact(Resources.extra_cost, loc.ExtraCost + Resources.uan)},
                 
                 Total = loc.Cost.ToString(),
 
@@ -329,16 +324,11 @@ namespace UklonBot.Dialogs.TaxiOrder
             var receiptCard = new ReceiptCard
             {
                 Title = await "Order details".ToUserLocaleAsync(context),
-                Facts = new List<Fact> { new Fact(await _translatorService.TranslateText("Марка автомобиля: ", StateHelper.GetUserLanguageCode(context)),
-                 info.Vehicle.Model),
-                    new Fact(await _translatorService.TranslateText("Цвет автомобиля: ", StateHelper.GetUserLanguageCode(context)),
-                        await _translatorService.TranslateText(info.Vehicle.Color, StateHelper.GetUserLanguageCode(context))),
-                    new Fact(await _translatorService.TranslateText("Имя водителя: ", StateHelper.GetUserLanguageCode(context)),
-                        info.Driver.Name),
-                    new Fact(await _translatorService.TranslateText("Номер водителя: ", StateHelper.GetUserLanguageCode(context)),
-                        info.Driver.Phone),
-                    new Fact(await _translatorService.TranslateText("Время прибытия: ", StateHelper.GetUserLanguageCode(context)),
-                        info.PickupTime)
+                Facts = new List<Fact> { new Fact(Resources.car_brand, info.Vehicle.Model),
+                    new Fact(Resources.car_color, await _translatorService.TranslateText(info.Vehicle.Color, StateHelper.GetUserLanguageCode(context))),
+                    new Fact(Resources.driver_name, info.Driver.Name),
+                    new Fact(Resources.driver_phone, info.Driver.Phone),
+                    new Fact(Resources.pickup_time, info.PickupTime)
                 },
 
                 Total = info.Cost.ToString()
