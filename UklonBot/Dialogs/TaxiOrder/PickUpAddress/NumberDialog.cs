@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 {
@@ -18,7 +18,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         }
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(await _translatorService.TranslateText("Номер здания: ",StateHelper.GetUserLanguageCode(context)));
+            await context.PostAsync(Resources.building_number);
 
             context.Wait(MessageReceivedAsync);
         }

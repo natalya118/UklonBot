@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="building_number" xml:space="preserve">
+    <value>Enter number of the building</value>
+  </data>
+  <data name="choose_place" xml:space="preserve">
+    <value>Choose place</value>
+  </data>
+  <data name="choose_place_from_list" xml:space="preserve">
+    <value>Choose place from list</value>
+  </data>
   <data name="Greeting" xml:space="preserve">
     <value>Hello!</value>
   </data>
@@ -135,11 +144,17 @@
   <data name="Not_understand" xml:space="preserve">
     <value>I'm not sure if I understood you correctly. Rephrase your message, please.</value>
   </data>
+  <data name="order_cancelled" xml:space="preserve">
+    <value>Your order was canceled</value>
+  </data>
   <data name="place_not_found" xml:space="preserve">
     <value>No place found with this number. Please check this</value>
   </data>
   <data name="place_not_found2" xml:space="preserve">
     <value>No place found. Please check this</value>
+  </data>
+  <data name="place_or_street_not_found" xml:space="preserve">
+    <value>No street or place with this name was found. Try to clarify.</value>
   </data>
   <data name="prompt_destination" xml:space="preserve">
     <value>Would you like to provide the address of the destination, or should we just send the car (taximeter)?</value>
@@ -155,6 +170,9 @@
   </data>
   <data name="send_taxi" xml:space="preserve">
     <value>1) Send a taxi</value>
+  </data>
+  <data name="street" xml:space="preserve">
+    <value>Street:</value>
   </data>
   <data name="thank_you" xml:space="preserve">
     <value>Your review has been accepted. Thank you for using UKLON!</value>

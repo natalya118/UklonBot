@@ -61,6 +61,33 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter number of the building.
+        /// </summary>
+        internal static string building_number {
+            get {
+                return ResourceManager.GetString("building_number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose place.
+        /// </summary>
+        internal static string choose_place {
+            get {
+                return ResourceManager.GetString("choose_place", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose place from list.
+        /// </summary>
+        internal static string choose_place_from_list {
+            get {
+                return ResourceManager.GetString("choose_place_from_list", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hello!.
         /// </summary>
         internal static string Greeting {
@@ -115,6 +142,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your order was canceled.
+        /// </summary>
+        internal static string order_cancelled {
+            get {
+                return ResourceManager.GetString("order_cancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No place found with this number. Please check this.
         /// </summary>
         internal static string place_not_found {
@@ -129,6 +165,15 @@ namespace UklonBot.Properties {
         internal static string place_not_found2 {
             get {
                 return ResourceManager.GetString("place_not_found2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No street or place with this name was found. Try to clarify..
+        /// </summary>
+        internal static string place_or_street_not_found {
+            get {
+                return ResourceManager.GetString("place_or_street_not_found", resourceCulture);
             }
         }
         
@@ -174,6 +219,15 @@ namespace UklonBot.Properties {
         internal static string send_taxi {
             get {
                 return ResourceManager.GetString("send_taxi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Street:.
+        /// </summary>
+        internal static string street {
+            get {
+                return ResourceManager.GetString("street", resourceCulture);
             }
         }
         
