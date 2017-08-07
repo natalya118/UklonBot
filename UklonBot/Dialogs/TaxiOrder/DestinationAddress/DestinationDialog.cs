@@ -51,7 +51,6 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
             }
             else
             {
-                
                 context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Street), StreetDialogResumeAfterAsync);
             }
            

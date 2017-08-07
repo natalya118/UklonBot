@@ -1,6 +1,5 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
@@ -12,11 +11,9 @@ namespace UklonBot.Dialogs
     [Serializable]
     public class HelpDialog : IDialog<object>
     {
-        private static ITranslatorService _translatorService;
         private static ILuisService _luisService;
-        public HelpDialog(ITranslatorService translatorService, ILuisService luisService)
+        public HelpDialog(ILuisService luisService)
         {
-            _translatorService = translatorService;
             _luisService = luisService;
         }
         public async Task StartAsync(IDialogContext context)

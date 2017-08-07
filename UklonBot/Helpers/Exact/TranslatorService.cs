@@ -1,8 +1,5 @@
-﻿
-using UklonBot.Helpers.Abstract;
-using UklonBot.Helpers;
-using UklonBot.Models;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Net.Http;
@@ -10,14 +7,16 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Xml;
 using System.Xml.Linq;
-using System.Collections.Generic;
-using System.Web.Configuration;
 using Microsoft.Bot.Builder.Dialogs;
+using UklonBot.Helpers.Abstract;
+using UklonBot.Models;
 
-namespace UklonBot.Services.Implementations
+namespace UklonBot.Helpers.Exact
 {
+    [Serializable]
     public class TranslatorService : ITranslatorService
     {
 

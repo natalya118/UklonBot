@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -7,6 +8,7 @@ using UklonBot.Models.BotSide;
 
 namespace UklonBot.Helpers.Exact
 {
+    [Serializable]
     public class LuisService: ILuisService
     {
         private ITranslatorService _translatorService;

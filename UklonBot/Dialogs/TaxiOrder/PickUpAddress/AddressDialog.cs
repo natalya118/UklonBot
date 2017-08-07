@@ -62,6 +62,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 
         private async Task StreetDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             var mess = await result as string;
             if (mess != null)
             {
@@ -70,6 +71,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                 if (lt != null)
                 {
                     _from = lt;
+                   
                     PromptDialog.Choice(context,
                         ChoiceDialogResumeAfter, new List<string>() { Resources.send_taxi,
                            Resources.input_destination }, Resources.prompt_destination, "");
@@ -104,6 +106,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             else
             {
                 _number = await result as string;
+              
                 await context.PostAsync(await
                     _translatorService.TranslateText($"{_street} , {_number}.", StateHelper.GetUserLanguageCode(context)));
                 PromptDialog.Choice(context,
@@ -123,6 +126,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                 case "1":
 
                     await context.PostAsync(Resources.searching_car);
+                    context.Done((Activity) null);
                     break;
 
                 case "2":

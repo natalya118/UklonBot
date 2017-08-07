@@ -300,10 +300,34 @@
   <data name="yes" xml:space="preserve">
     <value>Да</value>
   </data>
+  <data name="add_5uan" xml:space="preserve">
+    <value>Добавить 5 грн</value>
+  </data>
+  <data name="cancel_order" xml:space="preserve">
+    <value>Отменить заказ</value>
+  </data>
+  <data name="change_city" xml:space="preserve">
+    <value>Изменить город</value>
+  </data>
+  <data name="input_code" xml:space="preserve">
+    <value>Введите код подтверждения: </value>
+  </data>
   <data name="input_phone" xml:space="preserve">
     <value>Введите номер: </value>
   </data>
   <data name="input_phone_hint" xml:space="preserve">
     <value>Номер должен начинаться с 38...</value>
+  </data>
+  <data name="lets_create_account" xml:space="preserve">
+    <value>Сначала нужно зарегистрироваться. Сразу после этого вы сможете сделать заказ.</value>
+  </data>
+  <data name="sent_code" xml:space="preserve">
+    <value>Код подтверждения был отправлен на номер </value>
+  </data>
+  <data name="wanna_change_sth" xml:space="preserve">
+    <value>Хотите изменить что-нибудь пока мы ищем водителя?</value>
+  </data>
+  <data name="what_to_change" xml:space="preserve">
+    <value>Что вы хотите изменить?</value>
   </data>
 </root>

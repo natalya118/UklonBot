@@ -1,9 +1,11 @@
-﻿using UklonBot.Helpers.Abstract;
+﻿using System;
+using UklonBot.Helpers.Abstract;
 using UklonBot.Models;
 using UklonBot.Models.Repositories.Abstract;
 
 namespace UklonBot.Helpers.Exact
 {
+    [Serializable]
     public class UserService: IUserService
     {
         private IUnitOfWork _uow;

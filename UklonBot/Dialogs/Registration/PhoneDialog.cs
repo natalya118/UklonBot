@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
-using UklonBot.Helpers.Abstract;
 using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.Registration

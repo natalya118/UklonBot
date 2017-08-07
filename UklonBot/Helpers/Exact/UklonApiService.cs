@@ -586,6 +586,7 @@ using Microsoft.Bot.Builder.Dialogs;
 
 namespace UklonBot.Helpers.Exact
 {
+    [Serializable]
     public class UklonApiService : IUklonApiService
     {
         private readonly IUnitOfWork _uow;

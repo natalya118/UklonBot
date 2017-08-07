@@ -44,6 +44,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                     break;
                     default:
                     {
+                        StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
                         try
                         {
                             List<string> places = _uklonApiService.GetPlaces(message.Text, context).ToList();

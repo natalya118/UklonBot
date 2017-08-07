@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.ModifyOrder
 {
@@ -22,12 +23,13 @@ namespace UklonBot.Dialogs.ModifyOrder
 
             List<string> options = new List<string>()
             {
-                await _translatorService.TranslateText("1) Добавить 5 грн", StateHelper.GetUserLanguageCode(context)),
-                    await _translatorService.TranslateText("2) Отменить заказ", StateHelper.GetUserLanguageCode(context))
-               
+                "1) " + Resources.add_5uan,
+                "2) " + Resources.cancel_order,
+
             };
             PromptDialog.Choice(context,
-                ModifyOrderDialogResumeAfter, options, await _translatorService.TranslateText("Хотите изменить что-нибудь?", StateHelper.GetUserLanguageCode(context)), "");
+                ModifyOrderDialogResumeAfter, options, 
+                Resources.wanna_change_sth, "");
 
   
         }

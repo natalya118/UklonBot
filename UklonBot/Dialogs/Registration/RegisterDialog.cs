@@ -5,6 +5,7 @@ using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.Registration
 {
@@ -26,8 +27,7 @@ namespace UklonBot.Dialogs.Registration
         public async Task StartAsync(IDialogContext context)
         {
             StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
-            await context.PostAsync(await _translatorService.TranslateText("Сначала нужно зарегистрироваться. Сразу после этого вы сможете сделать заказ.",
-                StateHelper.GetUserLanguageCode(context)));
+            await context.PostAsync(Resources.lets_create_account);
            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Phone), PhoneDialogResumeAfter);
         }
 
@@ -37,7 +37,7 @@ namespace UklonBot.Dialogs.Registration
 
 
             _uklonApiService.ConfirmPhone(_phone);
-            await context.PostAsync(await _translatorService.TranslateText("Код подтверждения был отправлен на номер " + _phone, StateHelper.GetUserLanguageCode(context)));
+            await context.PostAsync(Resources.sent_code + _phone);
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.ConfirmPhone), ConfirmPhoneDialogResumeAfter);
         }
 

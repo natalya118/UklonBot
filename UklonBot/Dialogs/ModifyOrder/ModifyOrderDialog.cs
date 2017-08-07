@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.ModifyOrder
 {
@@ -21,16 +22,15 @@ namespace UklonBot.Dialogs.ModifyOrder
             StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             List<string> options = new List<string>()
             {
-                await _translatorService.TranslateText("1) + 5 грн", StateHelper.GetUserLanguageCode(context)),
-                    await _translatorService.TranslateText("2) Изменить адрес", StateHelper.GetUserLanguageCode(context)),
-                        await _translatorService.TranslateText( "3) Изменить город", StateHelper.GetUserLanguageCode(context)),
-                            await _translatorService.TranslateText( "4) Отменить заказ", StateHelper.GetUserLanguageCode(context)),
-                                await _translatorService.TranslateText("5) Всё ок, отправить", StateHelper.GetUserLanguageCode(context))
-
+               "1) "+ Resources.add_5uan,
+                "2) "+ Resources.wanna_change_addreess,
+                "3) "+ Resources.change_city,
+                "4) "+ Resources.cancel_order,
+                "5) "+ Resources.send
             };
             PromptDialog.Choice(context,
                 ModifyOrderDialogResumeAfter, options, 
-                await _translatorService.TranslateText("Что вы хотите изменить?", StateHelper.GetUserLanguageCode(context)), "");
+                Resources.what_to_change, "");
             
         }
         

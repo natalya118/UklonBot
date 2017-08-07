@@ -300,10 +300,34 @@
   <data name="yes" xml:space="preserve">
     <value>Так</value>
   </data>
+  <data name="add_5uan" xml:space="preserve">
+    <value>Додати 5 грн</value>
+  </data>
+  <data name="cancel_order" xml:space="preserve">
+    <value>Скасувати замовлення</value>
+  </data>
+  <data name="change_city" xml:space="preserve">
+    <value>Змінити місто</value>
+  </data>
+  <data name="input_code" xml:space="preserve">
+    <value>Введіть код підтвердження: </value>
+  </data>
   <data name="input_phone" xml:space="preserve">
     <value>Введіть номер: </value>
   </data>
   <data name="input_phone_hint" xml:space="preserve">
     <value>Номер має починатися з 38...</value>
+  </data>
+  <data name="lets_create_account" xml:space="preserve">
+    <value>Спочатку треба зареєструватися. Одразу після цього ви зможете робити замовлення.</value>
+  </data>
+  <data name="sent_code" xml:space="preserve">
+    <value>Код підтвердження був відправлений на номер </value>
+  </data>
+  <data name="wanna_change_sth" xml:space="preserve">
+    <value>Бажаєте щось змінити поки ми шукаємо машину?</value>
+  </data>
+  <data name="what_to_change" xml:space="preserve">
+    <value>Що ви хочете змінити?</value>
   </data>
 </root>

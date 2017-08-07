@@ -61,6 +61,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add 5 uan.
+        /// </summary>
+        internal static string add_5uan {
+            get {
+                return ResourceManager.GetString("add_5uan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter your comment: .
         /// </summary>
         internal static string add_comment {
@@ -124,6 +133,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel order.
+        /// </summary>
+        internal static string cancel_order {
+            get {
+                return ResourceManager.GetString("cancel_order", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Car brand:.
         /// </summary>
         internal static string car_brand {
@@ -165,6 +183,15 @@ namespace UklonBot.Properties {
         internal static string change {
             get {
                 return ResourceManager.GetString("change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change city.
+        /// </summary>
+        internal static string change_city {
+            get {
+                return ResourceManager.GetString("change_city", resourceCulture);
             }
         }
         
@@ -331,6 +358,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter confirmation code: .
+        /// </summary>
+        internal static string input_code {
+            get {
+                return ResourceManager.GetString("input_code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 2) Provide the destination address.
         /// </summary>
         internal static string input_destination {
@@ -363,6 +399,15 @@ namespace UklonBot.Properties {
         internal static string intrusive_driver {
             get {
                 return ResourceManager.GetString("intrusive_driver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First you need to register. Right after that you can make an order..
+        /// </summary>
+        internal static string lets_create_account {
+            get {
+                return ResourceManager.GetString("lets_create_account", resourceCulture);
             }
         }
         
@@ -574,6 +619,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verification code was sent to the number .
+        /// </summary>
+        internal static string sent_code {
+            get {
+                return ResourceManager.GetString("sent_code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Street:.
         /// </summary>
         internal static string street {
@@ -615,6 +669,24 @@ namespace UklonBot.Properties {
         internal static string wanna_change_addreess {
             get {
                 return ResourceManager.GetString("wanna_change_addreess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to change anything while we are looking for a car?.
+        /// </summary>
+        internal static string wanna_change_sth {
+            get {
+                return ResourceManager.GetString("wanna_change_sth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What would you like to change?.
+        /// </summary>
+        internal static string what_to_change {
+            get {
+                return ResourceManager.GetString("what_to_change", resourceCulture);
             }
         }
         

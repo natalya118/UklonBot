@@ -300,10 +300,34 @@
   <data name="yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="add_5uan" xml:space="preserve">
+    <value>Add 5 uan</value>
+  </data>
+  <data name="cancel_order" xml:space="preserve">
+    <value>Cancel order</value>
+  </data>
+  <data name="change_city" xml:space="preserve">
+    <value>Change city</value>
+  </data>
+  <data name="input_code" xml:space="preserve">
+    <value>Enter confirmation code: </value>
+  </data>
   <data name="input_phone" xml:space="preserve">
     <value>Enter your phone: </value>
   </data>
   <data name="input_phone_hint" xml:space="preserve">
     <value>Input number in format 38 ...</value>
+  </data>
+  <data name="lets_create_account" xml:space="preserve">
+    <value>First you need to register. Right after that you can make an order.</value>
+  </data>
+  <data name="sent_code" xml:space="preserve">
+    <value>Verification code was sent to the number </value>
+  </data>
+  <data name="wanna_change_sth" xml:space="preserve">
+    <value>Would you like to change anything while we are looking for a car?</value>
+  </data>
+  <data name="what_to_change" xml:space="preserve">
+    <value>What would you like to change?</value>
   </data>
 </root>
