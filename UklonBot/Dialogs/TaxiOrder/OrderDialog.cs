@@ -94,7 +94,7 @@ namespace UklonBot.Dialogs.TaxiOrder
             switch (res.Substring(0, 1))
             {
                 case "1":
-                    //HERE
+                    
 
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Modify), ModifyDialogAfter);
 
@@ -255,22 +255,5 @@ namespace UklonBot.Dialogs.TaxiOrder
             return receiptCard.ToAttachment();
         }
 
-        private static ReceiptCard GetDetailsCard(OrderInfo info)
-        {
-            var receiptCard = new ReceiptCard
-            {
-                Title = Resources.order_details,
-                Facts = new List<Fact> { new Fact(Resources.car_brand, info.Vehicle.Model),
-                    new Fact(Resources.car_color, info.Vehicle.Color),
-                    new Fact(Resources.driver_name, info.Driver.Name),
-                    new Fact(Resources.driver_phone, info.Driver.Phone),
-                    new Fact(Resources.pickup_time, info.PickupTime)
-                },
-
-                Total = info.Cost.cost.ToString()
-            };
-
-            return receiptCard;
-        }
     }
 }

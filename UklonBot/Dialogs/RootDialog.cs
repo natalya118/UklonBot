@@ -126,7 +126,20 @@ namespace UklonBot.Dialogs
 
         private async Task OrderDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
-            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Rank), RankDialogAfter);
+            var res = await result as Activity;
+            if (res == null)
+            {
+                StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
+                await context.PostAsync(Resources.order_cancelled);
+                context.Wait(MessageReceivedAsync);
+            }
+           
+            else
+            {
+                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Rank), RankDialogAfter);
+               
+            }
+            
         }
         private async Task RankDialogAfter(IDialogContext context, IAwaitable<object> result)
         {

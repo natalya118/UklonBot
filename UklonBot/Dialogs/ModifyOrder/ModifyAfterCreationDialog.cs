@@ -48,7 +48,7 @@ namespace UklonBot.Dialogs.ModifyOrder
                     count++;
                     var connector = new ConnectorClient(new Uri(context.Activity.ServiceUrl));
 
-                    if (count == 33)
+                    if (count == 10)
                     {
 
                         var status = new OrderInfo();
@@ -76,7 +76,7 @@ namespace UklonBot.Dialogs.ModifyOrder
 
                         _cancelTokenSource.Cancel();
                     }
-                    Thread.Sleep(10000);
+                    Thread.Sleep(5000);
                 }
 
 
