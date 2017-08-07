@@ -22,6 +22,7 @@ namespace UklonBot.Dialogs.Help
 
         public async Task StartAsync(IDialogContext context)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.LossDetails), LossDialogResumeAfter);
             //context.Wait(MessageReceivedAsync);
         }

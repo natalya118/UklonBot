@@ -1,40 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using UklonBot.Helpers;
-using UklonBot.Helpers.Abstract;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.Help
 {
     [Serializable]
     public class LossDetailsDialog:IDialog<object>
     {
-        private static ITranslatorService _translatorService;
-        private static ILuisService _luisService;
-
-        public LossDetailsDialog(ITranslatorService translatorService, ILuisService luisService)
+        public LossDetailsDialog()
         {
-            _translatorService = translatorService;
-            _luisService = luisService;
         }
         public async Task StartAsync(IDialogContext context)
         {
-
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             List<string> options = new List<string>()
             {
-                await _translatorService.TranslateText("1) Информация о авто", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("2) Дата", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText( "3) Дополнительные детали", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText( "4) Отменить создание", StateHelper.GetUserLanguageCode(context)),
-                await _translatorService.TranslateText("5) Отправить заявку", StateHelper.GetUserLanguageCode(context))
-
+                "1) " + Resources.car_info,
+                "2) " + Resources.date,
+                "3) " + Resources.additional_details,
+                "4) " + Resources.cancel_creation,
+                "5) " + Resources.send_request
             };
             PromptDialog.Choice(context,
                 LossDetailDialogResumeAfter, options,
-                await _translatorService.TranslateText("Выберите, что вы помните", StateHelper.GetUserLanguageCode(context)), "");
+                Resources.choose_what_you_remember, "");
 
           
         }

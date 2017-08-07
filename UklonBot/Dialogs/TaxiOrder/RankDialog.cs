@@ -19,7 +19,7 @@ namespace UklonBot.Dialogs.TaxiOrder
         }
         public async Task StartAsync(IDialogContext context)
         {
-
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             List<string> options = new List<string>()
             {
                 await _translatorService.TranslateText("1", StateHelper.GetUserLanguageCode(context)),

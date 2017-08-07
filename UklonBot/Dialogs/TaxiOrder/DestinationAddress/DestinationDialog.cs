@@ -26,6 +26,7 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
         private string _street;
         public async Task StartAsync(IDialogContext context)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Street), StreetDialogResumeAfterAsync);
             
         }

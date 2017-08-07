@@ -108,6 +108,8 @@ namespace UklonBot.Dialogs
                             break;
 
                         case "Help":
+                            await context.PostAsync(Thread.CurrentThread.CurrentCulture.DisplayName);
+                            await context.PostAsync(Thread.CurrentThread.CurrentUICulture.DisplayName);
                             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Help), DialogResumeAfter);
                             break;
 

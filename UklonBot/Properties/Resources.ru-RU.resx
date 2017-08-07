@@ -120,6 +120,9 @@
   <data name="added_5uan" xml:space="preserve">
     <value>Добавлено 5 грн</value>
   </data>
+  <data name="additional_details" xml:space="preserve">
+    <value>Дополнительные детали</value>
+  </data>
   <data name="add_comment" xml:space="preserve">
     <value>Добавьте комментарий: </value>
   </data>
@@ -132,11 +135,17 @@
   <data name="cancel" xml:space="preserve">
     <value>Отменить</value>
   </data>
+  <data name="cancel_creation" xml:space="preserve">
+    <value>Отменить создание</value>
+  </data>
   <data name="car_brand" xml:space="preserve">
     <value>Марка авто: </value>
   </data>
   <data name="car_color" xml:space="preserve">
     <value>Цвет авто: </value>
+  </data>
+  <data name="car_info" xml:space="preserve">
+    <value>Информация о машине</value>
   </data>
   <data name="car_not_in_time" xml:space="preserve">
     <value>Водитель опоздал</value>
@@ -159,11 +168,17 @@
   <data name="choose_trip_to_complaint" xml:space="preserve">
     <value>Выберите поездку, на которую хотите пожаловаться</value>
   </data>
+  <data name="choose_what_you_remember" xml:space="preserve">
+    <value>Выберите, что вы помните</value>
+  </data>
   <data name="city" xml:space="preserve">
     <value>Город</value>
   </data>
   <data name="confirm_cancel" xml:space="preserve">
     <value>Ваш текущий заказ будет отменен, продолжить?</value>
+  </data>
+  <data name="date" xml:space="preserve">
+    <value>Дата поездки </value>
   </data>
   <data name="defective_transport" xml:space="preserve">
     <value>Неисправный транспорт</value>
@@ -261,6 +276,9 @@
   <data name="send" xml:space="preserve">
     <value>Отправить</value>
   </data>
+  <data name="send_request" xml:space="preserve">
+    <value>Отправить заявку</value>
+  </data>
   <data name="send_taxi" xml:space="preserve">
     <value>1) Отправить такси</value>
   </data>
@@ -281,5 +299,11 @@
   </data>
   <data name="yes" xml:space="preserve">
     <value>Да</value>
+  </data>
+  <data name="input_phone" xml:space="preserve">
+    <value>Введите номер: </value>
+  </data>
+  <data name="input_phone_hint" xml:space="preserve">
+    <value>Номер должен начинаться с 38...</value>
   </data>
 </root>

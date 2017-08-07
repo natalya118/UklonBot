@@ -41,24 +41,25 @@ namespace UklonBot.Dialogs.TaxiOrder
         
         public async Task StartAsync(IDialogContext context)
         {
-            var status = new OrderInfo();
-                status.Driver = new Driver
-                {
-                    Bl = "da",
-                    Name = "Максим",
-                    Phone = "3801110011"
-                };
-                status.Vehicle = new Vehicle
-                {
-                    Model = "Maybach",
-                    Color = "Черный"
-                };
-                status.PickupTime = "19:43";
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
+            //var status = new OrderInfo();
+            //    status.Driver = new Driver
+            //    {
+            //        Bl = "da",
+            //        Name = "Максим",
+            //        Phone = "3801110011"
+            //    };
+            //    status.Vehicle = new Vehicle
+            //    {
+            //        Model = "Maybach",
+            //        Color = "Черный"
+            //    };
+            //    status.PickupTime = "19:43";
 
-                var attachment = GetDetailsCard(context, status);
-            var mess = context.MakeMessage();
-            mess.Attachments.Add(await attachment);
-            await context.PostAsync(mess);
+            //    var attachment = GetDetailsCard(context, status);
+            //var mess = context.MakeMessage();
+            //mess.Attachments.Add(await attachment);
+            //await context.PostAsync(mess);
             //cancelTokenSource.Cancel();
 
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);

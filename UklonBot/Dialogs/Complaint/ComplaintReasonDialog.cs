@@ -19,6 +19,7 @@ namespace UklonBot.Dialogs.Complaint
         }
         public async Task StartAsync(IDialogContext context)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             List<string> options = new List<string>()
             {
                 "1) " + Resources.car_not_in_time,

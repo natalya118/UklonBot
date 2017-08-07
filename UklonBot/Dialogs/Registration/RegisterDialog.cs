@@ -25,6 +25,7 @@ namespace UklonBot.Dialogs.Registration
         }
         public async Task StartAsync(IDialogContext context)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             await context.PostAsync(await _translatorService.TranslateText("Сначала нужно зарегистрироваться. Сразу после этого вы сможете сделать заказ.",
                 StateHelper.GetUserLanguageCode(context)));
            context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Phone), PhoneDialogResumeAfter);

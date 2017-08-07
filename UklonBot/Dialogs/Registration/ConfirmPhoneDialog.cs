@@ -18,6 +18,7 @@ namespace UklonBot.Dialogs.Registration
         }
         public async Task StartAsync(IDialogContext context)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             await context.PostAsync(await _translatorService.TranslateText("Введите код:  ", StateHelper.GetUserLanguageCode(context)));
             context.Wait(MessageReceivedAsync);
         }

@@ -20,6 +20,7 @@ namespace UklonBot.Dialogs.Complaint
         }
         public async Task StartAsync(IDialogContext context)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             List<string> options = new List<string>()
             {
                 await _translatorService.TranslateText("1/08/17, 13:45 Крещатик, 12 -> Фрунзе, 69, Владимир", StateHelper.GetUserLanguageCode(context)),

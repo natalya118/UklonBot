@@ -5,21 +5,22 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.Registration
 {
     [Serializable]
     public class PhoneDialog: IDialog<string>
     {
-        private static ITranslatorService _translatorService;
 
-        public PhoneDialog(ITranslatorService translatorService)
+        public PhoneDialog()
         {
-            _translatorService = translatorService;
+           
         }
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync(await _translatorService.TranslateText("Введите свой номер", StateHelper.GetUserLanguageCode(context)));
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
+            await context.PostAsync(Resources.input_phone);
             context.Wait(MessageReceivedAsync);
 
         }
@@ -34,7 +35,7 @@ namespace UklonBot.Dialogs.Registration
             }
             else
             {
-                await context.PostAsync(await _translatorService.TranslateText("Номер должен начинаться с 38...", StateHelper.GetUserLanguageCode(context)));
+                await context.PostAsync(Resources.input_phone_hint);
                 await StartAsync(context);
             }
 

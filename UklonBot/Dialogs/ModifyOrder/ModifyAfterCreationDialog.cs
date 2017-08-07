@@ -18,7 +18,7 @@ namespace UklonBot.Dialogs.ModifyOrder
         }
         public async Task StartAsync(IDialogContext context)
         {
-
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
 
             List<string> options = new List<string>()
             {

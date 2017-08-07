@@ -120,6 +120,9 @@
   <data name="added_5uan" xml:space="preserve">
     <value>Added 5 uan</value>
   </data>
+  <data name="additional_details" xml:space="preserve">
+    <value>Additional details</value>
+  </data>
   <data name="add_comment" xml:space="preserve">
     <value>Enter your comment: </value>
   </data>
@@ -132,11 +135,17 @@
   <data name="cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="cancel_creation" xml:space="preserve">
+    <value>Cancel creation</value>
+  </data>
   <data name="car_brand" xml:space="preserve">
     <value>Car brand:</value>
   </data>
   <data name="car_color" xml:space="preserve">
     <value>Car color: </value>
+  </data>
+  <data name="car_info" xml:space="preserve">
+    <value>Car info</value>
   </data>
   <data name="car_not_in_time" xml:space="preserve">
     <value>The car was late</value>
@@ -159,11 +168,17 @@
   <data name="choose_trip_to_complaint" xml:space="preserve">
     <value>Choose the trip you want to report to</value>
   </data>
+  <data name="choose_what_you_remember" xml:space="preserve">
+    <value>Choose what you remember</value>
+  </data>
   <data name="city" xml:space="preserve">
     <value>City</value>
   </data>
   <data name="confirm_cancel" xml:space="preserve">
     <value>Your current order will be canceled, continue?</value>
+  </data>
+  <data name="date" xml:space="preserve">
+    <value>Date of the trip</value>
   </data>
   <data name="defective_transport" xml:space="preserve">
     <value>Transport was defective</value>
@@ -261,6 +276,9 @@
   <data name="send" xml:space="preserve">
     <value>Send</value>
   </data>
+  <data name="send_request" xml:space="preserve">
+    <value>Send request</value>
+  </data>
   <data name="send_taxi" xml:space="preserve">
     <value>1) Send a taxi</value>
   </data>
@@ -281,5 +299,11 @@
   </data>
   <data name="yes" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="input_phone" xml:space="preserve">
+    <value>Enter your phone: </value>
+  </data>
+  <data name="input_phone_hint" xml:space="preserve">
+    <value>Input number in format 38 ...</value>
   </data>
 </root>

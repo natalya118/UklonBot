@@ -1,7 +1,9 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
+using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
 using UklonBot.Properties;
 
@@ -19,6 +21,7 @@ namespace UklonBot.Dialogs
         }
         public async Task StartAsync(IDialogContext context)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             await context.PostAsync(Resources.how_can_i_help_you);
             context.Wait(MessageReceivedAsync);
         }

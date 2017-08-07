@@ -79,6 +79,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Additional details.
+        /// </summary>
+        internal static string additional_details {
+            get {
+                return ResourceManager.GetString("additional_details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I didn&apos;t like music.
         /// </summary>
         internal static string bad_music {
@@ -106,6 +115,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel creation.
+        /// </summary>
+        internal static string cancel_creation {
+            get {
+                return ResourceManager.GetString("cancel_creation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Car brand:.
         /// </summary>
         internal static string car_brand {
@@ -120,6 +138,15 @@ namespace UklonBot.Properties {
         internal static string car_color {
             get {
                 return ResourceManager.GetString("car_color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Car info.
+        /// </summary>
+        internal static string car_info {
+            get {
+                return ResourceManager.GetString("car_info", resourceCulture);
             }
         }
         
@@ -187,6 +214,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose what you remember.
+        /// </summary>
+        internal static string choose_what_you_remember {
+            get {
+                return ResourceManager.GetString("choose_what_you_remember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to City.
         /// </summary>
         internal static string city {
@@ -201,6 +237,15 @@ namespace UklonBot.Properties {
         internal static string confirm_cancel {
             get {
                 return ResourceManager.GetString("confirm_cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date of the trip.
+        /// </summary>
+        internal static string date {
+            get {
+                return ResourceManager.GetString("date", resourceCulture);
             }
         }
         
@@ -291,6 +336,24 @@ namespace UklonBot.Properties {
         internal static string input_destination {
             get {
                 return ResourceManager.GetString("input_destination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your phone: .
+        /// </summary>
+        internal static string input_phone {
+            get {
+                return ResourceManager.GetString("input_phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input number in format 38 ....
+        /// </summary>
+        internal static string input_phone_hint {
+            get {
+                return ResourceManager.GetString("input_phone_hint", resourceCulture);
             }
         }
         
@@ -489,6 +552,15 @@ namespace UklonBot.Properties {
         internal static string send {
             get {
                 return ResourceManager.GetString("send", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send request.
+        /// </summary>
+        internal static string send_request {
+            get {
+                return ResourceManager.GetString("send_request", resourceCulture);
             }
         }
         

@@ -144,7 +144,6 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\Complaint\ComplaintReasonDialog.cs" />
     <Compile Include="Dialogs\Complaint\ComplaintDialog.cs" />
-    <Compile Include="Dialogs\GreetingDialog.cs" />
     <Compile Include="Dialogs\HelpDialog.cs" />
     <Compile Include="Dialogs\Help\LossDetailsDialog.cs" />
     <Compile Include="Dialogs\Help\LossDialog.cs" />
