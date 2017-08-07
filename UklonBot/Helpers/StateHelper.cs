@@ -1,6 +1,8 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using System;
+using System.Globalization;
+using System.Threading;
 
 namespace UklonBot.Helpers
 {
@@ -15,6 +17,18 @@ namespace UklonBot.Helpers
                 BotData userData = stateClient.BotState.GetUserData(activity.ChannelId, activity.From.Id);
 
                 userData.SetProperty<string>("LanguageCode", languageCode);
+                if (languageCode.Equals("ru"))
+                {
+                    Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+                }
+                else if (languageCode.Equals("uk"))
+                {
+                    Thread.CurrentThread.CurrentUICulture = new CultureInfo("uk-UA");
+                }
+                else
+                {
+                    Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+                }
                 await stateClient.BotState.SetUserDataAsync(activity.ChannelId, activity.From.Id, userData);
             }
             catch (Exception ex)
@@ -35,6 +49,18 @@ namespace UklonBot.Helpers
                 try
                 {
                     context.UserData.SetValue("LanguageCode", languageCode);
+                    if (languageCode.Equals("ru"))
+                    {
+                        Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+                    }
+                    else if (languageCode.Equals("uk"))
+                    {
+                        Thread.CurrentThread.CurrentUICulture = new CultureInfo("uk-UA");
+                    }
+                    else
+                    {
+                        Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+                    }
                 }
                 catch (Exception ex)
                 {

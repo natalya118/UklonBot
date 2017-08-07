@@ -5,6 +5,8 @@ using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Properties;
+
 namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
 {
     [Serializable]
@@ -63,8 +65,7 @@ namespace UklonBot.Dialogs.TaxiOrder.DestinationAddress
             }
             else
             {
-                await context.PostAsync(
-                    await _translatorService.TranslateText("Не найдено места с таким номером. Уточните, пожалуйста", StateHelper.GetUserLanguageCode(context)));
+                await context.PostAsync(Resources.place_not_found);
                 context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
             }
 

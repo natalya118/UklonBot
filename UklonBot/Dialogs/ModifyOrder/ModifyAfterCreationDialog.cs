@@ -23,8 +23,7 @@ namespace UklonBot.Dialogs.ModifyOrder
             List<string> options = new List<string>()
             {
                 await _translatorService.TranslateText("1) Добавить 5 грн", StateHelper.GetUserLanguageCode(context)),
-                    await _translatorService.TranslateText("2) Отменить заказ", StateHelper.GetUserLanguageCode(context)),
-                        await _translatorService.TranslateText( "3) Проверить статус", StateHelper.GetUserLanguageCode(context))
+                    await _translatorService.TranslateText("2) Отменить заказ", StateHelper.GetUserLanguageCode(context))
                
             };
             PromptDialog.Choice(context,

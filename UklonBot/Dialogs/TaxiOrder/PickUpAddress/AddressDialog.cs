@@ -9,6 +9,7 @@ using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
 using UklonBot.Models.BotSide.OrderTaxi;
 using UklonBot.Models.UklonSide;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 {
@@ -43,8 +44,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task SendWelcomeMessageAsync(IDialogContext context)
 
         {
-            await context.PostAsync(
-                await _translatorService.TranslateText("Введите адрес", StateHelper.GetUserLanguageCode(context)));
+            await context.PostAsync(Resources.input_address);
             
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Street), StreetDialogResumeAfter);
 
@@ -60,9 +60,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 
 
         private async Task StreetDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
-
         {
-            
             var mess = await result as string;
             if (mess != null)
             {
@@ -71,11 +69,9 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                 if (lt != null)
                 {
                     _from = lt;
-                    //await context.PostAsync(await
-                    //    _translatorService.TranslateText($"Место: {_street} ", StateHelper.GetUserLanguageCode(context)));
                     PromptDialog.Choice(context,
-                        ChoiceDialogResumeAfter, new List<string>() { await _translatorService.TranslateText("1) Отправить такси", StateHelper.GetUserLanguageCode(context)),
-                            await _translatorService.TranslateText("2) Предоставить адрес назначения", StateHelper.GetUserLanguageCode(context))}, await _translatorService.TranslateText("Предоставить адрес пункта назначения, или отправить машину?", StateHelper.GetUserLanguageCode(context)), "");
+                        ChoiceDialogResumeAfter, new List<string>() { Resources.send_taxi,
+                           Resources.input_destination }, Resources.prompt_destination, "");
 
 
                 }
@@ -101,9 +97,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             _from = _uklonApiService.GetPlaceLocation(_street, await result as string, context);
             if (_from == null)
             {
-                await context.PostAsync(await
-                    _translatorService.TranslateText("Место не найдено. Уточните, пожалуйста",
-                        StateHelper.GetUserLanguageCode(context)));
+                await context.PostAsync(Resources.place_not_found2);
                 context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
             }
             else
@@ -112,10 +106,8 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                 await context.PostAsync(await
                     _translatorService.TranslateText($"{_street} , {_number}.", StateHelper.GetUserLanguageCode(context)));
                 PromptDialog.Choice(context,
-                    ChoiceDialogResumeAfter, new List<string>() { await _translatorService.TranslateText("1) Отправить машину", StateHelper.GetUserLanguageCode(context)),
-                        await _translatorService.TranslateText("2) Ввести адрес", StateHelper.GetUserLanguageCode(context))}, await _translatorService.TranslateText("Предоставить адрес пункта назначения, или отправить машину?", StateHelper.GetUserLanguageCode(context)), "");
-
-
+                    ChoiceDialogResumeAfter, new List<string>() { Resources.send_taxi,
+                        Resources.input_destination }, Resources.prompt_destination, "");
             }
 
         }
@@ -129,7 +121,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             {
                 case "1":
 
-                    await context.PostAsync(await "Calling...".ToUserLocaleAsync(context));
+                    await context.PostAsync(Resources.searching_car);
                     break;
 
                 case "2":

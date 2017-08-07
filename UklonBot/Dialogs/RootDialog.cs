@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
+using System.Resources;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
@@ -10,6 +13,7 @@ using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers.Abstract;
 using UklonBot.Models.BotSide;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs
 {
@@ -32,13 +36,23 @@ namespace UklonBot.Dialogs
 
         public Task StartAsync(IDialogContext context)
         {
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("ru-RU");
+
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
+
             StateHelper.SetUserLanguageCode(context, "ru");
 
             context.Wait(MessageReceivedAsync);
             return Task.CompletedTask;
         }
-
-
+        public static string GetResourceTitle<T>(string key)
+        {
+            ResourceManager rm = new ResourceManager(typeof(T));
+            string someString = rm.GetString(key);
+            return someString;
+        }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
@@ -79,13 +93,12 @@ namespace UklonBot.Dialogs
                                     JsonConvert.DeserializeObject<LuisEntity>(ent).entity,
                                     StateHelper.GetUserLanguageCode(context));
 
-                                await context.PostAsync(await _translatorService.TranslateText(
-                                    "Ответьте на несколько вопросов, чтобы мы могли быстрее помочь вам найти " +
+                                await context.PostAsync(Resources.loss_thing + await _translatorService.TranslateText(
+                                    
                                     res, StateHelper.GetUserLanguageCode(context)));
                             }
                             else { 
-                                await context.PostAsync(await _translatorService.TranslateText(
-                                    "Ответьте на несколько вопросов, чтобы мы могли быстрее помочь вам найти вашу вещь", StateHelper.GetUserLanguageCode(context)));
+                                await context.PostAsync(UklonBot.Properties.Resources.ResourceManager.GetString("loss_sth"));
                             }
                             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Loss), DialogResumeAfter);
                             break;
@@ -99,7 +112,7 @@ namespace UklonBot.Dialogs
                             break;
 
                         case "Greeting":
-                            await context.PostAsync(await _translatorService.TranslateText("Привет! Как я могу вам помочь?", StateHelper.GetUserLanguageCode(context)));
+                            await context.PostAsync(Resources.Greeting);
                             context.Wait(MessageReceivedAsync);
                             break;
 
@@ -108,7 +121,7 @@ namespace UklonBot.Dialogs
                             break;
 
                         default:
-                            await context.PostAsync(await _translatorService.TranslateText("Я не уверен, что понял вас правильно. Перефразируйте, пожалуйста. ", StateHelper.GetUserLanguageCode(context)));
+                            await context.PostAsync(Resources.Not_understand);
                             context.Wait(MessageReceivedAsync);
                             break;
                     }
@@ -122,9 +135,7 @@ namespace UklonBot.Dialogs
         }
         private async Task RankDialogAfter(IDialogContext context, IAwaitable<object> result)
         {
-            await context.PostAsync(await _translatorService.TranslateText(
-                "Ваш отзыв принят. Спасибо, что воспользовались UKLON!",
-                StateHelper.GetUserLanguageCode(context)));
+            await context.PostAsync(Resources.thank_you);
             context.Done((Activity)null);
         }
 
@@ -132,14 +143,13 @@ namespace UklonBot.Dialogs
         {
             if ((bool) await result)
             {
-                await context.PostAsync(await _translatorService.TranslateText(
-                    "Поздравляем, вы успешно зарегистрировались :) ", StateHelper.GetUserLanguageCode(context)));
+                await context.PostAsync(Resources.registration_success);
                 context.Wait(MessageReceivedAsync);
             }
             else
             {
-                await context.PostAsync(await _translatorService.TranslateText(
-                    "Что-то пошло не так. Давайте попробуем ещё раз. ", StateHelper.GetUserLanguageCode(context)));
+                await context.PostAsync(Resources.registration_fail);
+                //uncomment this line to turn on token validation 
                 //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Register), this.RegistrationDialogResumeAfter);
             }
 
