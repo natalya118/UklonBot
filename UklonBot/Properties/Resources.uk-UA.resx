@@ -330,4 +330,16 @@
   <data name="what_to_change" xml:space="preserve">
     <value>Що ви хочете змінити?</value>
   </data>
+  <data name="too_many_attempts" xml:space="preserve">
+    <value>Забагато спроб. Почніть спочатку.</value>
+  </data>
+  <data name="describe_what_you_remember" xml:space="preserve">
+    <value>Опишіть, що ви пам'ятаєте</value>
+  </data>
+  <data name="request_received" xml:space="preserve">
+    <value>Заявку прийнято. Ми зв'яжемося з вами.</value>
+  </data>
+  <data name="thanks_maybe_sth_else" xml:space="preserve">
+    <value>Дякуємо! Можливо, ще щось?</value>
+  </data>
 </root>

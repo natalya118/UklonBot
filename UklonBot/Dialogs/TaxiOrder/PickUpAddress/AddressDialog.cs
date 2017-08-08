@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
@@ -63,30 +64,43 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task StreetDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
-            var mess = await result as string;
-            if (mess != null)
+            try
             {
-                _street = mess;
-                var lt = _uklonApiService.GetPlaceLocation(_street, null, context);
-                if (lt != null)
-                {
-                    _from = lt;
-                   
-                    PromptDialog.Choice(context,
-                        ChoiceDialogResumeAfter, new List<string>() { Resources.send_taxi,
-                           Resources.input_destination }, Resources.prompt_destination, "");
+                var mess = await result as string;
 
+                if (mess != null)
+                {
+                    _street = mess;
+                    var lt = _uklonApiService.GetPlaceLocation(_street, null, context);
+                    if (lt != null)
+                    {
+                        _from = lt;
+
+                        PromptDialog.Choice(context,
+                            ChoiceDialogResumeAfter, new List<string>()
+                            {
+                                Resources.send_taxi,
+                                Resources.input_destination
+                            }, Resources.prompt_destination, "");
+
+
+                    }
+                    else
+                    {
+                        context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number),
+                            NumberDialogResumeAfter);
+                    }
 
                 }
                 else
                 {
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+                    context.Done((Activity) null);
                 }
-                    
             }
-            else
+            catch (Exception)
             {
-                context.Done((Activity) null);
+                await context.PostAsync(Resources.too_many_attempts);
+                context.Done((Activity)null);
             }
         }
 
@@ -95,46 +109,69 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task NumberDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
 
         {
-           
-            
-            _from = _uklonApiService.GetPlaceLocation(_street, await result as string, context);
-            if (_from == null)
+            if (await result == null)
             {
-                await context.PostAsync(Resources.place_not_found2);
-                context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+                context.Fail(null);
             }
             else
             {
-                _number = await result as string;
-              
-                await context.PostAsync(await
-                    _translatorService.TranslateText($"{_street} , {_number}.", StateHelper.GetUserLanguageCode(context)));
-                PromptDialog.Choice(context,
-                    ChoiceDialogResumeAfter, new List<string>() { Resources.send_taxi,
-                        Resources.input_destination }, Resources.prompt_destination, "");
-            }
+                _from = _uklonApiService.GetPlaceLocation(_street, await result as string, context);
+                if (_from == null)
+                {
+                    await context.PostAsync(Resources.place_not_found2);
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Number), NumberDialogResumeAfter);
+                }
+                else
+                {
+                    _number = await result as string;
+                    try
+                    {
 
+
+                        await context.PostAsync(await
+                            _translatorService.TranslateText($"{_street} , {_number}.",
+                                StateHelper.GetUserLanguageCode(context)));
+                        PromptDialog.Choice(context,
+                            ChoiceDialogResumeAfter, new List<string>()
+                            {
+                                Resources.send_taxi,
+                                Resources.input_destination
+                            }, Resources.prompt_destination, "");
+                    }
+                    catch (Exception)
+                    {
+                        context.Fail(null);
+                    }
+                }
+            }
         }
 
         private async Task ChoiceDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
 
         {
+            try { 
             var r = await result;
-            switch (r.Substring(0,1))
+           
+                switch (r.Substring(0, 1))
 
-            {
-                case "1":
+                {
+                    case "1":
 
-                    await context.PostAsync(Resources.searching_car);
-                    context.Done((Activity) null);
-                    break;
+                        await context.PostAsync(Resources.searching_car);
+                        context.Done((Activity) null);
+                        break;
 
-                case "2":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Destination), DestinationDialogResumeAfter);
-                   
-                    break;
+                    case "2":
+                        context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Destination),
+                            DestinationDialogResumeAfter);
+
+                        break;
+                }
             }
-            
+            catch (Exception) { 
+                context.Fail(null);
+            }
+
         }
         private async Task DestinationDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {

@@ -6,6 +6,7 @@ using UklonBot.Factories;
 using UklonBot.Factories.Abstract;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
+using UklonBot.Properties;
 
 namespace UklonBot.Dialogs.Help
 {
@@ -29,33 +30,26 @@ namespace UklonBot.Dialogs.Help
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            await context.PostAsync(await _translatorService.TranslateText(
-                "Спасибо! Возможно, что-нибудь ещё? ",
-                StateHelper.GetUserLanguageCode(context)));
+            await context.PostAsync(Resources.thanks_maybe_sth_else);
             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.LossDetails), LossDialogResumeAfter);
         }
 
         private async Task LossDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             var res = await result as string;
             switch (res)
             {
                 case "4":
-                    await context.PostAsync(await _translatorService.TranslateText(
-                        "Заявка отменена", 
-                        StateHelper.GetUserLanguageCode(context)));
+                    await context.PostAsync(Resources.order_cancelled);
                     context.Done((Activity)null);
                     break;
                 case "5":
-                    await context.PostAsync(await _translatorService.TranslateText(
-                        "Заявка принята. Мы с вами свяжемся.",
-                        StateHelper.GetUserLanguageCode(context)));
+                    await context.PostAsync(Resources.request_received);
                     context.Done((Activity)null);
                     break;
                 default:
-                    await context.PostAsync(await _translatorService.TranslateText(
-                        "Опишите всё, что вы помните",
-                        StateHelper.GetUserLanguageCode(context)));
+                    await context.PostAsync(Resources.describe_what_you_remember);
                     context.Wait(MessageReceivedAsync);
                     //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.LossDetails), LossDialogResumeAfter);
                     break;

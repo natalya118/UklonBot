@@ -33,9 +33,9 @@ namespace UklonBot.Factories.Exact
                 case DialogFactoryType.Order.Address:
                     return new AddressDialog(_translatorService, _uklonApiService, _dialogStrategy);
                 case DialogFactoryType.Order.Street:
-                    return new StreetDialog(_translatorService, _luisService, _uklonApiService);
+                    return new StreetDialog(_luisService, _uklonApiService);
                 case DialogFactoryType.Order.Number:
-                    return new NumberDialog(_translatorService);
+                    return new NumberDialog(_luisService);
                 case DialogFactoryType.Order.Destination:
                     return new DestinationDialog(_uklonApiService, _dialogStrategy, _translatorService);
                 case DialogFactoryType.Order.Modify:

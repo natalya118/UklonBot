@@ -1,6 +1,7 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.EnterpriseServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
@@ -11,6 +12,7 @@ using UklonBot.Helpers.Abstract;
 using UklonBot.Models.BotSide.OrderTaxi;
 using UklonBot.Models.UklonSide;
 using UklonBot.Properties;
+using Activity = Microsoft.Bot.Connector.Activity;
 
 namespace UklonBot.Dialogs.TaxiOrder
 {
@@ -52,26 +54,46 @@ namespace UklonBot.Dialogs.TaxiOrder
       
         private async Task AddressDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
-            _taxiLocations = await result as TaxiLocations;
-            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
-            if (_taxiLocations != null)
+            var res = await result;
+            if (res != null)
             {
-                var amount = _uklonApiService.CalculateAmmount(_taxiLocations.FromLocation, _taxiLocations.ToLocation, context);
-                _taxiLocations.Cost = amount;
-                _taxiLocations.ExtraCost = 0;
+                _taxiLocations = await result as TaxiLocations;
+                StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
+                if (_taxiLocations != null)
+                {
+                    var amount =
+                        _uklonApiService.CalculateAmmount(_taxiLocations.FromLocation, _taxiLocations.ToLocation,
+                            context);
+                    _taxiLocations.Cost = amount;
+                    _taxiLocations.ExtraCost = 0;
+
+                    var message = context.MakeMessage();
+
+                    var attachment = GetOrderCard(context, _taxiLocations);
+                    message.Attachments.Add(await attachment);
+
+                    await context.PostAsync(message);
+
+                    try
+                    {
+                        PromptDialog.Choice(context,
+                            ChoiceDialogResumeAfterAsync, new List<string>()
+                            {
+                                "1)" + Resources.change,
+                                "2)" + Resources.send
+                            },
+                            Resources.prompt_change_details_or_send, "");
+                    }
+                    catch (Exception)
+                    {
+                        context.Fail(null);
+                    }
+                }
             }
-            var message = context.MakeMessage();
-
-            var attachment = GetOrderCard(context, _taxiLocations);
-            message.Attachments.Add(await attachment);
-
-            await context.PostAsync(message);
-
-            
-            PromptDialog.Choice(context,
-                ChoiceDialogResumeAfterAsync, new List<string>() { "1)" + Resources.change, 
-                                   "2)" + Resources.send }, 
-                Resources.prompt_change_details_or_send, "");
+            else
+            {
+                context.Done((Activity) null);
+            }
 
         }
         public async Task DisplayOrderDetails(IDialogContext context)
@@ -140,6 +162,10 @@ namespace UklonBot.Dialogs.TaxiOrder
                         Resources.confirm_cancel, "");
                     context.Done((Activity) null);
                     break;
+                default:
+                    //context.Done(result);
+                    break;
+                    
 
             }
         }

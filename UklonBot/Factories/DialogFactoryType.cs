@@ -12,8 +12,7 @@ namespace UklonBot.Factories
             Phone,
             Loss,
             LossDetails,
-            Complaint,
-            ComplaintReason
+            Complaint
 
         }
 

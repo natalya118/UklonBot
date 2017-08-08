@@ -36,6 +36,7 @@ namespace UklonBot.Dialogs.Complaint
 
         private async Task ComplaintDialogResumeAfterAsync(IDialogContext context, IAwaitable<string> result)
         {
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             List<string> options = new List<string>()
             {
                 "1) " + Resources.car_not_in_time,
@@ -46,10 +47,16 @@ namespace UklonBot.Dialogs.Complaint
                 "6) " + Resources.cancel,
 
             };
-            PromptDialog.Choice(context,
-                ComplaintReasonDialogResumeAfter, options,
-                Resources.prompt_what_was_bad, "");
-            
+            try
+            {
+                PromptDialog.Choice(context,
+                    ComplaintReasonDialogResumeAfter, options,
+                    Resources.prompt_what_was_bad, "");
+            }
+            catch (Exception)
+            {
+                context.Fail(null);
+            }
         }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)

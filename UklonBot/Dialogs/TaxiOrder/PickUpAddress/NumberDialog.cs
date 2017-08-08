@@ -11,12 +11,13 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
     [Serializable]
     public class NumberDialog : IDialog<object>
     {
-        private static ITranslatorService _translatorService;
-        
-        public NumberDialog(ITranslatorService translatorService)
+        private static ILuisService _luisService;
+
+        public NumberDialog(ILuisService luisService)
         {
-            _translatorService = translatorService;
+            _luisService = luisService;
         }
+
         public async Task StartAsync(IDialogContext context)
         {
             StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
@@ -24,13 +25,26 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 
             context.Wait(MessageReceivedAsync);
         }
+
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            var message = await result;
-            
-            context.Done(message.Text);            
-       
-        }
 
+
+            var message = await result;
+
+            var luisAnswer = await _luisService.GetResult(message.Text);
+            switch (luisAnswer.topScoringIntent.intent)
+            {
+                case "Cancel":
+
+                    context.Fail(null);
+                    break;
+                default:
+                {
+                    context.Done(message.Text);
+                        break;
+                }
+            }
+        }
     }
 }

@@ -36,19 +36,19 @@ namespace UklonBot.Dialogs.ModifyOrder
             Task task1 = new Task(() =>
             {
                 //TODO check what status is when driver is already chosen 
-                //TODO 
+              
                 int count = 1;
 
                 while (!_token.IsCancellationRequested)
                 {
-                    //await context.FlushAsync(_token);
+                   
                     //var order = StateHelper.GetOrder(context);
                     //status = _uklonApiService.GetOrderState(order, context);
                     IMessageActivity mess;
                     count++;
                     var connector = new ConnectorClient(new Uri(context.Activity.ServiceUrl));
 
-                    if (count == 10)
+                    if (count == 4)
                     {
 
                         var status = new OrderInfo();
@@ -73,8 +73,9 @@ namespace UklonBot.Dialogs.ModifyOrder
                         mess = context.MakeMessage();
                         mess.Attachments.Add(attachment.ToAttachment());
                         connector.Conversations.SendToConversation((Activity)mess);
-
+                        
                         _cancelTokenSource.Cancel();
+                        context.Done(status);
                     }
                     Thread.Sleep(5000);
                 }
@@ -107,11 +108,7 @@ namespace UklonBot.Dialogs.ModifyOrder
             return receiptCard;
         }
 
-        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            await context.PostAsync("HERE");
-        }
-
+    
         private async Task ModifyOrderDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             var res = await result;

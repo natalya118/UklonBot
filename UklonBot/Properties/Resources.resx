@@ -330,4 +330,16 @@
   <data name="what_to_change" xml:space="preserve">
     <value>What would you like to change?</value>
   </data>
+  <data name="too_many_attempts" xml:space="preserve">
+    <value>Too many attempts. Try again.</value>
+  </data>
+  <data name="describe_what_you_remember" xml:space="preserve">
+    <value>Describe what you remember</value>
+  </data>
+  <data name="request_received" xml:space="preserve">
+    <value>The application is accepted. We will contact you.</value>
+  </data>
+  <data name="thanks_maybe_sth_else" xml:space="preserve">
+    <value>Thank you! Maybe, something else?</value>
+  </data>
 </root>

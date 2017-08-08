@@ -142,7 +142,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CheckProviderIdController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
-    <Compile Include="Dialogs\Complaint\ComplaintReasonDialog.cs" />
     <Compile Include="Dialogs\Complaint\ComplaintDialog.cs" />
     <Compile Include="Dialogs\HelpDialog.cs" />
     <Compile Include="Dialogs\Help\LossDetailsDialog.cs" />
@@ -158,7 +157,6 @@
     <Compile Include="Dialogs\TaxiOrder\ChangeCityDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\NumberDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\OrderDialog.cs" />
-    <Compile Include="Dialogs\TaxiOrder\PickUpAddress\CorrectStreetDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\PickUpAddress\StreetDialog.cs" />
     <Compile Include="Dialogs\TaxiOrder\RankDialog.cs" />
     <Compile Include="Factories\Abstract\IDialogFactory.cs" />

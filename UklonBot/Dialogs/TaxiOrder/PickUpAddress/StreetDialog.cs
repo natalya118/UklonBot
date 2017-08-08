@@ -13,13 +13,11 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
     [Serializable]
     public class StreetDialog : IDialog<string>
     {
-        private static ITranslatorService _translatorService;
         private static ILuisService _luisService;
         private static IUklonApiService _uklonApiService;
         
-        public StreetDialog(ITranslatorService translatorService, ILuisService luisService, IUklonApiService uklonApiService)
+        public StreetDialog(ILuisService luisService, IUklonApiService uklonApiService)
         {
-            _translatorService = translatorService;
             _luisService = luisService;
             _uklonApiService = uklonApiService;
         }
@@ -34,12 +32,11 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             
             var message = await result;
             
-                var test = await _translatorService.TranslateIntoEnglish(message.Text);
-                var luisAnswer = await _luisService.GetResult(test);
+                var luisAnswer = await _luisService.GetResult(message.Text);
                 switch (luisAnswer.topScoringIntent.intent)
                 {
                     case "Cancel":
-                        await context.PostAsync(Resources.order_cancelled);
+                       
                         context.Fail(null);
                     break;
                     default:
@@ -51,14 +48,18 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                            
                             if (places.Any())
                             {
-                                if(context.Activity.ChannelId.Equals("telegram"))
-                                PromptDialog.Choice(context,
-                                    LocationDialogResumeAfter, places,
-                                   Resources.choose_place, Resources.choose_place_from_list, 3, PromptStyle.Keyboard);
-                                else
-                                    PromptDialog.Choice(context,
-                                        LocationDialogResumeAfter, places,
-                                       Resources.choose_place, Resources.choose_place_from_list);
+                               
+                                    if (context.Activity.ChannelId.Equals("telegram"))
+                                        PromptDialog.Choice(context,
+                                            LocationDialogResumeAfter, places,
+                                            Resources.choose_place, Resources.choose_place_from_list, 3,
+                                            PromptStyle.Keyboard);
+                                    else
+                                        PromptDialog.Choice(context,
+                                            LocationDialogResumeAfter, places,
+                                            Resources.choose_place, Resources.choose_place_from_list);
+                                
+                                
                             }
                             else
                             {
@@ -68,7 +69,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                         }
                         catch (Exception)
                         {
-
+                            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
                             await context.PostAsync(Resources.place_or_street_not_found);
                             context.Wait(MessageReceivedAsync);
                         }
@@ -85,7 +86,14 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         private async Task LocationDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             var res = await result;
-            context.Done(res);
+            if (res != null)
+            {
+                context.Done(res);
+            }
+            else
+            {
+                context.Fail(null);
+            }
         }
 
 

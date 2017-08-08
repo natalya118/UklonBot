@@ -48,8 +48,6 @@ namespace UklonBot.Factories.Exact
                     return new LossDetailsDialog();
                 case DialogFactoryType.Root.Complaint:
                     return new ComplaintDialog(_translatorService);
-                case DialogFactoryType.Root.ComplaintReason:
-                    return new ComplaintReasonDialog(_translatorService);
                 default:
                     return null;
             }

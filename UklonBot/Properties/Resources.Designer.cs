@@ -286,6 +286,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Describe what you remember.
+        /// </summary>
+        internal static string describe_what_you_remember {
+            get {
+                return ResourceManager.GetString("describe_what_you_remember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Destination.
         /// </summary>
         internal static string destination_address {
@@ -583,6 +592,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The application is accepted. We will contact you..
+        /// </summary>
+        internal static string request_received {
+            get {
+                return ResourceManager.GetString("request_received", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We are looking for a car for you....
         /// </summary>
         internal static string searching_car {
@@ -651,6 +669,24 @@ namespace UklonBot.Properties {
         internal static string thanks_for_complaint {
             get {
                 return ResourceManager.GetString("thanks_for_complaint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you! Maybe, something else?.
+        /// </summary>
+        internal static string thanks_maybe_sth_else {
+            get {
+                return ResourceManager.GetString("thanks_maybe_sth_else", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many attempts. Try again..
+        /// </summary>
+        internal static string too_many_attempts {
+            get {
+                return ResourceManager.GetString("too_many_attempts", resourceCulture);
             }
         }
         

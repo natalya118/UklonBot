@@ -17,7 +17,7 @@ using UklonBot.Properties;
 
 namespace UklonBot.Dialogs
 {
-    [LuisModel("ef002f59-e196-4dd8-a208-387c6c38bf3a", "fdac920ffdb9473c85f5f73eb274d076")]
+    [LuisModel("ef002f59-e196-4dd8-a208-387c6c38bf3a", "12331cbe593948a5a5f81bd509caf3d2")]
     [Serializable]
     public class RootDialog : IDialog<object>
     {
@@ -93,7 +93,7 @@ namespace UklonBot.Dialogs
                                     res, StateHelper.GetUserLanguageCode(context)));
                             }
                             else { 
-                                await context.PostAsync(UklonBot.Properties.Resources.ResourceManager.GetString("loss_sth"));
+                                await context.PostAsync(Resources.loss_sth);
                             }
                             context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.Loss), DialogResumeAfter);
                             break;
@@ -129,9 +129,9 @@ namespace UklonBot.Dialogs
             var res = await result as Activity;
             if (res == null)
             {
-                StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
-                await context.PostAsync(Resources.order_cancelled);
-                context.Wait(MessageReceivedAsync);
+               
+                context.Done((Activity) null);
+                
             }
            
             else

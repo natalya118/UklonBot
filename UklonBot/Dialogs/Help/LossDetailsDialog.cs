@@ -10,9 +10,7 @@ namespace UklonBot.Dialogs.Help
     [Serializable]
     public class LossDetailsDialog:IDialog<object>
     {
-        public LossDetailsDialog()
-        {
-        }
+     
         public async Task StartAsync(IDialogContext context)
         {
             StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
