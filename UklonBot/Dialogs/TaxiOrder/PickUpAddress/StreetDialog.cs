@@ -24,7 +24,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
         public async Task StartAsync(IDialogContext context)
         {
             StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
-            await context.PostAsync(Resources.street);
+            await context.PostAsync(Resources.street_or_place);
             context.Wait(MessageReceivedAsync);
         }
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)

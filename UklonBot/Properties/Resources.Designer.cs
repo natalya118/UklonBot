@@ -646,11 +646,11 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Street:.
+        ///   Looks up a localized string similar to Street or place:.
         /// </summary>
-        internal static string street {
+        internal static string street_or_place {
             get {
-                return ResourceManager.GetString("street", resourceCulture);
+                return ResourceManager.GetString("street_or_place", resourceCulture);
             }
         }
         

@@ -282,8 +282,8 @@
   <data name="send_taxi" xml:space="preserve">
     <value>1) Отправить такси</value>
   </data>
-  <data name="street" xml:space="preserve">
-    <value>Улица:</value>
+  <data name="street_or_place" xml:space="preserve">
+    <value>Улица или место:</value>
   </data>
   <data name="thanks_for_complaint" xml:space="preserve">
     <value>Спасибо! Мы сделаем всё, чтобы вам было комфортно в UKLON.</value>

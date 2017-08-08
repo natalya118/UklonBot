@@ -115,6 +115,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
             }
             else
             {
+                StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
                 _from = _uklonApiService.GetPlaceLocation(_street, await result as string, context);
                 if (_from == null)
                 {
@@ -126,7 +127,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
                     _number = await result as string;
                     try
                     {
-
+                        StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
 
                         await context.PostAsync(await
                             _translatorService.TranslateText($"{_street} , {_number}.",
