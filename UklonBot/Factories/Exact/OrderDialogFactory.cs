@@ -43,7 +43,7 @@ namespace UklonBot.Factories.Exact
                 case DialogFactoryType.Order.ConfirmPhone:
                     return new ConfirmPhoneDialog(_translatorService);
                 case DialogFactoryType.Order.ModifyAfterCreation:
-                    return new ModifyAfterCreationDialog(_translatorService);
+                    return new ModifyAfterCreationDialog(_luisService, _dialogStrategy);
                 case DialogFactoryType.Order.Rank:
                     return new RankDialog(_translatorService);
                 default:

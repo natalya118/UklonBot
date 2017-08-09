@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
@@ -126,20 +125,26 @@ namespace UklonBot.Dialogs
 
         private async Task OrderDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
-            var res = await result as Activity;
-            if (res == null)
+            try
             {
-               
-                context.Done((Activity) null);
-                
+                var res = await result as Activity;
+                if (res == null)
+                {
+
+                    context.Done((Activity) null);
+
+                }
+
+                else
+                {
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Rank), RankDialogAfter);
+
+                }
             }
-           
-            else
+            catch (Exception)
             {
                 context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Rank), RankDialogAfter);
-               
             }
-            
         }
         private async Task RankDialogAfter(IDialogContext context, IAwaitable<object> result)
         {

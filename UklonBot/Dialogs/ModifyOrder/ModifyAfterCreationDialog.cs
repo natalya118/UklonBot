@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using UklonBot.Factories.Abstract;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
 using UklonBot.Models.UklonSide;
@@ -14,30 +16,33 @@ namespace UklonBot.Dialogs.ModifyOrder
     [Serializable]
     public class ModifyAfterCreationDialog : IDialog
     {
-        private static ITranslatorService _translatorService;
         private static CancellationTokenSource _cancelTokenSource;
         private static CancellationToken _token;
-        public ModifyAfterCreationDialog(ITranslatorService translatorService)
+        private static ILuisService _luisService;
+        private static IDialogStrategy _dialogStrategy;
+        public ModifyAfterCreationDialog(ILuisService luisService, IDialogStrategy dialogStrategy)
         {
-            _translatorService = translatorService;
+            _luisService = luisService;
             _cancelTokenSource = new CancellationTokenSource();
             _token = _cancelTokenSource.Token;
+            _dialogStrategy = dialogStrategy;
         }
         public async Task StartAsync(IDialogContext context)
         {
             StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
 
-            List<string> options = new List<string>()
+            List<string> variants = new List<string>()
             {
                 "1) " + Resources.add_5uan,
                 "2) " + Resources.cancel_order,
 
             };
+            int count = 1;
             Task task1 = new Task(() =>
             {
                 //TODO check what status is when driver is already chosen 
               
-                int count = 1;
+              
 
                 while (!_token.IsCancellationRequested)
                 {
@@ -47,10 +52,10 @@ namespace UklonBot.Dialogs.ModifyOrder
                     IMessageActivity mess;
                     count++;
                     var connector = new ConnectorClient(new Uri(context.Activity.ServiceUrl));
-
-                    if (count == 4)
+                    //TODO change simulation to real order processing 
+                    if (count == 5)
                     {
-
+                        
                         var status = new OrderInfo();
                         status.Driver = new Driver
                         {
@@ -76,6 +81,8 @@ namespace UklonBot.Dialogs.ModifyOrder
                         
                         _cancelTokenSource.Cancel();
                         context.Done(status);
+                        //context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Rank), null);
+                        context.Fail(null);
                     }
                     Thread.Sleep(5000);
                 }
@@ -83,10 +90,12 @@ namespace UklonBot.Dialogs.ModifyOrder
 
             });
             task1.Start();
+            
+            
+            PromptOptions<string> options = new PromptOptions<string>(Resources.wanna_change_sth, "", Resources.driver_is_coming, variants, 0); // Overrided the PromptOptions Constructor.
+
             PromptDialog.Choice(context,
-                ModifyOrderDialogResumeAfter, options,
-                Resources.wanna_change_sth, "");
-            //context.Wait(MessageReceivedAsync);
+                ModifyOrderDialogResumeAfter, options);
 
         }
 
@@ -108,13 +117,11 @@ namespace UklonBot.Dialogs.ModifyOrder
             return receiptCard;
         }
 
-    
+
         private async Task ModifyOrderDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             var res = await result;
-            bool r = _token.IsCancellationRequested;
             _cancelTokenSource.Cancel();
-            bool r2 = _token.IsCancellationRequested;
             context.Done(res.Substring(0,1));
             
         }

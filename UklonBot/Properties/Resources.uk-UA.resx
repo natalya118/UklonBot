@@ -342,4 +342,7 @@
   <data name="thanks_maybe_sth_else" xml:space="preserve">
     <value>Дякуємо! Можливо, ще щось?</value>
   </data>
+  <data name="driver_is_coming" xml:space="preserve">
+    <value>Водій уже в дорозі!</value>
+  </data>
 </root>

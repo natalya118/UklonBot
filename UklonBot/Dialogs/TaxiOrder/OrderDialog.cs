@@ -10,7 +10,6 @@ using UklonBot.Factories.Abstract;
 using UklonBot.Helpers;
 using UklonBot.Helpers.Abstract;
 using UklonBot.Models.BotSide.OrderTaxi;
-using UklonBot.Models.UklonSide;
 using UklonBot.Properties;
 using Activity = Microsoft.Bot.Connector.Activity;
 
@@ -86,7 +85,7 @@ namespace UklonBot.Dialogs.TaxiOrder
                     }
                     catch (Exception)
                     {
-                        context.Fail(null);
+                        context.Done(true);
                     }
                 }
             }
@@ -163,7 +162,7 @@ namespace UklonBot.Dialogs.TaxiOrder
                     context.Done((Activity) null);
                     break;
                 default:
-                    //context.Done(result);
+                    context.Done(result);
                     break;
                     
 

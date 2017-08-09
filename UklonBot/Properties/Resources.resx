@@ -342,4 +342,7 @@
   <data name="thanks_maybe_sth_else" xml:space="preserve">
     <value>Thank you! Maybe, something else?</value>
   </data>
+  <data name="driver_is_coming" xml:space="preserve">
+    <value>Driver is coming!</value>
+  </data>
 </root>

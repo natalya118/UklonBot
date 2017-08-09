@@ -304,6 +304,15 @@ namespace UklonBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Driver is coming!.
+        /// </summary>
+        internal static string driver_is_coming {
+            get {
+                return ResourceManager.GetString("driver_is_coming", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Driver&apos;s name: .
         /// </summary>
         internal static string driver_name {
