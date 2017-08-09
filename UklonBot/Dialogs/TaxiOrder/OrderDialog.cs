@@ -1,7 +1,6 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
 using System.Collections.Generic;
-using System.EnterpriseServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
@@ -115,8 +114,6 @@ namespace UklonBot.Dialogs.TaxiOrder
             switch (res.Substring(0, 1))
             {
                 case "1":
-                    
-
                     context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Modify), ModifyDialogAfter);
 
                     break;
@@ -189,73 +186,25 @@ namespace UklonBot.Dialogs.TaxiOrder
                     break;
                 // change address
                 case "2":
-                    PromptDialog.Choice(context,
-                        ChangeAddressDialogResumeAfter, new List<String>() { "1) " + Resources.yes, "2)" + Resources.no },
-                        Resources.wanna_change_addreess, "");
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
                     break;
                 //change city
                 case "3":
-                    PromptDialog.Choice(context,
-                        ConfirmChangeCityDialogResumeAfter, new List<String>(){ "1) " + Resources.yes, "2)" + Resources.no }, 
-                        Resources.confirm_cancel, "");
-
+                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity),
+                        DialogResumeAfter);
                     break;
+                //cancel
                 case "4":
-                    PromptDialog.Choice(context,
-                        DialogResumeAfter, new List<String>() { "1) " + Resources.yes, "2)" + Resources.no },
-                        Resources.confirm_cancel, "");
-                    
-
+                    await context.PostAsync(Resources.order_cancelled);
+                    context.Done((Activity) null);
                     break;
                     //send
                 case "5":
                     _uklonApiService.CreateOrder(_taxiLocations, context.Activity.From.Id, context);
                     break;
-                default:
-                {
-                    await context.PostAsync("none");
-                    break;
-                }
+               
             }
         }
-
-        private async Task ChangeAddressDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
-        {
-            var res = await result;
-            switch (res.Substring(0,1))
-            {
-
-                //change pick up address
-                case "1":
-                    context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Order.Address), AddressDialogResumeAfter);
-                    break;
-                //cancel
-                case "2":
-                    break;
-                default:
-                {
-                    await context.PostAsync("none");
-                    break;
-                }
-            }
-        }
-
-        private async Task ConfirmChangeCityDialogResumeAfter(IDialogContext context, IAwaitable<object> result)
-        {
-            var res = await result as string;
-            if (res != null)
-                switch (res.Substring(0, 1))
-                {
-                    case "1":
-                        context.Call(_dialogStrategy.CreateDialog(DialogFactoryType.Root.ChangeCity),
-                            DialogResumeAfter);
-                        break;
-                    case "2":
-                        break;
-                }
-        }
-  
-
         private async Task DialogResumeAfter(IDialogContext context, IAwaitable<object> result)
         {
             context.Done((Activity)null);
@@ -273,7 +222,7 @@ namespace UklonBot.Dialogs.TaxiOrder
                     new Fact(Resources.city, await _translatorService.TranslateText((_userService.GetUserCity(context.Activity.From.Id)).ToString(), StateHelper.GetUserLanguageCode(context))),
                     new Fact(Resources.extra_cost, loc.ExtraCost + Resources.uan)},
                 
-                Total = loc.Cost.ToString(),
+                Total = loc.Cost.ToString()
 
             };
 
