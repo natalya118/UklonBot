@@ -171,6 +171,7 @@ namespace UklonBot.Dialogs.TaxiOrder
         private async Task ModifyDialogAfter(IDialogContext context, IAwaitable<object> result)
         {
             var res = await result as string;
+            StateHelper.SetUserLanguageCode(context, StateHelper.GetUserLanguageCode(context));
             switch (res)
             {
 

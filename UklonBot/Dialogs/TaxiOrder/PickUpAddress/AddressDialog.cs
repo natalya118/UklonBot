@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
@@ -157,8 +156,7 @@ namespace UklonBot.Dialogs.TaxiOrder.PickUpAddress
 
                 {
                     case "1":
-
-                        await context.PostAsync(Resources.searching_car);
+                        //context.Done(new TaxiLocations(_from, null));
                         context.Done((Activity) null);
                         break;
 
